@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MoveTest {
-
+    //TODO add all possible cases for castling: finishing on, crossing, starting on checks
     Piece[][] boardDefault = new Piece[][] {
             {Piece.blackRook,Piece.blackKnight,Piece.blackBishop,Piece.blackQueen,Piece.blackKing,Piece.blackBishop,Piece.blackKnight,Piece.blackRook},
             {Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn},
@@ -19,7 +19,7 @@ class MoveTest {
 
 
     @Test
-    void testShortCastling(){
+    void testShortCastlingWhite(){
 
         Piece[][] whiteCastle = new Piece[][] {
                 {Piece.blackRook,Piece.blackKnight,Piece.blackBishop,Piece.blackQueen,Piece.blackKing,null,null,Piece.blackRook},
@@ -31,6 +31,27 @@ class MoveTest {
                 {Piece.whitePawn,Piece.whitePawn,Piece.whitePawn,Piece.whitePawn,Piece.whiteBishop,Piece.whitePawn,Piece.whitePawn,Piece.whitePawn},
                 {Piece.whiteRook,Piece.whiteKnight,Piece.whiteBishop,Piece.whiteQueen,null,Piece.whiteRook,Piece.whiteKing,null}
         };
+
+
+
+        //legal moves
+        Move one = new Move(Piece.whitePawn,Position.E2,Position.E4,PlayerColor.WHITE);
+        Move two = new Move(Piece.blackPawn,Position.E7,Position.E6,PlayerColor.BLACK);
+        Move three = new Move(Piece.whiteKnight,Position.G1,Position.F3,PlayerColor.WHITE);
+        Move four = new Move(Piece.blackBishop,Position.F8,Position.C5,PlayerColor.BLACK);
+        Move five = new Move(Piece.whiteBishop,Position.F1,Position.E2,PlayerColor.WHITE);
+        Move six = new Move(Piece.blackKnight,Position.G8,Position.F6,PlayerColor.BLACK);
+        //white has Castled
+        Move seven = new Move(Piece.whiteKing,Position.E1,Position.G1,PlayerColor.WHITE);
+        assertEquals(whiteCastle.toString(),Board.getBoardInstance().getBoard().toString());
+
+    }
+
+
+    @Test
+    void testShortCastlingBlack(){
+
+
 
         Piece[][] blackCastle = new Piece[][] {
                 {Piece.blackRook,Piece.blackKnight,Piece.blackBishop,Piece.blackQueen,null,Piece.blackRook,Piece.blackKing,null},
@@ -52,8 +73,8 @@ class MoveTest {
         Move five = new Move(Piece.whiteBishop,Position.F1,Position.E2,PlayerColor.WHITE);
         Move six = new Move(Piece.blackKnight,Position.G8,Position.F6,PlayerColor.BLACK);
         //white has Castled
-        Move seven = new Move(Piece.whiteKing,Position.E1,Position.G1,PlayerColor.WHITE);
-        assertEquals(whiteCastle,Board.getBoardInstance().getBoard());
+        Move seven = new Move(Piece.whiteKing,Position.E1,Position.F1,PlayerColor.WHITE);
+
         //black has castled
         Move eight = new Move(Piece.blackKing,Position.E8,Position.G8,PlayerColor.BLACK);
         assertEquals(blackCastle,Board.getBoardInstance().getBoard());

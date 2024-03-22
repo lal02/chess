@@ -83,7 +83,10 @@ public class Move {
 		
 		kingDirection.add(new Pair(-1,0));
 		kingDirection.add(new Pair(-1,1));
-		kingDirection.add(new Pair(-1,-1));		
+		kingDirection.add(new Pair(-1,-1));
+		//Castling moves:
+		kingDirection.add(new Pair(0,-2));
+		kingDirection.add(new Pair(0,2));
 		
 		knightDirection.add(new Pair(2,1));
 		knightDirection.add(new Pair(2,-1));
@@ -321,7 +324,77 @@ public class Move {
 		else if(p.equals(Piece.whiteKing)  || p.equals(Piece.blackKing)) {
 			// (correct Position for castling check)
 			//TODO check for castling:
-			// Castling is permitted only if neither the king nor the rook has previously moved; the squares between the king and the rook are vacant; and the king does not leave, cross over, or finish on a square attacked by an enemy piece
+			// Castling is permitted only if neither the king nor the rook has previously moved;
+			// the squares between the king and the rook are null; and the king does not #leave#,
+			// cross over, or finish on a square attacked by an enemy piece
+
+			/*
+			 * if king and rook have not moved => check playedMoves
+			 * if king move => 2 column & 0 row
+			 * if not in check(every tile between currentdirection and targetdirection) => else exception
+			 *
+			 * update board according
+			 */
+
+			boolean kingHasMoved = false;
+			boolean ArookHasMoved = false;
+			boolean HrookHasMoved = false;
+			ArrayList<Move> playedMoves = boardInstance.getPlayedMoves();
+
+
+			//castling move
+			if(currentRow-targetRow == 0 && Math.abs(currentColumn-targetColumn) == 2){
+				//check if king or rook were moved
+				for(Move m : playedMoves){
+					if(m.getPiece().equals(Piece.whiteKing)) {
+						kingHasMoved = true;
+						break;
+					}
+					else if(m.getPiece().equals(Piece.whiteRook) && m.getCurrentPosition() == Position.A1){
+						ArookHasMoved = true;
+					}
+					else if(m.getPiece().equals(Piece.whiteRook) && m.getCurrentPosition() == Position.H1) {
+						HrookHasMoved = true;
+					}
+				}
+				//short castling
+				if(targetPosition == Position.G1 && kingHasMoved==false){
+					//f1 g1
+					//check if King would be in check after move;
+					Piece[][] boardSimulation = board;
+					Move moveF1 = new Move(Piece.whiteKing,currentPosition,Position.F1,PlayerColor.WHITE);
+					boardInstance.updateBoard(moveF1, boardSimulation);
+					//king cannot LEAVE or CROSS OVER or FINISH on a square that is checked
+
+					//currently in check:
+					if(inCheck(PlayerColor.WHITE,board)){
+						throw new IllegalMoveException("King cannot castle when given a check");
+					}
+
+					//cross over:
+					if(inCheck(move.getColor(),boardSimulation)) {
+						throw new IllegalMoveException("King cannot cross a square that is dangered. F1 dangered");
+					}
+					//finish: gets checked at the end of the function automatically
+					//TODO=> UPDATE BOARD ACCORDING
+
+					boardInstance.removePiece(Position.H1,board);
+					boardInstance.placePiece(Position.F1,board,Piece.whiteRook);
+				}
+
+				//long castling
+				else if(targetPosition == Position.C1&&kingHasMoved==false){
+
+				}
+				// 2 column difference but no castling allowed => illegal
+				else{
+					throw new IllegalMoveException("Castling is not allowed in this situation\nKing has moved " + kingHasMoved
+					+ "\nA Rook has moved: " + ArookHasMoved + "\nH Rook has Moved: " + HrookHasMoved);
+				}
+
+			}
+
+
 		}
 		else {
 			if(checkPathBlocked(currentPosition,targetPosition,move.piece) == false) {

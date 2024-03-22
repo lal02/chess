@@ -76,6 +76,10 @@ public class Board {
 	public void removePiece(Position pos, Piece[][] board) {
 		board[pos.getRow()][pos.getColumn()] = null;
 	}
+
+	public void placePiece(Position pos, Piece[][] board, Piece piece){
+		board[pos.getRow()][pos.getColumn()] = piece;
+	}
 	
 	public String toString() {
 	    StringBuilder str = new StringBuilder();
