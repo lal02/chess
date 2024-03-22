@@ -10,12 +10,12 @@ import java.util.ArrayList;
  */
 //TODO: Outsource Move Validation to new class ? Seperation of concerns?
 public class Move {
-	private static ArrayList <Pair> blackPawnDirection = new ArrayList<Pair>();
-	private static ArrayList <Pair> whitePawnDirection = new ArrayList<Pair>();
-	private static ArrayList <Pair> bishopDirection = new ArrayList<Pair>();
-	private static ArrayList <Pair> kingDirection = new ArrayList<Pair>();
-	private static ArrayList <Pair> knightDirection = new ArrayList<Pair>();
-	private static ArrayList <Pair> rookDirection = new ArrayList<Pair>();
+	private static ArrayList <Pair> blackPawnDirection = new ArrayList<>();
+	private static ArrayList <Pair> whitePawnDirection = new ArrayList<>();
+	private static ArrayList <Pair> bishopDirection = new ArrayList<>();
+	private static ArrayList <Pair> kingDirection = new ArrayList<>();
+	private static ArrayList <Pair> knightDirection = new ArrayList<>();
+	private static ArrayList <Pair> rookDirection = new ArrayList<>();
 	private static ArrayList <Pair> queenDirection = new ArrayList<>();
 	
 	/**
@@ -229,8 +229,8 @@ public class Move {
 				if(board[targetRow][targetColumn] == null) {
 					//check en passant 
 					ArrayList<Move> playedMoves = boardInstance.getPlayedMoves();
-					//atleast 4 moves must have been made inorder to reach an en passant position
-					if(playedMoves.size()>=4) {
+
+
 						Move previouslyPlayed = playedMoves.get(playedMoves.size()-1);
 						//moved piece has to be pawn
 						if(previouslyPlayed.piece == Piece.whitePawn) {
@@ -254,15 +254,15 @@ public class Move {
 								enpassant = true;
 							}
 						}
-					}	
+
 					//moving to empty diagonal field without en passant possibility
 					if(!enpassant && currentColumn != targetColumn) {
 						throw new IllegalMoveException("moving to empty diagonal square as pawn without en passant is illegal");
 					}
 				}
 				//targetSquare is not empty and occpuied by same colored pawn
-				else if(Math.abs(currentRow-targetRow) == 1 && Math.abs(currentColumn - targetColumn) == 1 && !(board[targetRow][targetColumn].getPieceColor() != PlayerColor.WHITE)){							
-						throw new IllegalMoveException("There square is filled with a Piece from the same color");		
+				else if(Math.abs(currentRow-targetRow) == 1 && Math.abs(currentColumn - targetColumn) == 1 && !(board[targetRow][targetColumn].getPieceColor() != PlayerColor.BLACK)){
+						throw new IllegalMoveException("The targeted square is filled with a Piece from the same color");
 				}
 				
 				break;
@@ -319,7 +319,9 @@ public class Move {
 			//no checks neccessary
 		}
 		else if(p.equals(Piece.whiteKing)  || p.equals(Piece.blackKing)) {
-			//TODO check for castling
+			// (correct Position for castling check)
+			//TODO check for castling:
+			// Castling is permitted only if neither the king nor the rook has previously moved; the squares between the king and the rook are vacant; and the king does not leave, cross over, or finish on a square attacked by an enemy piece
 		}
 		else {
 			if(checkPathBlocked(currentPosition,targetPosition,move.piece) == false) {

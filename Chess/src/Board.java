@@ -46,7 +46,7 @@ public class Board {
 	}
 	
 	/**
-	 * Singleton Design-Pattern that assures only one board instance that is up to date all the time
+	 * Singleton Design-Pattern that assures only one board instance that is up-to-date all the time
 	 * @return the current instance of the chess board
 	 */
 	public static Board getBoardInstance() {

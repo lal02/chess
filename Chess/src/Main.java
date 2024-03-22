@@ -46,7 +46,8 @@ public class Main extends Thread{
 	 * blackPawn H7 H6 BLACK
 	 */
 	
-	//TODO: adjust input reception to leave out color and instead take it from piece 
+	//TODO: adjust input reception to leave out color and instead take it from piece
+	 //=> FEN Input from chesscom?
 	/**
 	 * Parses the String user-input move into a Move object.
 	 * 
