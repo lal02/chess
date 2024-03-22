@@ -224,7 +224,7 @@ public class Move {
 				boolean enpassant = false;
 				if(currentColumn == targetColumn && board[targetRow][targetColumn] == Piece.whitePawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way"); 
 				//first move 2 squares
-				if(Math.abs(currentRow - targetRow) == 2 && currentRow != 6) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
+				if(Math.abs(currentRow - targetRow) == 2 && currentRow != 1) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
 				//target square is empty
 				if(board[targetRow][targetColumn] == null) {
 					//check en passant 
@@ -319,7 +319,7 @@ public class Move {
 			//no checks neccessary
 		}
 		else if(p.equals(Piece.whiteKing)  || p.equals(Piece.blackKing)) {
-			//check for castling
+			//TODO check for castling
 		}
 		else {
 			if(checkPathBlocked(currentPosition,targetPosition,move.piece) == false) {
@@ -532,7 +532,16 @@ public class Move {
 							}
 							//enemy piece found => add to possibleChecks list
 							else if(board[iterateRow][iterateColumn].getPieceColor() != moveColor) {
-								possibleChecks.add(Position.getPositionFromValue(iterateRow, iterateColumn));
+								if(board[iterateRow][iterateColumn] == Piece.whitePawn ||board[iterateRow][iterateColumn] == Piece.blackPawn){
+									//pawn has to be one row away from the king inorder to give him a check
+									if(Math.abs(iterateRow- kingPosition.getRow())== 1) {
+										possibleChecks.add(Position.getPositionFromValue(iterateRow, iterateColumn));
+									}
+								}
+								else{
+									possibleChecks.add(Position.getPositionFromValue(iterateRow, iterateColumn));
+								}
+
 							}	
 						}
 							//increment the iteration by the direction of the empty square => Integer.compare gives the direction
