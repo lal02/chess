@@ -16,7 +16,7 @@ public class Move {
 	private static ArrayList <Pair> kingDirection = new ArrayList<Pair>();
 	private static ArrayList <Pair> knightDirection = new ArrayList<Pair>();
 	private static ArrayList <Pair> rookDirection = new ArrayList<Pair>();
-	private static ArrayList <Pair> queenDirection = new ArrayList<Pair>();
+	private static ArrayList <Pair> queenDirection = new ArrayList<>();
 	
 	/**
 	 * Fills all the direction ArrayLists with all possible Moves for each Piece
@@ -384,34 +384,31 @@ public class Move {
 		Piece p = move.getPiece();
 		Position currentPosition = move.getCurrentPosition();
 		Position targetPosition = move.getTargetPosition();
-		switch(p) {
-		case blackPawn:return positionMatches(blackPawnDirection,currentPosition,targetPosition);
-			
-		case blackBishop:return positionMatches(bishopDirection,currentPosition,targetPosition);
-		
-		case blackKing:return positionMatches(kingDirection,currentPosition,targetPosition);
-		
-		case blackKnight:return positionMatches(knightDirection,currentPosition,targetPosition);
-		
-		case blackQueen:return positionMatches(queenDirection,currentPosition,targetPosition);
-		
-		case blackRook:return positionMatches(rookDirection,currentPosition,targetPosition);
-		
-		case whitePawn: return positionMatches(whitePawnDirection,currentPosition,targetPosition);	
-		
-		case whiteBishop:return positionMatches(bishopDirection,currentPosition,targetPosition);
-		
-		case whiteKing: return positionMatches(kingDirection,currentPosition,targetPosition);
-		
-		case whiteKnight:return positionMatches(knightDirection,currentPosition,targetPosition);
-		
-		case whiteQueen:return positionMatches(queenDirection,currentPosition,targetPosition);
-		
-		case whiteRook: return positionMatches(rookDirection,currentPosition,targetPosition);
-		
-		default: return false;
-			
+		if(p == Piece.blackBishop ||p == Piece.whiteBishop){
+			return positionMatches(bishopDirection,currentPosition,targetPosition);
 		}
+		else if(p == Piece.blackKing || p == Piece.whiteKing){
+			return positionMatches(kingDirection,currentPosition,targetPosition);
+		}
+		else if(p == Piece.blackKnight || p == Piece.whiteKnight){
+			return positionMatches(knightDirection,currentPosition,targetPosition);
+		}
+		else if(p == Piece.whiteQueen || p==Piece.blackQueen){
+			return positionMatches(queenDirection,currentPosition,targetPosition);
+		}
+		else if(p == Piece.blackRook || p == Piece.whiteRook) {
+			return positionMatches(rookDirection,currentPosition,targetPosition);
+		}
+		else if(p == Piece.blackPawn){
+			return positionMatches(blackPawnDirection,currentPosition,targetPosition);
+		}
+		else if(p == Piece.whitePawn){
+			return positionMatches(whitePawnDirection,currentPosition,targetPosition);
+		}
+		else{
+			return false;
+		}
+
 	}
 	
 	/**
