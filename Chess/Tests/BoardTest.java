@@ -7,6 +7,7 @@ class BoardTest {
     /**
      * Tests the playedMoves ArrayList and if the moves only get stored if the move is legal
      */
+    //TODO Castling moves should count as one move
     @Test
     void testPlayedMoves(){
         Move one = new Move(Piece.whitePawn,Position.A2,Position.A4,PlayerColor.WHITE);

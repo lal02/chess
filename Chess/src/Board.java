@@ -80,6 +80,23 @@ public class Board {
 	public void placePiece(Position pos, Piece[][] board, Piece piece){
 		board[pos.getRow()][pos.getColumn()] = piece;
 	}
+
+	/**
+	 * used to reset the board when testing code
+	 */
+	public void resetGame(){
+		board = new Piece[][] {
+				{blackRook,blackKnight,blackBishop,blackQueen,blackKing,blackBishop,blackKnight,blackRook},
+				{blackPawn,blackPawn,blackPawn,blackPawn,blackPawn,blackPawn,blackPawn,blackPawn},
+				{null,null,null,null,null,null,null,null},
+				{null,null,null,null,null,null,null,null},
+				{null,null,null,null,null,null,null,null},
+				{null,null,null,null,null,null,null,null},
+				{whitePawn,whitePawn,whitePawn,whitePawn,whitePawn,whitePawn,whitePawn,whitePawn},
+				{whiteRook,whiteKnight,whiteBishop,whiteQueen,whiteKing,whiteBishop,whiteKnight,whiteRook}
+		};
+		playedMoves.clear();
+	}
 	
 	public String toString() {
 	    StringBuilder str = new StringBuilder();
