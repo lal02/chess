@@ -9,7 +9,8 @@ import java.util.Scanner;
  */
 public class Main extends Thread{  
 	private Board b;
-	
+
+
 	public static void main(String[] args) {
 		Thread thread = new Main();
 		thread.start();	
