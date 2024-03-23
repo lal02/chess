@@ -61,20 +61,23 @@ public class Board {
 	 * Updates the Chessboard after the move is made.
 	 * It sets the old position to null and moves the Piece to the new position.
 	 * @param move The move object that is to be executed
-	 * @param board The board that is to be updated. Either the currently active gameboard or a copy of the board used to simulate the position after a move is made
+	 * @param boardParam The board that is to be updated. Either the currently active gameboard or a copy of the board used to simulate the position after a move is made
 	 */
-	public void updateBoard(Move move, Piece[][] board) {
+	public void updateBoard(Move move, Piece[][] boardParam) {
 		//alte position null setzen neue Position das Zeichen setzen
-		int oldRow = move.getCurrentPosition().getRow();
-		int oldColumn = move.getCurrentPosition().getColumn();
-		board[oldRow][oldColumn] = null;
-		int newRow = move.getTargetPosition().getRow();
-		int newColumn = move.getTargetPosition().getColumn();
-		board[newRow][newColumn] = move.getPiece();
+
+			int oldRow = move.getCurrentPosition().getRow();
+			int oldColumn = move.getCurrentPosition().getColumn();
+			boardParam[oldRow][oldColumn] = null;
+			int newRow = move.getTargetPosition().getRow();
+			int newColumn = move.getTargetPosition().getColumn();
+			boardParam[newRow][newColumn] = move.getPiece();
+
+
 	}
 	
-	public void removePiece(Position pos, Piece[][] board) {
-		board[pos.getRow()][pos.getColumn()] = null;
+	public void removePiece(Position pos, Piece[][] boardParam) {
+		boardParam[pos.getRow()][pos.getColumn()] = null;
 	}
 
 	public void placePiece(Position pos, Piece[][] board, Piece piece){
