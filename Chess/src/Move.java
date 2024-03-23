@@ -38,7 +38,6 @@ public class Move {
 		this.currentPosition = currentPosition;
 		this.targetPosition = targetPosition;
 		this.color = color;
-
 	}
 	
 

@@ -495,7 +495,7 @@ public class MoveValidation {
         }
         return true;
     }
-    //FIXME: when playing an illegal castling move, the board doesnt get restored to the correct state it had before the illegal move
+
     /**
      * This method checks the validity of a king move, including casling
      * @param move the king move to be checked
