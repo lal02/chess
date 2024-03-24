@@ -1,0 +1,10 @@
+TODO implement:
+pawn promotion
+checkmate detection
+
+TODO:
+tests for all pieces
+tests for check detection
+
+FIXME
+pawn forward capture
