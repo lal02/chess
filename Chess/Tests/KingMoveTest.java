@@ -1,3 +1,4 @@
+import foundation.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ class KingMoveTest {
 
     @Test
     void testLegalShortCastleWhite(){
-        new Move(Piece.whitePawn,Position.E2,Position.E4,PlayerColor.WHITE);
+        new Move(Piece.whitePawn, Position.E2,Position.E4,PlayerColor.WHITE);
         new Move(Piece.blackPawn,Position.E7,Position.E6,PlayerColor.BLACK);
         new Move(Piece.whiteKnight,Position.G1,Position.F3,PlayerColor.WHITE);
         new Move(Piece.blackBishop,Position.F8,Position.C5,PlayerColor.BLACK);
@@ -78,19 +79,19 @@ class KingMoveTest {
                 {null,null,null,null,Piece.whitePawn,null,null,null},
                 {null,null,null,null,null,Piece.whiteKnight,null,null},
                 {Piece.whitePawn,Piece.whitePawn,Piece.whitePawn,Piece.whitePawn,Piece.whiteBishop,Piece.whitePawn,Piece.whitePawn,Piece.whitePawn},
-                {Piece.whiteRook,Piece.whiteKnight,Piece.whiteBishop,Piece.whiteQueen,null,Piece.whiteKing,null,Piece.whiteRook}
+                {Piece.whiteRook,Piece.whiteKnight,Piece.whiteBishop,Piece.whiteQueen,null,Piece.whiteKing,null, Piece.whiteRook}
         };
         new Move(Piece.whitePawn,Position.E2,Position.E4,PlayerColor.WHITE);
         new Move(Piece.blackPawn,Position.E7,Position.E6,PlayerColor.BLACK);
         new Move(Piece.whiteKnight,Position.G1,Position.F3,PlayerColor.WHITE);
-        new Move(Piece.blackBishop,Position.F8,Position.C5,PlayerColor.BLACK);
+        new Move(Piece.blackBishop,Position.F8,Position.C5, PlayerColor.BLACK);
         new Move(Piece.whiteBishop,Position.F1,Position.E2,PlayerColor.WHITE);
         new Move(Piece.blackKnight,Position.G8,Position.F6,PlayerColor.BLACK);
         new Move(Piece.whiteKing,Position.E1,Position.F1,PlayerColor.WHITE);
         //black castles
         new Move(Piece.blackKing,Position.E8,Position.G8,PlayerColor.BLACK);
-        //System.out.println(Board.getBoardInstance());
-        assertArrayEquals(expected,Board.getBoardInstance().getBoard());
+        //System.out.println(foundation.Board.getBoardInstance());
+        assertArrayEquals(expected, Board.getBoardInstance().getBoard());
     }
 
     @Test
@@ -160,7 +161,7 @@ class KingMoveTest {
         new Move(Piece.blackQueen,Position.D8,Position.D7,PlayerColor.BLACK);
 
         //board is expected to have the state of move eight => before the castling attempt was made
-        //this is not implemented currently; current state just throws RuntimeException when IllegalMoveException gets thrown while move validity checking
+        //this is not implemented currently; current state just throws RuntimeException when analysis.IllegalMoveException gets thrown while move validity checking
         Piece[][] expected = new Piece[][] {
                 {Piece.blackRook,Piece.blackKnight,null,null,Piece.blackKing,Piece.blackBishop,Piece.blackKnight,Piece.blackRook},
                 {Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackQueen,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn},
@@ -188,7 +189,7 @@ class KingMoveTest {
         new Move(Piece.whitePawn,Position.A3,Position.A4,PlayerColor.WHITE);
 
 
-        //this is not implemented currently; current state just throws RuntimeException when IllegalMoveException gets thrown while move validity checking
+        //this is not implemented currently; current state just throws RuntimeException when analysis.IllegalMoveException gets thrown while move validity checking
         Piece[][] expected = new Piece[][] {
                 {Piece.blackRook,Piece.blackKnight,Piece.blackBishop,Piece.blackQueen,Piece.blackKing,null,null,Piece.blackRook},
                 {Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackPawn,Piece.blackBishop,null,Piece.blackPawn,Piece.blackPawn},
@@ -199,8 +200,8 @@ class KingMoveTest {
                 {null,Piece.whitePawn,Piece.whitePawn,Piece.whitePawn,Piece.whiteQueen,Piece.whitePawn,Piece.whitePawn,Piece.whitePawn},
                 {Piece.whiteRook,Piece.whiteKnight,Piece.whiteBishop,null,Piece.whiteKing,null,Piece.whiteKnight,Piece.whiteRook}
         };
-        //System.out.println(Board.getBoardInstance().toString());
-        //assertArrayEquals(expected,Board.getBoardInstance().getBoard());
+        //System.out.println(foundation.Board.getBoardInstance().toString());
+        //assertArrayEquals(expected,foundation.Board.getBoardInstance().getBoard());
 
         // try to castle through the F8 square that is threatened
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackKing,Position.E8,Position.G8,PlayerColor.BLACK));

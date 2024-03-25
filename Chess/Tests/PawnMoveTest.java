@@ -1,3 +1,4 @@
+import foundation.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class PawnMoveTest {
             new Move(Piece.whitePawn,Position.A2,Position.A3,PlayerColor.WHITE);
             new Move(Piece.blackPawn,Position.F7,Position.F6,PlayerColor.BLACK);
             //normal diagonal pawn capture
-            //Move five = new Move(Piece.whitePawn,Position.E4,Position.F6,PlayerColor.WHITE);
+            //foundation.Move five = new foundation.Move(foundation.Piece.whitePawn,foundation.Position.E4,foundation.Position.F6,foundation.PlayerColor.WHITE);
         });
 
     }
@@ -35,7 +36,7 @@ public class PawnMoveTest {
         new Move(Piece.whitePawn,Position.E2,Position.E3,PlayerColor.WHITE);
         new Move(Piece.blackPawn,Position.E7,Position.E5,PlayerColor.BLACK);
         assertThrows(Throwable.class,()->{
-            new Move(Piece.whitePawn,Position.E3,Position.E5,PlayerColor.WHITE);
+            new Move(Piece.whitePawn, Position.E3,Position.E5,PlayerColor.WHITE);
         });
 
         new Move(Piece.whitePawn,Position.A2,Position.A3,PlayerColor.WHITE);
@@ -47,7 +48,7 @@ public class PawnMoveTest {
 
     @Test
     void testIllegalDiagonalPawnMove(){
-        //new Move(Piece.whitePawn,Position.E2,Position.E3,PlayerColor.WHITE);
+        //new foundation.Move(foundation.Piece.whitePawn,foundation.Position.E2,foundation.Position.E3,foundation.PlayerColor.WHITE);
         assertThrows(RuntimeException.class,()->{
            new Move(Piece.whitePawn,Position.E2,Position.F3,PlayerColor.WHITE);
         });
@@ -132,7 +133,7 @@ public class PawnMoveTest {
             new Move(Piece.whitePawn,Position.C5,Position.B6,PlayerColor.WHITE);
         });
 
-        new Move(Piece.blackPawn,Position.C7,Position.C5,PlayerColor.BLACK);
+        new Move(Piece.blackPawn,Position.C7,Position.C5, PlayerColor.BLACK);
         new Move(Piece.whitePawn,Position.D2,Position.D4,PlayerColor.WHITE);
         new Move(Piece.blackPawn,Position.C5,Position.C4,PlayerColor.BLACK);
         new Move(Piece.whitePawn,Position.B2,Position.B4,PlayerColor.WHITE);

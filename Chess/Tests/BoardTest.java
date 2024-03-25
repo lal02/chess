@@ -1,3 +1,4 @@
+import foundation.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,19 +12,19 @@ class BoardTest {
     @Test
     void testPlayedMoves(){
         Move one = new Move(Piece.whitePawn,Position.A2,Position.A4,PlayerColor.WHITE);
-        Move two = new Move(Piece.blackPawn,Position.A7,Position.A6,PlayerColor.BLACK);
+        Move two = new Move(Piece.blackPawn,Position.A7,Position.A6, PlayerColor.BLACK);
         Move three = new Move(Piece.whitePawn,Position.A4,Position.A5,PlayerColor.WHITE);
         Move four = new Move(Piece.blackPawn,Position.B7,Position.B5,PlayerColor.BLACK);
-        Move five = new Move(Piece.whitePawn,Position.A5,Position.B6,PlayerColor.WHITE);
+        Move five = new Move(Piece.whitePawn,Position.A5, Position.B6,PlayerColor.WHITE);
         Move six = new Move(Piece.blackPawn,Position.C7,Position.B6,PlayerColor.BLACK);
         Move seven = new Move(Piece.whiteKnight,Position.B1,Position.A3,PlayerColor.WHITE);
-        assertEquals(7,Board.getBoardInstance().getPlayedMoves().size());
+        assertEquals(7, Board.getBoardInstance().getPlayedMoves().size());
 
-        //illegal Move shouldnt get added to playedMoves
+        //illegal foundation.Move shouldnt get added to playedMoves
         Move eight_illegal = new Move(Piece.blackKing,Position.E8,Position.E7,PlayerColor.BLACK);
         assertEquals(7,Board.getBoardInstance().getPlayedMoves().size());
 
-        //also illegal Move because a different colour should be expected. not to be added to list
+        //also illegal foundation.Move because a different colour should be expected. not to be added to list
         Move nine = new Move(Piece.whiteRook, Position.A1, Position.A2, PlayerColor.WHITE);
         assertEquals(7,Board.getBoardInstance().getPlayedMoves().size());
 
