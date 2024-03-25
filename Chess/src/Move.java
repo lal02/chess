@@ -29,7 +29,7 @@ public class Move {
 			Board.getBoardInstance().updateBoard(this, Board.getBoardInstance().getBoard());
 			Board.getBoardInstance().playedMoves.add(this);
         } catch (IllegalMoveException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 	// constructor to prevent validity checking for this move if it is only to be simulated for check searching. also prevents unwanted add to playedmove list

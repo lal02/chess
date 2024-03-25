@@ -438,21 +438,21 @@ public class MoveValidation {
         int targetRow = move.getTargetPosition().getRow();
         int targetColumn = move.getTargetPosition().getColumn();
 
-        int pawnReihe = -1;
+        int startingRow = -1;
         Piece enemyPawn = null;
         if(pawn.getPieceColor() == PlayerColor.BLACK){
-            pawnReihe = 1;
+            startingRow = 1;
             enemyPawn = Piece.whitePawn;
         }
         else if(pawn.getPieceColor() == PlayerColor.WHITE){
-            pawnReihe = 6;
+            startingRow = 6;
             enemyPawn = Piece.blackPawn;
         }
 
         boolean enpassant = false;
-        if(currentColumn == targetColumn && board[targetRow][targetColumn] == pawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way");
+        if(currentColumn == targetColumn && board[targetRow][targetColumn] == enemyPawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way");
         //first move 2 squares
-        if(Math.abs(currentRow - targetRow) == 2 && currentRow != pawnReihe) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
+        if(Math.abs(currentRow - targetRow) == 2 && currentRow != startingRow) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
 
         //target square is empty
         if(board[targetRow][targetColumn] == null) {
