@@ -159,7 +159,6 @@ class KingMoveTest {
         new Move(Piece.blackBishop,Position.E6,Position.C4,PlayerColor.BLACK);
         new Move(Piece.whitePawn,Position.E2,Position.E3,PlayerColor.WHITE);
         new Move(Piece.blackQueen,Position.D8,Position.D7,PlayerColor.BLACK);
-
         //board is expected to have the state of move eight => before the castling attempt was made
         //this is not implemented currently; current state just throws RuntimeException when analysis.IllegalMoveException gets thrown while move validity checking
         Piece[][] expected = new Piece[][] {
@@ -202,7 +201,6 @@ class KingMoveTest {
         };
         //System.out.println(foundation.Board.getBoardInstance().toString());
         //assertArrayEquals(expected,foundation.Board.getBoardInstance().getBoard());
-
         // try to castle through the F8 square that is threatened
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackKing,Position.E8,Position.G8,PlayerColor.BLACK));
     }
@@ -221,11 +219,8 @@ class KingMoveTest {
         new Move(Piece.blackPawn,Position.C7,Position.C6,PlayerColor.BLACK);
         new Move(Piece.whitePawn,Position.H2,Position.H3,PlayerColor.WHITE);
         new Move(Piece.blackBishop,Position.F5,Position.C2,PlayerColor.BLACK);
-
-            // try to castle through the F8 square that is threatened
-
+        // try to castle through the F8 square that is threatened
         assertThrows(RuntimeException.class,()-> new Move(Piece.whiteKing,Position.E1,Position.C1,PlayerColor.BLACK));
-
     }
 
     @Test
@@ -243,11 +238,8 @@ class KingMoveTest {
         new Move(Piece.whitePawn,Position.H2,Position.H3,PlayerColor.WHITE);
         new Move(Piece.blackBishop,Position.F5,Position.C2,PlayerColor.BLACK);
         new Move(Piece.whiteBishop,Position.F4,Position.C7,PlayerColor.WHITE);
-
-            // try to castle through the F8 square that is threatened
-
+        // try to castle through the F8 square that is threatened
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackKing,Position.E8,Position.C8,PlayerColor.BLACK));
-
     }
 
     @Test
@@ -260,9 +252,7 @@ class KingMoveTest {
         new Move(Piece.blackKnight,Position.B8,Position.A6,PlayerColor.BLACK);
         new Move(Piece.whiteBishop,Position.F1,Position.D3,PlayerColor.WHITE);
         new Move(Piece.blackQueen,Position.E7,Position.B4,PlayerColor.BLACK);
-
-            // try to castle when the king is in check
-
+        // try to castle when the king is in check
         assertThrows(RuntimeException.class,()-> new Move(Piece.whiteKing,Position.E1,Position.G1,PlayerColor.WHITE));
     }
 
@@ -277,9 +267,7 @@ class KingMoveTest {
         new Move(Piece.whitePawn,Position.B2,Position.B3,PlayerColor.WHITE);
         new Move(Piece.blackKnight,Position.G8,Position.H6,PlayerColor.BLACK);
         new Move(Piece.whiteQueen,Position.D1,Position.H5,PlayerColor.WHITE);
-
-            // try to castle when the king is in check
-
+        // try to castle when the king is in check
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackKing,Position.E8,Position.G8,PlayerColor.BLACK));
     }
     @Test
@@ -296,10 +284,7 @@ class KingMoveTest {
         new Move(Piece.blackPawn,Position.A5,Position.A4,PlayerColor.BLACK);
         new Move(Piece.whitePawn,Position.F2,Position.F3,PlayerColor.WHITE);
         new Move(Piece.blackQueen,Position.G5,Position.H4,PlayerColor.BLACK);
-
-
-            // try to castle when the king is in check
-
+        // try to castle when the king is in check
         assertThrows(RuntimeException.class,()-> new Move(Piece.whiteKing,Position.E1,Position.C1,PlayerColor.WHITE));
     }
 
@@ -316,12 +301,7 @@ class KingMoveTest {
         new Move(Piece.whitePawn,Position.A2,Position.A3,PlayerColor.WHITE);
         new Move(Piece.blackPawn,Position.F7,Position.F6,PlayerColor.BLACK);
         new Move(Piece.whiteQueen,Position.D1,Position.H5,PlayerColor.WHITE);
-
-
         // try to castle when the king is in check
-
-
-
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackKing,Position.E8,Position.C8,PlayerColor.BLACK));
     }
 

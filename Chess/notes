@@ -1,10 +1,21 @@
 TODO implement:
 pawn promotion
 checkmate detection
+stalemate detection
+3 time repetition
 
 TODO:
 tests for all pieces
 tests for check detection
 
 FIXME
-pawn forward capture : DONE
+when calculating checks the board gets updated anyway or check didnt get calculated correctly(checktest)
+Check prevention seems to be bugged, when preventing a check with a backwards bishop move like in testRookCheck the move is considered illegal
+-> when searching for a straight check, I dont check if I have diagonal piece I can block it with?
+
+TODO Longterm:
+gui
+System that allows to build a position with drag and drop and save the board
+Puzzle gamemode with databaseS
+
+// is my en passant implemented correctly? by the rules of chess

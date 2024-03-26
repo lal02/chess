@@ -12,7 +12,6 @@ public class PawnMoveTest {
     // no forward capture
     // en passant
     // normal pawn capture
-    @AfterEach
     @BeforeEach
     void resetBoard(){
         Board.getBoardInstance().resetGame();

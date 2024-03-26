@@ -210,6 +210,13 @@ public class MoveValidation {
         //check if King would be in check after move;
         Piece[][] boardSimulation = boardInstance.getBoard().clone();
         boardInstance.updateBoard(move, boardSimulation);
+        //System.out.println(boardSimulation);
+        for(int i = 0; i< boardSimulation.length;i++){
+            for(int j = 0; j<boardSimulation[i].length;j++){
+                System.out.print(boardSimulation[i][j] + " ");
+            }
+            System.out.println();
+        }
         if(inCheck(move.getColor(),boardSimulation)) {
             throw new IllegalMoveException("King is in check after this move");
         }
@@ -302,13 +309,19 @@ public class MoveValidation {
         //determine squares that need to be checked => either enemy piece or empty square through which a distant piece can give a check
         ArrayList<Position> possibleChecks = new ArrayList<>();
         for(Pair p : kingDirection) {
+
+            // CASTLING POSSIBILITY MOVE BREAKS IT
+            if(p.column == 2){
+                continue;
+            }
+
             //iterate over the squares that touch the king
             int rowAfterMovement = kingPosition.getRow() + p.row;
             int columnAfterMovement = kingPosition.getColumn() + p.column;
             //prevents out of bounds
             if(rowAfterMovement >= 0 && columnAfterMovement >=0 && rowAfterMovement < boardParam.length && columnAfterMovement < boardParam[rowAfterMovement].length ) {
                 //enemy piece stands next to king
-                if(boardParam[rowAfterMovement][columnAfterMovement] != null && !(boardParam[rowAfterMovement][columnAfterMovement].getPieceColor()==moveColor)) {
+                if(boardParam[rowAfterMovement][columnAfterMovement] != null && boardParam[rowAfterMovement][columnAfterMovement].getPieceColor()!=moveColor) {
                     //add to possibleChecks
                     possibleChecks.add(Position.getPositionFromValue(rowAfterMovement, columnAfterMovement));
                 }
@@ -321,7 +334,7 @@ public class MoveValidation {
                     int iterateColumn = kingPosition.getColumn();
                     iterateColumn += columnIncrement;
                     // Iterate from current king position in the direction of the empty square until an own piece, enemy piece or the end of the board is reached
-                    while(iterateRow>=0 && iterateColumn >= 0 && iterateRow < boardParam.length && iterateColumn < boardParam[iterateRow].length) {
+                    while(iterateRow>=0 && iterateColumn >= 0 && iterateRow < boardParam.length && iterateColumn < boardParam[iterateRow].length && iterateColumn>=0) {
                         if(boardParam[iterateRow][iterateColumn] != null) {
                             if(boardParam[iterateRow][iterateColumn].getPieceColor()==moveColor) {
                                 //piece of the same color blocks the way => no check possible
@@ -329,6 +342,7 @@ public class MoveValidation {
                             }
                             //enemy piece found => add to possibleChecks list
                             else if(boardParam[iterateRow][iterateColumn].getPieceColor() != moveColor) {
+                                //TODO this can be done more generic
                                 if(boardParam[iterateRow][iterateColumn] == Piece.whitePawn ||boardParam[iterateRow][iterateColumn] == Piece.blackPawn){
                                     //pawn has to be one row away from the king inorder to give him a check
                                     if(Math.abs(iterateRow- kingPosition.getRow())== 1) {
@@ -349,7 +363,10 @@ public class MoveValidation {
             }
         }
 
+
         //iterate over possibleChecks list and determine if the piece can theoreticall move to the king => can capture him and therefore give him a check
+
+
         for(Position p : possibleChecks) {
             if(boardParam[p.getRow()][p.getColumn()] != null) {
                 //use private move constructor to prevent each move getting checked for validity which is not needed in this case. move only gets created to re-use correctDirection method
