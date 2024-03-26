@@ -210,13 +210,6 @@ public class MoveValidation {
         //check if King would be in check after move;
         Piece[][] boardSimulation = boardInstance.getBoard().clone();
         boardInstance.updateBoard(move, boardSimulation);
-        //System.out.println(boardSimulation);
-        for(int i = 0; i< boardSimulation.length;i++){
-            for(int j = 0; j<boardSimulation[i].length;j++){
-                System.out.print(boardSimulation[i][j] + " ");
-            }
-            System.out.println();
-        }
         if(inCheck(move.getColor(),boardSimulation)) {
             throw new IllegalMoveException("King is in check after this move");
         }

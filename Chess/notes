@@ -7,11 +7,10 @@ stalemate detection
 TODO:
 tests for all pieces
 tests for check detection
+test for castling after already moved king
 
 FIXME
-when calculating checks the board gets updated anyway or check didnt get calculated correctly(checktest)
-Check prevention seems to be bugged, when preventing a check with a backwards bishop move like in testRookCheck the move is considered illegal
--> when searching for a straight check, I dont check if I have diagonal piece I can block it with?
+when calculating checks the board still gets updated for some reason...
 
 TODO Longterm:
 gui
