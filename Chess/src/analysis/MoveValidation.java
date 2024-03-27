@@ -581,7 +581,7 @@ public class MoveValidation {
             if(whiteShortCastle && (whiteKingHasMoved || whiteHrookHasMoved)) piecesHaveMoved = true;
             if(whiteLongCastle && (whiteKingHasMoved || whiteArookHasMoved)) piecesHaveMoved = true;
             if(blackShortCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
-            if(blackLongCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
+            if(blackLongCastle && (blackKingHasMoved || blackArookHasMoved)) piecesHaveMoved = true;
             if(piecesHaveMoved){
                 throw new IllegalMoveException("Pieces have moved and therefore cannot castle");
             }

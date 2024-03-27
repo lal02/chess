@@ -7,7 +7,6 @@ stalemate detection
 TODO:
 tests for all pieces
 tests for check detection
-test for castling after already moved king
 
 FIXME
 when calculating checks the board still gets updated for some reason...
