@@ -34,7 +34,7 @@ public class Main extends Thread{
 					outStream.print(b);
 					String input = sc.nextLine();				
 					Move m = parseInput(input);
-					b.updateBoard(m, b.getBoard());	
+					//b.updateBoard(m, b.getBoard());
 					
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();

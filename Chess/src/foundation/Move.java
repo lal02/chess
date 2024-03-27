@@ -19,6 +19,7 @@ public class Move {
 	public Position currentPosition;
 	public Position targetPosition;
 	public PlayerColor color;
+	public Position checkedFrom;
 
 	public Move(Piece piece, Position currentPosition, Position targetPosition, PlayerColor color) {
 		this.piece = piece;
@@ -28,10 +29,12 @@ public class Move {
 
 		MoveValidation m = new MoveValidation();
         try {
-            m.isValid(this);
 
-			Board.getBoardInstance().updateBoard(this, Board.getBoardInstance().getBoard());
-			Board.getBoardInstance().playedMoves.add(this);
+			if(m.isValid(this)){
+				Board.getBoardInstance().updateBoard(this, Board.getBoardInstance().getBoard());
+				Board.getBoardInstance().playedMoves.add(this);
+			}
+
         } catch (IllegalMoveException e) {
             throw new RuntimeException(e);
         }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CheckTest {
+    //TODO pawn promotion check
 
     @BeforeEach
     void initialize(){
@@ -17,6 +18,7 @@ public class CheckTest {
         new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.D7, Position.D6, PlayerColor.BLACK);
         new Move(Piece.whiteBishop, Position.F1, Position.B5, PlayerColor.WHITE);
+        System.out.println(Board.getBoardInstance());
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackPawn, Position.A7, Position.A6, PlayerColor.BLACK));
         new Move(Piece.blackBishop, Position.C8, Position.D7, PlayerColor.BLACK);
 
@@ -385,8 +387,8 @@ public class CheckTest {
         new Move(Piece.whiteBishop, Position.F3, Position.H1, PlayerColor.WHITE);
     }
 
-    @Test // add black knight checks
-    void testKnightChecks(){
+    @Test
+    void testWhiteKnightChecks(){
         new Move(Piece.whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.A7, Position.A6, PlayerColor.BLACK);
         new Move(Piece.whiteKnight, Position.F3, Position.D4, PlayerColor.WHITE);
@@ -405,6 +407,25 @@ public class CheckTest {
         new Move(Piece.blackKing, Position.D8, Position.E8, PlayerColor.BLACK);
         new Move(Piece.whiteKnight, Position.E6, Position.C7, PlayerColor.WHITE);
         new Move(Piece.blackKing, Position.E8, Position.D8, PlayerColor.BLACK);
+    }
+    @Test
+    void testBlackKnightChecks(){
+        new Move(Piece.whitePawn, Position.A2, Position.A3, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.G8, Position.F6, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.A3, Position.A4, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.F6, Position.H5, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.A4, Position.A5, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.H5, Position.F4, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.A5, Position.A6, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.F4, Position.G2, PlayerColor.BLACK);
+        new Move(Piece.whiteBishop, Position.F1, Position.G2, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.B8, Position.C6, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.A6, Position.B7, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.C6, Position.B4, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.B2, Position.B3, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.B4, Position.C2, PlayerColor.BLACK);
+        new Move(Piece.whiteKing, Position.E1, Position.F1, PlayerColor.WHITE);
+
     }
 
     @Test
@@ -469,6 +490,5 @@ public class CheckTest {
 
         assertThrows(RuntimeException.class,()->new Move(Piece.whitePawn,Position.D2,Position.D3,PlayerColor.WHITE));
     }
-
 
 }

@@ -21,11 +21,11 @@ class BoardTest {
         assertEquals(7, Board.getBoardInstance().getPlayedMoves().size());
 
         //illegal foundation.Move shouldnt get added to playedMoves
-        Move eight_illegal = new Move(Piece.blackKing,Position.E8,Position.E7,PlayerColor.BLACK);
+        assertThrows(RuntimeException.class,() -> new Move(Piece.blackKing,Position.E8,Position.E7,PlayerColor.BLACK));
         assertEquals(7,Board.getBoardInstance().getPlayedMoves().size());
 
         //also illegal foundation.Move because a different colour should be expected. not to be added to list
-        Move nine = new Move(Piece.whiteRook, Position.A1, Position.A2, PlayerColor.WHITE);
+        assertThrows(RuntimeException.class,() -> new Move(Piece.whiteRook, Position.A1, Position.A2, PlayerColor.WHITE));
         assertEquals(7,Board.getBoardInstance().getPlayedMoves().size());
 
         //legal moves
@@ -40,7 +40,7 @@ class BoardTest {
         assertEquals(15,Board.getBoardInstance().getPlayedMoves().size());
 
         //illegal because would be in check
-        Move eighteen = new Move(Piece.blackQueen,Position.D8,Position.B6,PlayerColor.BLACK);
+        assertThrows(RuntimeException.class,() -> new Move(Piece.blackQueen,Position.D8,Position.B6,PlayerColor.BLACK));
         assertEquals(15,Board.getBoardInstance().getPlayedMoves().size());
 
 
