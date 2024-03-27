@@ -11,10 +11,11 @@ test for castling after already moved king
 
 FIXME
 when calculating checks the board still gets updated for some reason...
+improve BoardTest TestClass
 
-TODO Longterm:
+TODO long-term:
 gui
 System that allows to build a position with drag and drop and save the board
-Puzzle gamemode with databaseS
+Puzzle gamemode with database
 
 // is my en passant implemented correctly? by the rules of chess

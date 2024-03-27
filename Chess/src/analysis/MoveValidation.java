@@ -196,7 +196,7 @@ public class MoveValidation {
             //no checks neccessary
         }
         else if(p== Piece.whiteKing  || p== Piece.blackKing) {
-            if(!kingMoveValidity(move,p)){
+            if(kingMoveValidity(move,p) == false){
                 throw new IllegalMoveException("Castling illegal");
             }
         }
@@ -249,8 +249,7 @@ public class MoveValidation {
         return true;
     }
     //TODO add checkmate analyzis? => all possible moves to remove the check
-    //  Pawn checks are not calculated correct => they can only move 1 position but get calculated like bishops (probably)
-    /**
+    /*
      * This method analyzes a given board and examines it if movecolor king is currently in check
      * @param moveColor the playercolor that is making the move
      * @param boardParam the board which has to be examined
@@ -536,7 +535,7 @@ public class MoveValidation {
         Position rookPosition = null;
         Piece rook = null;
 
-        boolean piecesHaveMoved = true;
+        boolean piecesHaveMoved = false;
 
         ArrayList<Move> playedMoves = boardInstance.getPlayedMoves();
         //castling move
@@ -579,12 +578,16 @@ public class MoveValidation {
                 rook = Piece.blackRook;
             }
 
-            if(whiteShortCastle && !(whiteKingHasMoved && whiteHrookHasMoved)) piecesHaveMoved = false;
-            if(whiteLongCastle && !(whiteKingHasMoved && whiteArookHasMoved)) piecesHaveMoved = false;
-            if(blackShortCastle && !(blackKingHasMoved && blackHrookHasMoved)) piecesHaveMoved = false;
-            if(blackLongCastle && !(blackKingHasMoved && blackHrookHasMoved)) piecesHaveMoved = false;
-
-            return simulateKingMove(king,rook,move,crossingSquare,rookPosition);
+            if(whiteShortCastle && (whiteKingHasMoved || whiteHrookHasMoved)) piecesHaveMoved = true;
+            if(whiteLongCastle && (whiteKingHasMoved || whiteArookHasMoved)) piecesHaveMoved = true;
+            if(blackShortCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
+            if(blackLongCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
+            if(piecesHaveMoved){
+                throw new IllegalMoveException("Pieces have moved and therefore cannot castle");
+            }
+            else{
+                return simulateKingMove(king,rook,move,crossingSquare,rookPosition);
+            }
         }
         return true;
     }

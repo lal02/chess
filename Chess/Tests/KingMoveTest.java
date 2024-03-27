@@ -305,5 +305,35 @@ class KingMoveTest {
         assertThrows(RuntimeException.class,()-> new Move(Piece.blackKing,Position.E8,Position.C8,PlayerColor.BLACK));
     }
 
+    @Test
+    void testWhiteShortCastlingWhenKingHasMoved(){
+        new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
+        new Move(Piece.blackPawn, Position.E7, Position.E6, PlayerColor.BLACK);
+        new Move(Piece.whiteBishop, Position.F1, Position.D3, PlayerColor.WHITE);
+        new Move(Piece.blackBishop, Position.F8, Position.D6, PlayerColor.BLACK);
+        new Move(Piece.whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.G8, Position.F6, PlayerColor.BLACK);
+        new Move(Piece.whiteKing, Position.E1, Position.E2, PlayerColor.WHITE);
+        new Move(Piece.blackKing, Position.E8, Position.E7, PlayerColor.BLACK);
+        new Move(Piece.whiteKing, Position.E2, Position.E1, PlayerColor.WHITE);
+        new Move(Piece.blackKing, Position.E7, Position.E8, PlayerColor.BLACK);
+        assertThrows(RuntimeException.class,()->new Move(Piece.whiteKing, Position.E1, Position.G1, PlayerColor.WHITE));
+        System.out.println(Board.getBoardInstance());
+    }
+
+    @Test
+    void testBlackShortCastlingWhenKingHasMoved(){
+        new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
+        new Move(Piece.blackPawn, Position.E7, Position.E6, PlayerColor.BLACK);
+        new Move(Piece.whiteBishop, Position.F1, Position.D3, PlayerColor.WHITE);
+        new Move(Piece.blackBishop, Position.F8, Position.D6, PlayerColor.BLACK);
+        new Move(Piece.whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE);
+        new Move(Piece.blackKnight, Position.G8, Position.F6, PlayerColor.BLACK);
+        new Move(Piece.whiteKing, Position.E1, Position.E2, PlayerColor.WHITE);
+        new Move(Piece.blackKing, Position.E8, Position.E7, PlayerColor.BLACK);
+        new Move(Piece.whiteKing, Position.E2, Position.E1, PlayerColor.WHITE);
+        new Move(Piece.blackKing, Position.E7, Position.E8, PlayerColor.BLACK);
+        assertThrows(RuntimeException.class,()->new Move(Piece.blackKing, Position.E8, Position.G8, PlayerColor.BLACK));
+    }
 
 }
