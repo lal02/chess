@@ -30,7 +30,7 @@ The jQuery JavaScript Library v3.6.0 also includes Sizzle.js
 
 Sizzle.js includes the following license:
 
-Copyright JS Foundation and other contributors, https://js.foundation/
+Copyright JS Foundation and other contributors, https://js.gamefoundation/
 
 This software consists of voluntary contributions made by many
 individuals. For exact contribution history, see the revision history

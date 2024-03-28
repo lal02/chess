@@ -1,6 +1,6 @@
 package main;
 
-import foundation.*;
+import gamefoundation.*;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;

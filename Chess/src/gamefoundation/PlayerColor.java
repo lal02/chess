@@ -1,4 +1,4 @@
-package foundation;
+package gamefoundation;
 
 /**
  * Enum that is used to determine the current Player

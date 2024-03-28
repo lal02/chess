@@ -1,4 +1,4 @@
-package foundation;
+package gamefoundation;
 
 import java.util.ArrayList;
 
@@ -29,12 +29,12 @@ public class Board {
 	private final Piece whitePawn = Piece.whitePawn;
 	
 	private Piece[][] board;
-	public ArrayList<Move> playedMoves = new ArrayList<Move>();
+	public ArrayList<Move> playedMoves = new ArrayList<>();
 	
 	private static Board instance = null;
 	
 	
-	private Board() {							
+	private Board() {
 		board = new Piece[][] {							
 								{blackRook,blackKnight,blackBishop,blackQueen,blackKing,blackBishop,blackKnight,blackRook},
 								{blackPawn,blackPawn,blackPawn,blackPawn,blackPawn,blackPawn,blackPawn,blackPawn},
@@ -74,8 +74,23 @@ public class Board {
 			int newRow = move.getTargetPosition().getRow();
 			int newColumn = move.getTargetPosition().getColumn();
 			boardParam[newRow][newColumn] = move.getPiece();
+	}
 
+	/**
+	 * This is neccessary because Array.clone() does not work with 2D arrays as I have painfully learned
+	 * @param source
+	 * @return
+	 */
+	public Piece[][] cloneBoard(Piece[][] source){
+		Piece[][] returnedBoard = new Piece[source.length][source[0].length];
 
+		for(int i = 0;i< source.length;i++){
+			for(int j = 0;j<source[i].length;j++){
+				returnedBoard[i][j] = source[i][j];
+			}
+		}
+
+		return returnedBoard;
 	}
 	
 	public void removePiece(Position pos, Piece[][] boardParam) {

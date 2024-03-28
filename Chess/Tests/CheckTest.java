@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import foundation.*;
+import gamefoundation.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -114,7 +114,7 @@ public class CheckTest {
         new Move(Piece.blackKnight, Position.G8, Position.F6, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.B2, Position.B3, PlayerColor.WHITE);
         new Move(Piece.blackKnight, Position.F6, Position.D5, PlayerColor.BLACK);
-        new Move(Piece.whitePawn, Position.H3, Position.H4, PlayerColor.WHITE);
+        new Move(Piece.whitePawn, Position.H2, Position.H4, PlayerColor.WHITE);
         new Move(Piece.blackKnight, Position.D5, Position.F4, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.H4, Position.H5, PlayerColor.WHITE);
         new Move(Piece.blackKnight, Position.F4, Position.G2, PlayerColor.BLACK);

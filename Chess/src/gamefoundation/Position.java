@@ -1,4 +1,4 @@
-package foundation;
+package gamefoundation;
 
 /**
  * Enum that is used to convert Chess Coordinates to Array Positions

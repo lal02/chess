@@ -1,5 +1,4 @@
-import foundation.*;
-import org.junit.jupiter.api.AfterEach;
+import gamefoundation.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

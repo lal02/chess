@@ -1,4 +1,4 @@
-package foundation;
+package gamefoundation;
 
 /**
  * Enum that is used to assign Unicode Values and the associated foundation.PlayerColor-Enum to the Chess Pieces

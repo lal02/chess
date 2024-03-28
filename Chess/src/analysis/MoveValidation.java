@@ -1,10 +1,10 @@
 package analysis;
 
 import java.util.ArrayList;
-import foundation.*;
+import gamefoundation.*;
 
-import static foundation.Piece.blackKing;
-import static foundation.Piece.whiteKing;
+import static gamefoundation.Piece.blackKing;
+import static gamefoundation.Piece.whiteKing;
 
 public class MoveValidation {
 
@@ -214,7 +214,7 @@ public class MoveValidation {
         }
 
         //check if King would be in check after move;
-        Piece[][] boardSimulation = boardInstance.getBoard().clone();
+        Piece[][] boardSimulation = boardInstance.cloneBoard(board);
         boardInstance.updateBoard(move, boardSimulation);
         if(inCheck(move.getColor(),boardSimulation) == true) {
             throw new IllegalMoveException("King is in check after this move");
@@ -223,13 +223,13 @@ public class MoveValidation {
 
         //check if enemy is checkmated after this move
 
-        PlayerColor enemy = null;
-        if(move.getColor() == PlayerColor.WHITE) enemy = PlayerColor.BLACK;
-        if(move.getColor() == PlayerColor.BLACK) enemy = PlayerColor.WHITE;
+        //PlayerColor enemy = null;
+        //if(move.getColor() == PlayerColor.WHITE) enemy = PlayerColor.BLACK;
+        //if(move.getColor() == PlayerColor.BLACK) enemy = PlayerColor.WHITE;
 
-        //if(CheckDetection.isCheckMated(enemy,boardSimulation)){
-        //    System.out.println(enemy + " is checkmated! Game ended");
-         //   throw new RuntimeException("Game over");
+        //if(isCheckMated(enemy,boardSimulation)){
+          //  System.out.println(enemy + " is checkmated! Game ended");
+           //throw new RuntimeException("Game over");
         //}
 
         return true;
@@ -289,6 +289,23 @@ public class MoveValidation {
         //iterate over possibleChecks list and determine if the piece can theoreticall move to the king => can capture him and therefore give him a check
         //ArrayList<Position> possibleChecks = findPossibleChecks(moveColor,kingPosition,boardParam);
         //determine squares that need to be checked => either enemy piece or empty square through which a distant piece can give a check
+        ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,moveColor);
+
+        //MoveValidation m = new MoveValidation();
+        if(getCheckSourcePosition(possibleChecks,kingPosition,boardParam) != null){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Creates arraylist including all possible checks to the current movecolor
+     * @param kingPosition
+     * @param boardParam
+     * @param moveColor
+     * @return arraylist including all possible positions with enemy pieces on them that can give a check to the movecolor king
+     */
+    private ArrayList<Position> getPossibleChecks(Position kingPosition,Piece[][] boardParam,PlayerColor moveColor){
         ArrayList<Position> possibleChecks = new ArrayList<>();
         for(Pair p : kingDirection) {
             // CASTLING POSSIBILITY MOVE BREAKS IT
@@ -343,23 +360,33 @@ public class MoveValidation {
                 }
             }
         }
-        //MoveValidation m = new MoveValidation();
+        return possibleChecks;
+    }
+
+    /**
+     * get the correct source of the given check from the possibleChecks arraylist
+     * @param possibleChecks
+     * @param kingPosition
+     * @param boardParam
+     * @return position from which the check is given; null if there is no check given
+     */
+    private Position getCheckSourcePosition(ArrayList<Position> possibleChecks, Position kingPosition, Piece[][] boardParam){
         for(Position p : possibleChecks) {
             if(boardParam[p.getRow()][p.getColumn()] != null) {
                 //use private move constructor to prevent each move getting checked for validity which is not needed in this case. move only gets created to re-use correctDirection method
                 if(correctDirection(new Move(boardParam[p.getRow()][p.getColumn()],p,kingPosition,false))) {
-                    return true;
+                    return p;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
      * Checks if the moveColor is checkmated
      * @return true if the movecolor is checkmated
      */
-    public boolean isCheckMated(PlayerColor moveColor, Piece[][] boardParam){
+    public boolean isCheckMated(Piece king, Piece[][] boardParam){
          /*
         checkmate:  if in check == true
                     if king has no safe square it can go to
@@ -372,9 +399,7 @@ public class MoveValidation {
         check all possible king moves (except castling) and test if king would be inCheck after them
          */
         //get king enum value
-        Piece king = null;
-        if(moveColor == PlayerColor.WHITE) king = whiteKing;
-        else if(moveColor == PlayerColor.BLACK) king = blackKing;
+
         //get king position
         Position kingPosition = null;
         for(int i = 0 ; i< boardParam.length;i++){
@@ -386,31 +411,146 @@ public class MoveValidation {
         }
 
         //if king is not in check, no checkmate testing needed
-        if(inCheck(moveColor,boardParam) == false){
+        if(inCheck(king.getPieceColor(),boardParam) == false){
+            // TODO ELSE IF CHECK FOR STALEMATE?
+            System.out.println("false!");
             return false;
         }
-        // TODO ELSE IF CHECK FOR STALEMATE?
 
+        //Piece[][] backupboard = Board.getBoardInstance().getBoard();
         //if king can escape checkmate by running away
-        for(MoveValidation.Pair p : kingDirection){
-            if(p.column == 2){
+        for(Pair p : kingDirection){
+            Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
+
+            if(p.column == 2 || p.column == -2){
                 continue;
             }
             int testRow = kingPosition.getRow() + p.row;
             int testColumn = kingPosition.getColumn() + p.column;
 
-            Piece[][] simulationBoard = Board.getBoardInstance().getBoard().clone();
-            Board.getBoardInstance().updateBoard(new Move(king,kingPosition,Position.getPositionFromValue(testRow,testColumn),false),simulationBoard);
 
-            if(inCheck(king.getPieceColor(),simulationBoard) == false){
-                //king kann weglaufen also kein checkmate
-                return false;
+            if(testRow < 0 ||testRow >= boardParam.length ||testColumn < 0 || testColumn >= boardParam.length){
+                continue;
             }
+
+
+
+
+            Move simulateMove = new Move(king,kingPosition,Position.getPositionFromValue(testRow,testColumn),false);
+
+
+
+            //piece can theoretically move there
+            if(correctDirection(simulateMove)){
+
+
+                Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
+
+
+                //target square is not empty
+                if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()] != null) {
+                    //occupied by the same color
+                    if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()==simulateMove.getPiece().getPieceColor()) {
+                        //DO NOTHING THIS IS NOT A LEGAL MOVE
+
+                    }
+                    //occupied by the opponent color
+                    else if (simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()!=simulateMove.getPiece().getPieceColor()){
+                        //enemy piece blocking
+                        System.out.println(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()!=simulateMove.getColor());
+
+
+                        if(inCheck(king.getPieceColor(),simulationBoard) == false){
+                            //king kann zur targetPosition gehen ohne dass er dort gechecked wird, also kein checkmate
+                            System.out.println("king kann aber nicht weglaufen!" + simulateMove.targetPosition + " " + king.getPieceColor() + " " + simulationBoard[Position.F8.getRow()][Position.F8.getColumn()].getPieceColor());
+                            return false;
+                        }
+                    }
+                }
+                //square is empty
+                else if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()] == null){
+                    Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
+                    if(inCheck(king.getPieceColor(),simulationBoard) == false){
+                        //king kann weglaufen also kein checkmate
+                        System.out.println("king kann aber nicht weglaufen!" + simulateMove.targetPosition);
+                        //FIXME problem: this move has to be checked for validity, this is probably the error source (the move constructor above)
+
+                        return false;
+                    }
+                }
+
+
+            }
+
         }
         //knight checks? multiple checks at the same time (abzugsdoppelschach)?
         //if checkmate can be prevented by blocking the check
         // -> int compare checkgiving position, kingposition to get the squares between the check giver and the king
         //      if no piece from the checked king color can move to any of the positions between king and checkgiver then its checkmate (this includes capturing)
+
+        //-> get source of the check(s?)
+
+        ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,king.getPieceColor());
+        Position checkSource = getCheckSourcePosition(possibleChecks,kingPosition,boardParam);
+        if(checkSource == null){
+
+            System.out.println("this should never be possible because inCheck gets called above and there therefore has to be a checkSource" + possibleChecks.size());
+        }
+
+        int kingRow = kingPosition.getRow();
+        int kingColumn = kingPosition.getColumn();
+
+        int checkSourceRow = checkSource.getRow();
+        int checkSourceColumn = checkSource.getColumn();
+
+        //reihenfolge beachten und wenn bugs auftreten umdrehen FIXME
+        int rowIncrement = Integer.compare(kingRow,checkSourceRow);
+        int columnIncrement = Integer.compare(kingColumn,checkSourceColumn);
+
+        int rowDifference = Math.abs(kingRow-checkSourceRow);
+        int columnDifference = Math.abs(kingColumn-checkSourceColumn);
+
+        //this should be 3 for knight checks
+        int cumulatedDifference = Math.abs(rowDifference+columnDifference);
+        if(cumulatedDifference == 3){
+            //it is given by a knight and can only be stopped by capturing the knight
+        }
+        else{
+            //blocking or capturing
+            /*
+             der diagonale entlang gehen bis zur source und für jedes feld prüfen ob es von einem movecolor piece erreicht werden kann
+             woher bekomm ich alle pieces? über das ganze feld iterieren und die Pieces in einem array speichern?
+             */
+
+            ArrayList<Piece> moveColorPieces = new ArrayList<>();
+
+            for(int i = 0; i< boardParam.length;i++){
+                for(int j = 0 ; j<boardParam[i].length;j++){
+                    if(boardParam[i][j].getPieceColor() == king.getPieceColor()){
+
+                        int rowIterator = kingPosition.getRow() + rowIncrement;
+                        int columnIterator = kingPosition.getColumn() + columnIncrement;
+                        //it should be impossible for them to not be both true or both false
+                        while(rowIterator != checkSourceRow && columnIterator != checkSourceColumn){
+
+                            //moveColorPieces.add(boardParam[i][j]);
+                            Piece p = boardParam[i][j];
+                            //i can just try here if it can reach it??
+                            //not king position! the targetposition
+                            if(correctDirection(new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowIterator,columnIterator),false))){
+                                return false;
+                            }
+
+                            rowIterator+= rowIncrement;
+                            columnIterator += columnIncrement;
+                        }
+
+
+
+                    }
+                }
+            }
+        }
 
 
         return true;
@@ -453,7 +593,7 @@ public class MoveValidation {
      * @param move The move that is to be checked
      * @return returns true if the piece can theoretically move to the targeted position
      */
-    public static boolean correctDirection(Move move) {
+    public boolean correctDirection(Move move) {
         Piece p = move.getPiece();
         Position currentPosition = move.getCurrentPosition();
         Position targetPosition = move.getTargetPosition();
@@ -492,7 +632,7 @@ public class MoveValidation {
      * @param targetPosition The in the move targeted foundation.Position of the move
      * @return Returns boolean value stating if the foundation.Piece can theoretically move to the given foundation.Position; True if it can move there; false if it cannot
      */
-    private static boolean positionMatches(ArrayList<Pair> list, Position currentPosition, Position targetPosition) {
+    private boolean positionMatches(ArrayList<Pair> list, Position currentPosition, Position targetPosition) {
         int currentRow = currentPosition.getRow();
         int currentColumn = currentPosition.getColumn();
         for(Pair pair : list) {
@@ -685,14 +825,15 @@ public class MoveValidation {
     private boolean simulateKingMove(Piece king, Piece rook , Move move, Position crossingSquare, Position rookPosition) throws IllegalMoveException {
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
-        Piece[][] boardSimulation = board.clone();
+        Piece[][] boardSimulation = boardInstance.cloneBoard(board);
+
         Move moveToCrossingSquare = new Move(king,move.currentPosition,crossingSquare,false);
         boardInstance.updateBoard(moveToCrossingSquare, boardSimulation);
         //cross over square that is checked by enemy piece:
         if(inCheck(king.getPieceColor(),boardSimulation)) {
             throw new IllegalMoveException("King cannot cross a square that is dangered. F1 dangered");
         }
-        Piece[][] boardSimulationDefault = board.clone();
+        Piece[][] boardSimulationDefault = boardInstance.cloneBoard(board);
         boardInstance.updateBoard(move, boardSimulationDefault);
         if(inCheck(king.getPieceColor(),boardSimulationDefault)) {
             throw new IllegalMoveException("King is in check after this move");
