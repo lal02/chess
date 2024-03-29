@@ -473,8 +473,6 @@ public class MoveValidation {
                     if(inCheck(king.getPieceColor(),simulationBoard) == false){
                         //king kann weglaufen also kein checkmate
                         System.out.println("king kann aber nicht weglaufen!" + simulateMove.targetPosition);
-                        //FIXME problem: this move has to be checked for validity, this is probably the error source (the move constructor above)
-
                         return false;
                     }
                 }
@@ -503,9 +501,8 @@ public class MoveValidation {
         int checkSourceRow = checkSource.getRow();
         int checkSourceColumn = checkSource.getColumn();
 
-        //reihenfolge beachten und wenn bugs auftreten umdrehen FIXME
-        int rowIncrement = Integer.compare(kingRow,checkSourceRow);
-        int columnIncrement = Integer.compare(kingColumn,checkSourceColumn);
+        int rowIncrement = Integer.compare(checkSourceRow,kingRow);
+        int columnIncrement = Integer.compare(checkSourceColumn,kingColumn);
 
         int rowDifference = Math.abs(kingRow-checkSourceRow);
         int columnDifference = Math.abs(kingColumn-checkSourceColumn);
@@ -537,9 +534,16 @@ public class MoveValidation {
                             Piece p = boardParam[i][j];
                             //i can just try here if it can reach it??
                             //not king position! the targetposition
-                            if(correctDirection(new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowIterator,columnIterator),false))){
-                                return false;
+                            if(p != king){
+                                Move toCheck = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowIterator,columnIterator),false);
+
+                                if(correctDirection(toCheck)){
+
+                                    System.out.println(toCheck);
+                                    return false;
+                                }
                             }
+
 
                             rowIterator+= rowIncrement;
                             columnIterator += columnIncrement;

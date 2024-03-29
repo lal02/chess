@@ -40,10 +40,13 @@ public class Move {
 
 				System.out.println(Board.getBoardInstance());
 
-				//if(m.isCheckMated(king,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard())) == true){
-				//	System.out.println("CHECKMATE! " + king + " is checkmated! game over");
-				//	throw new RuntimeException();
-				//}
+				if(m.isCheckMated(king,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard())) == true){
+					System.out.println("CHECKMATE! " + king + " is checkmated! game over");
+					throw new RuntimeException();
+				}
+				else{
+					System.out.println("no checkmate :(");
+				}
 			}
 
         } catch (IllegalMoveException e) {
@@ -77,5 +80,12 @@ public class Move {
 	}
 
 
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Move: " + this.piece + " from " + this.getCurrentPosition() + " to " + this.getTargetPosition());
+
+		return sb.toString();
+	}
 	
 }

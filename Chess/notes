@@ -4,22 +4,12 @@ checkmate detection
 stalemate detection
 3 time repetition
 
-
-
-checkmate:
-    after every move if the opponent is checkmated -> einzige option da sonst auf move input gewartet wird und dann erst checkmate detected wird
-    => where?
-                * move constructor after calling isValid and adding the move to the playedmoves arraylist
-                * movevalidation at isValid ending after simulating the current move and after that check if opponent is checkmated
-                * board
-                * main after parsing the input
-
-
-TODO:
+TODO tests :
 tests for all pieces
+all checkmate scenarios
+
 
 FIXME
-when calculating checks the board still gets updated for some reason... FIXED
 improve BoardTest TestClass
 
 TODO long-term:
