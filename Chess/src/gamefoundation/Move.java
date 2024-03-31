@@ -38,14 +38,11 @@ public class Move {
 				if(this.getColor() == PlayerColor.WHITE) king = Piece.blackKing;
 				if(this.getColor() == PlayerColor.BLACK) king = Piece.whiteKing;
 
-				System.out.println(Board.getBoardInstance());
+				//System.out.println(Board.getBoardInstance());
 
 				if(m.isCheckMated(king,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard())) == true){
 					System.out.println("CHECKMATE! " + king + " is checkmated! game over");
 					throw new RuntimeException();
-				}
-				else{
-					System.out.println("no checkmate :(");
 				}
 			}
 

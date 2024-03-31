@@ -1,13 +1,12 @@
 TODO implement:
 pawn promotion
-checkmate detection
 stalemate detection
 3 time repetition
 
 TODO tests :
 tests for all pieces
 all checkmate scenarios
-
+test king cannot touch -> kingmovetest
 
 FIXME
 improve BoardTest TestClass
@@ -17,4 +16,3 @@ gui
 System that allows to build a position with drag and drop and save the board
 Puzzle gamemode with database
 
-// is my en passant implemented correctly? by the rules of chess
