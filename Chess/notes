@@ -3,13 +3,16 @@ pawn promotion
 stalemate detection
 3 time repetition
 
+getpossible moves function?
+switch Piece to class instead of enum?
+
 TODO tests :
 tests for all pieces
-all checkmate scenarios
 test king cannot touch -> kingmovetest
+improve boardTest
 
 FIXME
-improve BoardTest TestClass
+checkmate detection doesnt always work -> CheckMateTest
 
 TODO long-term:
 gui

@@ -587,6 +587,78 @@ public class MoveValidation {
     }
 
     /**
+     * Checks if the moveColor is checkmated
+     * @return true if the board param is in a stalemate position
+     */
+    public boolean isStaleMated(PlayerColor playerColor, Piece[][] boardParam){
+        /*
+           iterate over all pieces
+                and for each piece iterate over all the possible directions and test if the move would be legal
+         */
+
+        ArrayList<Pair> direction = null;
+
+        for(int i = 0; i<boardParam.length;i++){
+            for(int j = 0; j<boardParam[i].length;j++){
+                if(boardParam[i][j] != null && boardParam[i][j].getPieceColor() == playerColor){
+                    //
+                    Piece p = boardParam[i][j];
+
+                    if(p == whitePawn){
+                        direction = whitePawnDirection;
+                    }
+                    else if(p == blackPawn){
+                        direction = blackPawnDirection;
+                    }
+                    else if(p == whiteBishop ||p == blackBishop){
+                        direction = bishopDirection;
+                    }
+                    else if(p==blackKnight ||p == whiteKnight){
+                        direction = knightDirection;
+                    }
+                    else if(p == blackRook || p == whiteRook){
+                        direction = rookDirection;
+                    }
+                    else if(p == whiteKing || p == blackKing){
+                        direction = kingDirection;
+                    }
+                    else if(p == whiteQueen || p == blackQueen){
+                        direction = queenDirection;
+                    }
+
+                    for(Pair pair : direction){
+                        int rowAfterMove = i + pair.row;
+                        int columnAfterMove = j + pair.column;
+                        if(rowAfterMove >= boardParam.length ||rowAfterMove<0 || columnAfterMove >= boardParam.length ||columnAfterMove<0){
+                            continue;
+                        }
+                        Move simulationMove = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowAfterMove,columnAfterMove),false);
+                        System.out.println(simulationMove);
+                        Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
+                        //incheck correctdirection und pathblocked
+                        System.out.println("tests: " + correctDirection(simulationMove) + " " + inCheck(simulationMove.getColor(),simulationBoard) + " " +checkPathBlocked(simulationMove.currentPosition,simulationMove.targetPosition,simulationMove.piece));
+
+                        if (correctDirection(simulationMove) == true)
+                            if (checkPathBlocked(simulationMove.currentPosition, simulationMove.targetPosition, simulationMove.piece) == true)
+                                if (inCheck(simulationMove.getColor(), simulationBoard) == false) {
+                                    //möglicher move gefunden, also kein stalemate
+                                    System.out.println("möglicher move gefunden");
+                                    return false;
+                                }
+
+                    }
+                }
+
+            }
+        }
+
+
+
+
+        return true;
+    }
+
+    /**
      * Checks if the path between the current location and the target location is blocked by a piece and the move therefore illegal.
      * Calculates the difference between current and targetposition and checks each position by using the Integer.compare(a,b) function to increment with 1 or -1 until the position is reached.
      * @param piece The piece that is moving
@@ -873,6 +945,7 @@ public class MoveValidation {
         boardInstance.placePiece(crossingSquare, Board.getBoardInstance().getBoard(),rook);
         return true;
     }
+
 
 
     static class Pair{
