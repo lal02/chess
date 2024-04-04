@@ -39,7 +39,9 @@ public class Move {
 				if(this.getColor() == PlayerColor.WHITE) king = Piece.blackKing;
 				if(this.getColor() == PlayerColor.BLACK) king = Piece.whiteKing;
 
-				if(m.isCheckMated(king,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard())) == true){
+				boolean checkmated = m.isCheckMated(king,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
+
+				if( checkmated == true){
 					System.out.println("CHECKMATE! " + king + " is checkmated! game over");
 					throw new RuntimeException();
 				}
@@ -51,7 +53,7 @@ public class Move {
 					nextMoveColor = PlayerColor.WHITE;
 				}
 
-//				if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
+//				if(checkmated == false && m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
 //					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
 //				}
 //				else{

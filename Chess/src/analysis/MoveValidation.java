@@ -1,6 +1,8 @@
 package analysis;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import gamefoundation.*;
 
 import static gamefoundation.Piece.*;
@@ -598,68 +600,78 @@ public class MoveValidation {
            iterate over all pieces
                 and for each piece iterate over all the possible directions and test if the move would be legal
          */
-
-        ArrayList<Pair> direction = null;
-
         for(int i = 0; i<boardParam.length;i++){
             for(int j = 0; j<boardParam[i].length;j++){
                 if(boardParam[i][j] != null && boardParam[i][j].getPieceColor() == playerColor){
-                    //
                     Piece p = boardParam[i][j];
-
-                    if(p == whitePawn){
-                        direction = whitePawnDirection;
-                    }
-                    else if(p == blackPawn){
-                        direction = blackPawnDirection;
-                    }
-                    else if(p == whiteBishop ||p == blackBishop){
-                        direction = bishopDirection;
-                    }
-                    else if(p==blackKnight ||p == whiteKnight){
-                        direction = knightDirection;
-                    }
-                    else if(p == blackRook || p == whiteRook){
-                        direction = rookDirection;
-                    }
-                    else if(p == whiteKing || p == blackKing){
-                        direction = kingDirection;
-                    }
-                    else if(p == whiteQueen || p == blackQueen){
-                        direction = queenDirection;
-                    }
-
-                    for(Pair pair : direction){
-                        int rowAfterMove = i + pair.row;
-                        int columnAfterMove = j + pair.column;
-                        if(rowAfterMove >= boardParam.length ||rowAfterMove<0 || columnAfterMove >= boardParam.length ||columnAfterMove<0){
-                            continue;
-                        }
-                        Move simulationMove = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowAfterMove,columnAfterMove),false);
-
-                        Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
-                        //incheck correctdirection und pathblocked
-
-                        if (correctDirection(simulationMove) == true)
-                            if (checkPathBlocked(simulationMove.currentPosition, simulationMove.targetPosition, simulationMove.piece,boardParam) == true)
-                                if (inCheck(simulationMove.getColor(), simulationBoard) == false) {
-                                    //möglicher move gefunden, also kein stalemate
-
-                                    return false;
-                                }
-
+                    if(hasPossibleMoves(p,Position.getPositionFromValue(i,j),boardParam) == false){
+                        return false;
                     }
                 }
-
             }
         }
-
-
-
-
         return true;
     }
 
+    private boolean hasPossibleMoves(Piece piece, Position currentPosition,Piece[][] boardParam){
+        ArrayList<Pair> direction = null;
+        if(piece == whitePawn){
+            direction = whitePawnDirection;
+        }
+        else if(piece == blackPawn){
+            direction = blackPawnDirection;
+        }
+        else if(piece == whiteBishop ||piece == blackBishop){
+            direction = bishopDirection;
+        }
+        else if(piece==blackKnight ||piece == whiteKnight){
+            direction = knightDirection;
+        }
+        else if(piece == blackRook || piece == whiteRook){
+            direction = rookDirection;
+        }
+        else if(piece == whiteKing || piece == blackKing){
+            direction = kingDirection;
+        }
+        else if(piece == whiteQueen || piece == blackQueen){
+            direction = queenDirection;
+        }
+
+        //if piece has any legal move return true
+        //iterate over all possible pairs and add them to it and determine if they are legal
+
+        for(Pair p : direction){
+            int rowAfterMove = currentPosition.getRow() + p.row;
+            int columnAfterMove = currentPosition.getColumn() + p.column;
+            //prevent out of bounds
+            if(rowAfterMove >= boardParam.length ||rowAfterMove<0 || columnAfterMove >= boardParam.length ||columnAfterMove<0){
+                continue;
+            }
+
+            Move simulationMove = new Move(piece,currentPosition,Position.getPositionFromValue(rowAfterMove,columnAfterMove),false);
+            Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(boardParam);
+
+            /*
+            if correct direction
+                if not path blocked
+                    if not in check afterwards
+                        return true
+             */
+            if(correctDirection(simulationMove)){
+                if(checkPathBlocked(currentPosition,simulationMove.targetPosition,simulationMove.piece,simulationBoard) == true){
+                    Board.getBoardInstance().updateBoard(simulationMove,simulationBoard);
+                    if(inCheck(simulationMove.color,simulationBoard) == false){
+                        System.out.println("Not in check and therefore legal move!");
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    //TODO change parameters to Move and Board only
     /**
      * Checks if the path between the current location and the target location is blocked by a piece and the move therefore illegal.
      * Calculates the difference between current and targetposition and checks each position by using the Integer.compare(a,b) function to increment with 1 or -1 until the position is reached.
