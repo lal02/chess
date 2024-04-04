@@ -445,6 +445,7 @@ public class CheckTest {
         new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
         new Move(Piece.blackBishop, Position.C5, Position.D4, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whitePawn,Position.E3,Position.D4,PlayerColor.WHITE));
+        //new Move(Piece.whitePawn,Position.E3,Position.D4,PlayerColor.WHITE);
     }
 
     @Test
@@ -462,6 +463,8 @@ public class CheckTest {
         new Move(Piece.whiteKnight, Position.B5, Position.D6, PlayerColor.WHITE);
         // piece is pinned and capturing that way is therefore illegal
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackPawn,Position.E7,Position.D6,PlayerColor.BLACK));
+        //new Move(Piece.blackPawn,Position.E7,Position.D6,PlayerColor.BLACK);
+
     }
 
     @Test
@@ -489,6 +492,10 @@ public class CheckTest {
         new Move(Piece.blackQueen, Position.G5, Position.E3, PlayerColor.BLACK);
 
         assertThrows(RuntimeException.class,()->new Move(Piece.whitePawn,Position.D2,Position.D3,PlayerColor.WHITE));
+
+
+
+
     }
 
 }

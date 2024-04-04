@@ -313,11 +313,9 @@ public class CheckMateTest {
         new Move(Piece.whiteKnight, Position.H4, Position.F5, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.A6, Position.A5, PlayerColor.BLACK);
         //this is not checkmate! only normal check
-        System.out.println(Board.getBoardInstance());
         new Move(Piece.whiteKnight, Position.F5, Position.E7, PlayerColor.WHITE);
         new Move(Piece.blackKing, Position.G8, Position.H8, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.H2, Position.H3, PlayerColor.WHITE);
-        System.out.println(Board.getBoardInstance());
         //same problem as the other test, this should be a legal move! fixme
         new Move(Piece.blackPawn, Position.H5, Position.G4, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.B2, Position.B3, PlayerColor.WHITE);
@@ -368,8 +366,6 @@ public class CheckMateTest {
         new Move(Piece.blackKing, Position.C6, Position.B6, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.C2, Position.C4, PlayerColor.WHITE);
         //sollte legal sein, möglicherweise wird der bishop auf f1 nicht als geblocked gesehen und das game denkt dass der king auf a6 vom bishop gesehen werden kann?
-        System.out.println(Board.getBoardInstance());
-        System.out.println(Board.getBoardInstance().getBoard()[4][2]);
         new Move(Piece.blackKing, Position.B6, Position.A6, PlayerColor.BLACK);
         new Move(Piece.whiteQueen, Position.G3, Position.E5, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.H7, Position.H6, PlayerColor.BLACK);

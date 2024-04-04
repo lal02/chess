@@ -51,12 +51,12 @@ public class Move {
 					nextMoveColor = PlayerColor.WHITE;
 				}
 
-				if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
-					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
-				}
-				else{
-					System.out.println("Kein Stalemate ;)");
-				}
+//				if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
+//					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
+//				}
+//				else{
+//					System.out.println("Kein Stalemate ;)");
+//				}
 			}
 
         } catch (IllegalMoveException e) {

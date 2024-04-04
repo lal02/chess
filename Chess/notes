@@ -3,6 +3,9 @@ pawn promotion
 stalemate detection
 3 time repetition
 
+
+
+
 getpossible moves function?
 switch Piece to class instead of enum?
 
@@ -12,7 +15,10 @@ test king cannot touch -> kingmovetest
 improve boardTest
 
 FIXME
-checkmate detection doesnt always work -> CheckMateTest
+check and checkmate detection:
+
+getpossiblechecks adds blackKing E8 to E1 Move???? makes no sense
+CheckSource is often null for some reason
 
 TODO long-term:
 gui

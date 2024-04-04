@@ -133,7 +133,7 @@ public class MoveValidation {
     }
 
 
-    //TODO: Pawn promotion
+
     /**
      * Confirms if a move is legal and can be played.
      * Also checks for all the special cases.
@@ -207,7 +207,7 @@ public class MoveValidation {
         }
         //bishop queen rook
         else {
-            if(checkPathBlocked(move.currentPosition,move.targetPosition,move.piece) == false) {
+            if(checkPathBlocked(move.currentPosition,move.targetPosition,move.piece,board) == false) {
                 throw new IllegalMoveException("Path is blocked");
             }
         }
@@ -215,10 +215,10 @@ public class MoveValidation {
         //check if King would be in check after move;
         Piece[][] boardSimulation = boardInstance.cloneBoard(board);
         boardInstance.updateBoard(move, boardSimulation);
-        System.out.println(inCheck(move.getColor(),boardSimulation));
-        System.out.println(move);
+
+
         if(inCheck(move.getColor(),boardSimulation) == true) {
-            throw new IllegalMoveException("King is in check after this move");
+            throw new IllegalMoveException("King is in check after this move: " + move);
         }
         return true;
     }
@@ -275,14 +275,22 @@ public class MoveValidation {
 
 
         //iterate over possibleChecks list and determine if the piece can theoreticall move to the king => can capture him and therefore give him a check
-        //ArrayList<Position> possibleChecks = findPossibleChecks(moveColor,kingPosition,boardParam);
         //determine squares that need to be checked => either enemy piece or empty square through which a distant piece can give a check
-        ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,moveColor);
+       ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,moveColor);
 
         //MoveValidation m = new MoveValidation();
-        if(getCheckSourcePosition(possibleChecks,kingPosition,boardParam) != null){
-            return true;
+//        if(getCheckSourcePosition(possibleChecks,kingPosition,boardParam) != null){
+//            return true;
+//        }
+
+        if(possibleChecks.size() >0){
+            Position p = getCheckSourcePosition(possibleChecks,kingPosition,boardParam);
+            if(p!=null){
+                return true;
+            }
+
         }
+
         return false;
     }
 
@@ -316,11 +324,12 @@ public class MoveValidation {
                     int rowIncrement = Integer.compare(rowAfterMovement, kingPosition.getRow());
                     int columnIncrement = Integer.compare(columnAfterMovement, kingPosition.getColumn());
                     int iterateRow = kingPosition.getRow();
+                    //one iteration so the current king position does not get checked
                     iterateRow += rowIncrement;
                     int iterateColumn = kingPosition.getColumn();
                     iterateColumn += columnIncrement;
                     // Iterate from current king position in the direction of the empty square until an own piece, enemy piece or the end of the board is reached
-                    while(iterateRow>=0 && iterateColumn >= 0 && iterateRow < boardParam.length && iterateColumn < boardParam[iterateRow].length && iterateColumn>=0) {
+                    while(iterateRow>=0 && iterateColumn >= 0 && iterateRow < boardParam.length && iterateColumn < boardParam[iterateRow].length ) {
                         if(boardParam[iterateRow][iterateColumn] != null) {
                             if(boardParam[iterateRow][iterateColumn].getPieceColor()==moveColor) {
                                 //piece of the same color blocks the way => no check possible
@@ -348,6 +357,7 @@ public class MoveValidation {
                 }
             }
         }
+
         Piece knight = null;
         if(moveColor == PlayerColor.WHITE){
             knight = blackKnight;
@@ -365,14 +375,15 @@ public class MoveValidation {
 
                 if(boardParam[possibleKnightCheckRow][possibleKnightCheckColumn] == knight){
                     possibleChecks.add(Position.getPositionFromValue(possibleKnightCheckRow,possibleKnightCheckColumn));
+
                 }
 
             }
         }
-
         return possibleChecks;
     }
 
+    //FIXME what to do if there are 2 checks? abzugsschach?
     /**
      * get the correct source of the given check from the possibleChecks arraylist
      * @param possibleChecks
@@ -384,8 +395,15 @@ public class MoveValidation {
         for(Position p : possibleChecks) {
             if(boardParam[p.getRow()][p.getColumn()] != null) {
                 //use private move constructor to prevent each move getting checked for validity which is not needed in this case. move only gets created to re-use correctDirection method
-                if(correctDirection(new Move(boardParam[p.getRow()][p.getColumn()],p,kingPosition,false))) {
-                    return p;
+                Move simulationMove = new Move(boardParam[p.getRow()][p.getColumn()],p,kingPosition,false);
+                if(correctDirection(simulationMove)) {
+                    Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(boardParam);
+                    Board.getBoardInstance().updateBoard(simulationMove,simulationBoard);
+                    if(checkPathBlocked(simulationMove.currentPosition,simulationMove.targetPosition, simulationMove.getPiece(),simulationBoard) == true){
+                        // wird nicht geblocked
+                        return p;
+                    }
+
                 }
             }
         }
@@ -419,45 +437,37 @@ public class MoveValidation {
         for(Pair p : kingDirection){
             Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
 
+            //king can only move 2 squares when castling
             if(p.column == 2 || p.column == -2){
                 continue;
             }
             int testRow = kingPosition.getRow() + p.row;
             int testColumn = kingPosition.getColumn() + p.column;
 
-
+            //prevent out of bounds
             if(testRow < 0 ||testRow >= boardParam.length ||testColumn < 0 || testColumn >= boardParam.length){
                 continue;
             }
-
-
 
 
             Move simulateMove = new Move(king,kingPosition,Position.getPositionFromValue(testRow,testColumn),false);
             //piece can theoretically move there
             if(correctDirection(simulateMove)){
 
-                //Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
 
 
                 //target square is not empty
                 if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()] != null) {
-                    //occupied by the same color
                     if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()==simulateMove.getPiece().getPieceColor()) {
-                        //DO NOTHING THIS IS NOT A LEGAL MOVE
-
-
+                        //DO NOTHING THIS IS NOT A LEGAL MOVE - occupied by the same color
                     }
                     //occupied by the opponent color
                     else if (simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()!=simulateMove.getPiece().getPieceColor()){
                         //enemy piece blocking
-                       // System.out.println(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()!=simulateMove.getColor());
 
-
+                        Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
                         if(inCheck(king.getPieceColor(),simulationBoard) == false){
                             //king kann zur targetPosition gehen ohne dass er dort gechecked wird, also kein checkmate
-                        //    System.out.println("king kann aber nicht weglaufen!" + simulateMove.targetPosition + " " + king.getPieceColor() + " " + simulationBoard[Position.F8.getRow()][Position.F8.getColumn()].getPieceColor());
-
                             return false;
                         }
                     }
@@ -465,14 +475,10 @@ public class MoveValidation {
                 //square is empty
 
                 else if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()] == null){
-                    System.out.println("here");
+
                     Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
                     if(inCheck(king.getPieceColor(),simulationBoard) == false){
-                        //king kann weglaufen also kein checkmate
-                       // System.out.println("king kann aber nicht weglaufen!" + simulateMove.targetPosition);
-                        //System.out.println(simulateMove);
-                        System.out.println("er kann aber weglaufen!!!");
-
+                        //king has an empty square it can reach and not be checked on it => no checkmate
                         return false;
                     }
                 }
@@ -489,7 +495,6 @@ public class MoveValidation {
         //-> get source of the check(s?)
 
         //
-        //System.out.println(inCheck(king.getPieceColor(),simulationBoard));
 
         ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,king.getPieceColor());
         Position checkSource = getCheckSourcePosition(possibleChecks,kingPosition,boardParam);
@@ -564,8 +569,6 @@ public class MoveValidation {
 
                                 //if it can reach the position theoretically it can block the check and therefore it is not checkmated
                                 if(correctDirection(toCheck)){
-
-                                    System.out.println(toCheck);
                                     return false;
                                 }
                             }
@@ -633,16 +636,15 @@ public class MoveValidation {
                             continue;
                         }
                         Move simulationMove = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowAfterMove,columnAfterMove),false);
-                        System.out.println(simulationMove);
+
                         Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
                         //incheck correctdirection und pathblocked
-                        System.out.println("tests: " + correctDirection(simulationMove) + " " + inCheck(simulationMove.getColor(),simulationBoard) + " " +checkPathBlocked(simulationMove.currentPosition,simulationMove.targetPosition,simulationMove.piece));
 
                         if (correctDirection(simulationMove) == true)
-                            if (checkPathBlocked(simulationMove.currentPosition, simulationMove.targetPosition, simulationMove.piece) == true)
+                            if (checkPathBlocked(simulationMove.currentPosition, simulationMove.targetPosition, simulationMove.piece,boardParam) == true)
                                 if (inCheck(simulationMove.getColor(), simulationBoard) == false) {
                                     //möglicher move gefunden, also kein stalemate
-                                    System.out.println("möglicher move gefunden");
+
                                     return false;
                                 }
 
@@ -666,7 +668,7 @@ public class MoveValidation {
      * @param currentPosition the current position from which the piece wants to move away from
      * @return boolean false if path is blocked; boolean true if path is not blocked
      */
-    private boolean checkPathBlocked(Position currentPosition, Position targetPosition, Piece piece) {
+    private boolean checkPathBlocked(Position currentPosition, Position targetPosition, Piece piece,Piece[][] boardParam) {
         int currentRow = currentPosition.getRow();
         int targetRow = targetPosition.getRow();
         int currentColumn = currentPosition.getColumn();
@@ -679,7 +681,7 @@ public class MoveValidation {
         currentColumn += columnIncrement;
         if(piece.equals(Piece.blackBishop) || piece.equals(Piece.whiteBishop) || piece.equals(Piece.whiteRook) || piece.equals(Piece.blackRook) || piece.equals(Piece.blackQueen) || piece.equals(Piece.whiteQueen) ) {
             while(currentRow!= targetRow || currentColumn != targetColumn) {
-                if(boardInstance.getBoard()[currentRow][currentColumn]!=null) {
+                if(boardParam[currentRow][currentColumn]!=null) {
                     return false;
                 }
                 currentRow += rowIncrement;
