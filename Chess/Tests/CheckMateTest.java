@@ -345,9 +345,11 @@ public class CheckMateTest {
         new Move(Piece.blackKnight, Position.D5, Position.F4, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.A2, Position.A3, PlayerColor.WHITE);
         new Move(Piece.blackKnight, Position.F4, Position.E2, PlayerColor.BLACK);
-        //this move should be legal, why is it not??
         new Move(Piece.whitePawn, Position.H3, Position.G4, PlayerColor.WHITE);
-        assertThrows(RuntimeException.class,() -> new Move(Piece.blackPawn, Position.H5, Position.G4, PlayerColor.BLACK));
+        new Move(Piece.blackPawn, Position.H5, Position.G4, PlayerColor.BLACK);
+        new Move(Piece.whiteBishop,Position.D3,Position.H7,PlayerColor.WHITE);
+        assertThrows(RuntimeException.class,() ->new Move(Piece.blackRook,Position.H8,Position.H7,PlayerColor.BLACK));
+
 
     }
 

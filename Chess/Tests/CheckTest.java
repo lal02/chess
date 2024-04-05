@@ -311,8 +311,8 @@ public class CheckTest {
         new Move(Piece.whiteQueen, Position.D1, Position.E2, PlayerColor.WHITE);
         new Move(Piece.blackRook, Position.H4, Position.G4, PlayerColor.BLACK);
         // rook check
-        assertDoesNotThrow(() ->new Move(Piece.whiteRook, Position.H1, Position.H8, PlayerColor.WHITE));
-        //new Move(Piece.whiteRook, Position.H1, Position.H8, PlayerColor.WHITE);
+        //assertDoesNotThrow(() ->new Move(Piece.whiteRook, Position.H1, Position.H8, PlayerColor.WHITE));
+        new Move(Piece.whiteRook, Position.H1, Position.H8, PlayerColor.WHITE);
         //block it with bishop
         new Move(Piece.blackBishop, Position.G7, Position.F8, PlayerColor.BLACK);
         new Move(Piece.whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE);
