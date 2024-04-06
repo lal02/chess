@@ -4,84 +4,77 @@ import analysis.IllegalMoveException;
 import analysis.MoveValidation;
 
 /**
- * The foundation.Move class represents a foundation.Move played in the game.
+ * The foundation.Move class represents a Move played in the game.
  * It encapsulates information about the piece being moved, the current and targeted foundation.Position and which Color is currently moving.
- * It also provides the function to check if a move is valid and can be legally played in the game.
- * 
- * @author lalbr
- *
- */
-
+ * It has two constructors. One tests if the move is valid and if the enemy is in a game-ending position after the move. The other is used to simulate moves without going through the validation process and enemy position testing.
+ **/
 public class Move {
 
+	private Piece piece;
+	private Position currentPosition;
+	private Position targetPosition;
+	private PlayerColor color;
 
-	public Piece piece;
-	public Position currentPosition;
-	public Position targetPosition;
-	public PlayerColor color;
-	public Position checkedFrom;
-
+	/**
+	 * Default constructor that does the following checks upon creation:
+	 * Test if move is valid / legal by the rules of chess
+	 * Test if enemy is Checkmated after this move
+	 * Test if enemy is Stalemated after this move
+	 * @param piece The piece that is moved
+	 * @param currentPosition The starting position of the piece
+	 * @param targetPosition The targeted Position of the piece
+	 * @param color The color that is making the move
+	 */
 	public Move(Piece piece, Position currentPosition, Position targetPosition, PlayerColor color) {
 		this.piece = piece;
 		this.currentPosition = currentPosition;
 		this.targetPosition = targetPosition;
 		this.color = color;
-
 		MoveValidation m = new MoveValidation();
         try {
-
 			if(m.isValid(this)){
 				Board.getBoardInstance().updateBoard(this, Board.getBoardInstance().getBoard());
 				Board.getBoardInstance().playedMoves.add(this);
-				Piece king = null;
-
-
-				if(this.getColor() == PlayerColor.WHITE) king = Piece.blackKing;
-				if(this.getColor() == PlayerColor.BLACK) king = Piece.whiteKing;
-
-				boolean checkmated = m.isCheckMated(king,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
+				PlayerColor enemyColor = null;
+				if(this.getColor() == PlayerColor.WHITE) enemyColor = PlayerColor.BLACK;
+				if(this.getColor() == PlayerColor.BLACK) enemyColor = PlayerColor.WHITE;
+				boolean checkmated = m.isCheckMated(enemyColor,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
+				PlayerColor nextMoveColor = null;
+				if(this.getColor() == PlayerColor.WHITE)nextMoveColor = PlayerColor.BLACK;
+				else if(this.getColor() == PlayerColor.BLACK)nextMoveColor = PlayerColor.WHITE;
 
 				if( checkmated == true){
-					System.out.println("CHECKMATE! " + king + " is checkmated! game over");
+					System.out.println("CHECKMATE! " + enemyColor + " is checkmated! game over");
 					throw new RuntimeException();
+				} else if(checkmated == false && m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
+					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
+					throw new RuntimeException("stalemate");
 				}
-				PlayerColor nextMoveColor = null;
-				if(this.getColor() == PlayerColor.WHITE){
-					nextMoveColor = PlayerColor.BLACK;
-				}
-				else if(this.getColor() == PlayerColor.BLACK){
-					nextMoveColor = PlayerColor.WHITE;
-				}
-
-//				if(checkmated == false && m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
-//					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
-//				}
-//				else{
-//					System.out.println("Kein Stalemate ;)");
-//				}
 			}
-
         } catch (IllegalMoveException e) {
             throw new RuntimeException(e);
         }
     }
-	// constructor to prevent validity checking for this move if it is only to be simulated for check searching. also prevents unwanted add to playedmove list
+	/**
+	 * Constructor that is used to reuse functions that have Move as a parameter. Good to simulate moves that dont have to be checked for validity and added to the playedMoves list.
+	 * @param piece the moved piece
+	 * @param currentPosition the starting position
+	 * @param targetPosition the target position
+	 * @param checkValidity True or false does not matter. this always prevents validity checking
+	 */
 	public Move(Piece piece, Position currentPosition, Position targetPosition, boolean checkValidity) {
 		this.piece = piece;
 		this.currentPosition = currentPosition;
 		this.targetPosition = targetPosition;
 	}
-	
 
 	public Piece getPiece() {
 		return piece;
 	}
 
-
 	public Position getCurrentPosition() {
 		return currentPosition;
 	}
-
 
 	public Position getTargetPosition() {
 		return targetPosition;
@@ -91,13 +84,10 @@ public class Move {
 		return color;
 	}
 
-
+	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-
-		sb.append("Move: " + this.piece + " from " + this.getCurrentPosition() + " to " + this.getTargetPosition());
-
+		sb.append("Move: " + this.getPiece() + " from " + this.getCurrentPosition() + " to " + this.getTargetPosition());
 		return sb.toString();
 	}
-	
 }

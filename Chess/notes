@@ -1,14 +1,14 @@
 TODO implement:
 pawn promotion
-stalemate detection
 3 time repetition
+no suffiecient material to mate on the board detection
 
 getpossible moves function?
 switch Piece to class instead of enum?
 
 TODO tests :
 tests for all pieces
-test king cannot touch -> kingmovetest
+test king cannot touch -> kingmovetest (should be covered by checkdetection but writing a test wont hurt)
 improve boardTest
 
 FIXME

@@ -1,7 +1,6 @@
 package analysis;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import gamefoundation.*;
 
@@ -18,7 +17,7 @@ public class MoveValidation {
     public static ArrayList <Pair> queenDirection = new ArrayList<>();
 
     //TODO better solution for this
-    //Fills all the direction ArrayLists with all possible Moves for each foundation.Piece
+    //Fills all the direction ArrayLists with all possible Moves for each Piece
     static {
         blackPawnDirection.add(new Pair(1,0));
         blackPawnDirection.add(new Pair(1,1));
@@ -137,62 +136,57 @@ public class MoveValidation {
 
 
     /**
-     * Confirms if a move is legal and can be played.
-     * Also checks for all the special cases.
+     * Confirms if a move is legal and can be played be testing for the following cases:
+     * Check if the correct color is making a move
+     * Check if piece is on the named starting square
+     * Check if piece can theoretically move that way
+     * Ceck if targetsquare is empty or has enemy piece on it
+     * Check for pawn and king special cases
+     * Check if path is blocked between currentposition and targetposition
+     * Check if king would be in check after this move
      * @param move The move that is to be checked for validity
      * @throws IllegalMoveException is thrown if any of the severals checks fail with a description on why the move is illegal
      */
     public boolean isValid(Move move) throws IllegalMoveException {
-        // explanation outdated
-        /* 0. Check if the correct color is making a move
-         * 1. Check if Player is currently in check
-         * 2. Check if foundation.Piece is actually on the starting field that is being named
-         * 3. Check if foundation.Piece can move that way -> Pawn Capture?
-         * 4. Check if Tile is empty or if enemy has piece on it -> own piece cant be captured
-         * 5. Check if own king would be in check after move
-         */
         Piece p = move.getPiece();
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
-
-
         int currentRow = move.getCurrentPosition().getRow();
         int currentColumn = move.getCurrentPosition().getColumn();
         int targetRow = move.getTargetPosition().getRow();
         int targetColumn = move.getTargetPosition().getColumn();
 
-        //Check if the correct color is making a move :: Done
+        //Check if the correct color is making a move
         ArrayList<Move> moveList = boardInstance.getPlayedMoves();
         if(moveList.size()>0) {
-            PlayerColor lastMoveColor = moveList.get(moveList.size()-1).color;
+            PlayerColor lastMoveColor = moveList.get(moveList.size() - 1).getColor();
             if(lastMoveColor == move.getColor()) {
                 throw new IllegalMoveException("Expected move from different color.\nLast move played by " +
-                        moveList.get(moveList.size()-1).color + "\nCurrent foundation.Move played by: "+move.getColor());
+                        moveList.get(moveList.size() - 1).getColor() + "\nCurrent Move played by: "+move.getColor());
             }
         }
         else {
-            if(move.color == PlayerColor.BLACK) {
+            if(move.getColor() == PlayerColor.BLACK) {
                 throw new IllegalMoveException("White starts the game");
             }
         }
 
-
-        //Check if foundation.Piece is on the named square :: Done
+        //Check if Piece is on the named square
         if(!(p== board[currentRow][currentColumn])) {
             //the piece from the move isnt equal to the piece saved in the board array
-            throw new IllegalMoveException("foundation.Piece is not on the named starting piece.\nfoundation.Piece current foundation.Position: "
-                    + move.getCurrentPosition() + "\nfoundation.Piece on the supposed foundation.Position: " + board[currentRow][currentColumn]);
+            throw new IllegalMoveException("Piece is not on the named starting piece.\nPiece current Position: "
+                    + move.getCurrentPosition() + "\nPiece on the supposed Position: " + board[currentRow][currentColumn]);
         }
 
-        //Check if foundation.Piece can move that way ::Done
+        //Check if Piece can move that way
         if(correctDirection(move) == false) {
-            throw new IllegalMoveException("This foundation.Piece cannot move that way by the rules of chess");
+            throw new IllegalMoveException("This Piece cannot move that way by the rules of chess");
         }
 
-        //check if Tile is empty or if enemy has piece on it ::Done
+        //check if Tile is empty or if enemy has piece on it
         if(board[targetRow][targetColumn] != null) {
             if(board[targetRow][targetColumn].getPieceColor()==move.getColor()) {
-                throw new IllegalMoveException("Square is blocked by foundation.Piece of the same color");
+                throw new IllegalMoveException("Square is blocked by Piece of the same color");
             }
         }
         //check for capture , pawn blockage, en passant, first move 2 squares
@@ -209,7 +203,7 @@ public class MoveValidation {
         }
         //bishop queen rook
         else {
-            if(checkPathBlocked(move.currentPosition,move.targetPosition,move.piece,board) == false) {
+            if(checkPathBlocked(move.getCurrentPosition(), move.getTargetPosition(), move.getPiece(),board) == false) {
                 throw new IllegalMoveException("Path is blocked");
             }
         }
@@ -217,30 +211,25 @@ public class MoveValidation {
         //check if King would be in check after move;
         Piece[][] boardSimulation = boardInstance.cloneBoard(board);
         boardInstance.updateBoard(move, boardSimulation);
-
-
         if(inCheck(move.getColor(),boardSimulation) == true) {
             throw new IllegalMoveException("King is in check after this move: " + move);
         }
         return true;
     }
 
-
-
     /**
-     * This method analyzes a given board and examines it if movecolor king is currently in check
+     * This method analyzes a given board and examines if the movecolor king is currently in check. Uses the functions getPossibleChecks and getCheckSourcePosition.
      * @param moveColor the playercolor that is making the move
      * @param boardParam the board which has to be examined
      * @return boolean true if the moveColor-king is currently in check
      **/
     public boolean inCheck(PlayerColor moveColor, Piece[][] boardParam) {
         /*
-         * Check each square next to the king for pieces of the same color => if they are all from the same color then there can only be a check by knight
-         * 	=> for each square where there is no piece of the same color next to the King, iterate over all the square horizontal and diagonal from it and look for an enemy piece
-         * Check for Knight checks
-         * 	=> King position plus all possible knight moves from knightDirection ArrayList
+        determines king position on the board
+        test for knight checks
+        iterate over possibleChecks list obtained by external function and determine if the piece can theoreticall move to the king using external function
          */
-        //determines current king position
+
         Position kingPosition = null;
         Piece king = null;
         Piece knight = null;
@@ -254,9 +243,9 @@ public class MoveValidation {
         }
 
         //get kingPosition
-        for(int i = boardParam.length-1;i>=0;i--) {
-            for(int j = boardParam[i].length-1;j>=0;j--) {
-                if(boardParam[i][j]==king) {
+        for(int i = 0; i< boardParam.length;i++){
+            for(int j = 0; j<boardParam[i].length;j++){
+                if(boardParam[i][j] == king) {
                     kingPosition = Position.getPositionFromValue(i,j);
                 }
             }
@@ -275,23 +264,15 @@ public class MoveValidation {
             }
         }
 
-
         //iterate over possibleChecks list and determine if the piece can theoreticall move to the king => can capture him and therefore give him a check
         //determine squares that need to be checked => either enemy piece or empty square through which a distant piece can give a check
        ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,moveColor);
-
-        //MoveValidation m = new MoveValidation();
-//        if(getCheckSourcePosition(possibleChecks,kingPosition,boardParam) != null){
-//            return true;
-//        }
-
         if(possibleChecks.size() >0){
             Position p = getCheckSourcePosition(possibleChecks,kingPosition,boardParam);
             if(p!=null){
                 return true;
             }
         }
-
         return false;
     }
 
@@ -303,9 +284,18 @@ public class MoveValidation {
      * @return arraylist including all possible positions with enemy pieces on them that can give a check to the movecolor king
      */
     private ArrayList<Position> getPossibleChecks(Position kingPosition,Piece[][] boardParam,PlayerColor moveColor){
+        /*
+            iterate over squares that touch the king
+                enemy piece next to king
+                    add to possibleChecks
+                empty square next to king
+                    iterate from kingposition in the direction of empty square until end of board, own piece or enemy piece is hit
+                        enemy piece => add to possibleChecks
+            kingposition + knightdirections = enemyknight => add to possibleChecks
+         */
         ArrayList<Position> possibleChecks = new ArrayList<>();
         for(Pair p : kingDirection) {
-            // CASTLING POSSIBILITY MOVE BREAKS IT
+            // castling moves are not allowed, only the squares the king can move to (right next to him) are relevant in this function
             if(p.column == 2 || p.column == -2){
                 continue;
             }
@@ -328,11 +318,9 @@ public class MoveValidation {
                     iterateRow += rowIncrement;
                     int iterateColumn = kingPosition.getColumn();
                     iterateColumn += columnIncrement;
-                    //FIXME i was here
                     //Iterate from current king position in the direction of the empty square until an own piece, enemy piece or the end of the board is reached
                     while(iterateRow>=0 && iterateColumn >= 0 && iterateRow < boardParam.length && iterateColumn < boardParam[iterateRow].length ) {
                         if(boardParam[iterateRow][iterateColumn] != null) {
-
                             if(boardParam[iterateRow][iterateColumn].getPieceColor()==moveColor) {
                                 //piece of the same color blocks the way => no check possible
                                 break;
@@ -349,7 +337,6 @@ public class MoveValidation {
                                 else{
                                     possibleChecks.add(Position.getPositionFromValue(iterateRow, iterateColumn));
                                 }
-
                             }
                         }
                         //increment the iteration by the direction of the empty square => Integer.compare gives the direction
@@ -359,7 +346,6 @@ public class MoveValidation {
                 }
             }
         }
-
         Piece knight = null;
         if(moveColor == PlayerColor.WHITE){
             knight = blackKnight;
@@ -367,24 +353,19 @@ public class MoveValidation {
         else if(moveColor == PlayerColor.BLACK){
             knight = whiteKnight;
         }
-
         for(Pair p : knightDirection) {
             int possibleKnightCheckRow = kingPosition.getRow() + p.row;
             int possibleKnightCheckColumn = kingPosition.getColumn() + p.column;
-
             //prevent out of bounds
             if(possibleKnightCheckRow < boardParam.length && possibleKnightCheckRow >= 0 && possibleKnightCheckColumn < boardParam.length && possibleKnightCheckColumn >= 0){
                 if(boardParam[possibleKnightCheckRow][possibleKnightCheckColumn] == knight){
                     possibleChecks.add(Position.getPositionFromValue(possibleKnightCheckRow,possibleKnightCheckColumn));
-
                 }
-
             }
         }
         return possibleChecks;
     }
 
-    //FIXME what to do if there are 2 checks? abzugsschach?
     /**
      * get the correct source of the given check from the possibleChecks arraylist
      * @param possibleChecks
@@ -393,6 +374,11 @@ public class MoveValidation {
      * @return position from which the check is given; null if there is no check given
      */
     private Position getCheckSourcePosition(ArrayList<Position> possibleChecks, Position kingPosition, Piece[][] boardParam){
+        /*
+            iterates over possiblechecks list
+                test if the pieces could "travel" to the kingposition and therefore capture him
+                    true => return the position
+        */
         for(Position p : possibleChecks) {
             if(boardParam[p.getRow()][p.getColumn()] != null) {
                 //use private move constructor to prevent each move getting checked for validity which is not needed in this case. move only gets created to re-use correctDirection method
@@ -400,8 +386,8 @@ public class MoveValidation {
                 if(correctDirection(simulationMove)) {
                     Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(boardParam);
                     Board.getBoardInstance().updateBoard(simulationMove,simulationBoard);
-                    if(checkPathBlocked(simulationMove.currentPosition,simulationMove.targetPosition, simulationMove.getPiece(),simulationBoard) == true){
-                        // wird nicht geblocked
+                    //path not blocked
+                    if(checkPathBlocked(simulationMove.getCurrentPosition(), simulationMove.getTargetPosition(), simulationMove.getPiece(),simulationBoard) == true){
                         return p;
                     }
 
@@ -412,10 +398,22 @@ public class MoveValidation {
     }
 
     /**
-     * Checks if the moveColor is checkmated
-     * @return true if the movecolor is checkmated
+     * Checks if the king is currently in a checkmate position on the given board
+     * @param king
+     * @param boardParam
+     * @return true if the king is currently checkmated on the given board
      */
-    public boolean isCheckMated(Piece king, Piece[][] boardParam){
+    public boolean isCheckMated(PlayerColor moveColor, Piece[][] boardParam){
+        /**
+            if king in check
+            if king can escape checkmate by running away
+            if checkmate can be prevented by blocking the check
+            test for possible moves that can capture the checksource
+            test for blocking check
+         */
+        Piece king = null;
+        if(moveColor == PlayerColor.WHITE) king = whiteKing;
+        else if(moveColor == PlayerColor.BLACK) king = blackKing;
         //get king position
         Position kingPosition = null;
         for(int i = 0 ; i< boardParam.length;i++){
@@ -445,18 +443,17 @@ public class MoveValidation {
                 continue;
             }
 
-
             Move simulateMove = new Move(king,kingPosition,Position.getPositionFromValue(testRow,testColumn),false);
             //piece can theoretically move there
             if(correctDirection(simulateMove)){
                 //target square is not empty
-                if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()] != null) {
-                    if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()==simulateMove.getPiece().getPieceColor()) {
+                if(simulationBoard[simulateMove.getTargetPosition().getRow()][simulateMove.getTargetPosition().getColumn()] != null) {
+                    if(simulationBoard[simulateMove.getTargetPosition().getRow()][simulateMove.getTargetPosition().getColumn()].getPieceColor()==simulateMove.getPiece().getPieceColor()) {
                         //DO NOTHING THIS IS NOT A LEGAL MOVE - occupied by the same color
                         continue;
                     }
                     //occupied by the opponent color
-                    else if (simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()].getPieceColor()!=simulateMove.getPiece().getPieceColor()){
+                    else if (simulationBoard[simulateMove.getTargetPosition().getRow()][simulateMove.getTargetPosition().getColumn()].getPieceColor()!=simulateMove.getPiece().getPieceColor()){
                         //enemy piece blocking
 
                         Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
@@ -467,7 +464,7 @@ public class MoveValidation {
                     }
                 }
                 //square is empty
-                else if(simulationBoard[simulateMove.targetPosition.getRow()][simulateMove.targetPosition.getColumn()] == null){
+                else if(simulationBoard[simulateMove.getTargetPosition().getRow()][simulateMove.getTargetPosition().getColumn()] == null){
                     Board.getBoardInstance().updateBoard(simulateMove,simulationBoard);
                     if(inCheck(king.getPieceColor(),simulationBoard) == false){
                         //king has an empty square it can reach and not be checked on it => no checkmate
@@ -480,23 +477,18 @@ public class MoveValidation {
 
         }
         //if checkmate can be prevented by blocking the check
-        // -> int compare checkgiving position, kingposition to get the squares between the check giver and the king
-        //      if no piece from the checked king color can move to any of the positions between king and checkgiver then its checkmate (this includes capturing)
+        //if no piece from the checked king color can move to any of the positions between king and checkgiver then its checkmate (this includes capturing)
         ArrayList<Position> possibleChecks = getPossibleChecks(kingPosition,boardParam,king.getPieceColor());
         Position checkSource = getCheckSourcePosition(possibleChecks,kingPosition,boardParam);
-
         int kingRow = kingPosition.getRow();
         int kingColumn = kingPosition.getColumn();
-
         int checkSourceRow = checkSource.getRow();
         int checkSourceColumn = checkSource.getColumn();
-
         int rowIncrement = Integer.compare(checkSourceRow,kingRow);
         int columnIncrement = Integer.compare(checkSourceColumn,kingColumn);
 
         //TODO this can be done better so it is also checked inside the while loop later on.
         //checks for captures
-        //if(boardParam[checkSourceRow][checkSourceColumn] == whiteKnight ||boardParam[checkSourceRow][checkSourceColumn] == blackKnight){
             for(int k = 0; k< boardParam.length;k++) {
                 for (int l = 0; l < boardParam[k].length; l++) {
                     Piece p = boardParam[k][l];
@@ -508,19 +500,16 @@ public class MoveValidation {
                             Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
                             if(checkPathBlocked(Position.getPositionFromValue(k,l),checkSource,p,simulationBoard) == true){
                                 if(inCheck(p.getPieceColor(),simulationBoard)){
-
                                     if(p == Piece.whitePawn|| p == blackPawn){
                                         int rowDiff = Math.abs(k-checkSourceRow);
                                         int columnDiff = Math.abs(l-checkSourceColumn);
                                         //capturing possible and therefore not checkmate TODO this has to be properly tested
                                         if(rowDiff == 1 && columnDiff == 1){
                                             //check if it would be check after the capturing
-
                                             Board.getBoardInstance().updateBoard(simulationMove,simulationBoard);
-                                            if(inCheck(simulationMove.piece.getPieceColor(),simulationBoard) == false){
+                                            if(inCheck(simulationMove.getPiece().getPieceColor(),simulationBoard) == false){
                                                 return false;
                                             }
-
                                         }
                                     } else {
                                         return false;
@@ -531,8 +520,7 @@ public class MoveValidation {
                     }
                 }
             }
-        //}
-
+        //search for pieces that can block the check
         for(int i = 0; i< boardParam.length;i++){
             for(int j = 0 ; j<boardParam[i].length;j++){
                 Piece p = boardParam[i][j];
@@ -540,86 +528,75 @@ public class MoveValidation {
                 if(p == null || p.getPieceColor() != king.getPieceColor()){
                     continue;
                 }
-
                 //same color as the king getting checked -> test if it can stop the check somehow
                 if(p.getPieceColor() == king.getPieceColor()){
-
-                        int rowIterator = kingPosition.getRow() + rowIncrement;
-                        int columnIterator = kingPosition.getColumn() + columnIncrement;
-                        //über alle squares iterieren auf der strecke zwischen king bis zur checkSource
-                        while(rowIterator != checkSourceRow || columnIterator != checkSourceColumn){
-                            //wenn es ein bauer ist muss überprüft werden dass er nur diagonal schlagen kann wenn dort auch ein gegnerisches piece ist
-                            if(p == Piece.whitePawn|| p == blackPawn){
-                                int rowDiff = Math.abs(i - rowIterator);
-                                int columnDiff = Math.abs(j - columnIterator);
-                                //diagonal
-                                if(rowDiff == 1 && columnDiff == 1){
-                                    //illegal diagonal move
-                                    if(boardParam[rowIterator][columnIterator] == null ||boardParam[rowIterator][columnIterator].getPieceColor() == p.getPieceColor()){
-                                        rowIterator+= rowIncrement;
-                                        columnIterator += columnIncrement;
-                                        continue;
-                                    }
-
-                                }
-                                else{
-                                    Move toCheck = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowIterator,columnIterator),false);
-                                    Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
-                                    if(correctDirection(toCheck)){
-                                        if(checkPathBlocked(toCheck.currentPosition,toCheck.targetPosition,toCheck.piece,simulationBoard)){
-                                            Board.getBoardInstance().updateBoard(toCheck,simulationBoard);
-
-                                            if(inCheck(king.getPieceColor(),simulationBoard) == false){
-
-                                                return false;
-                                            }
-                                        }
-
-                                    }
-                                }
+                    int rowIterator = kingPosition.getRow() + rowIncrement;
+                    int columnIterator = kingPosition.getColumn() + columnIncrement;
+                    //iterate over all the squares between the king and the checksource
+                    while(rowIterator != checkSourceRow || columnIterator != checkSourceColumn){
+                        //if its a pawn it can only move diagonal if it captures a piece
+                        if(p == Piece.whitePawn|| p == blackPawn){
+                            int rowDiff = Math.abs(i - rowIterator);
+                            int columnDiff = Math.abs(j - columnIterator);
+                            //diagonal moves are not allowed. diagonal moves are only possible when capturing and if I try to block the check there is no piece between it
+                            if(rowDiff == 1 && columnDiff == 1){
+                                rowIterator+= rowIncrement;
+                                columnIterator += columnIncrement;
+                                continue;
                             }
-                            else if( p != king){
-
+                            else{
+                                //check if move would be valid
                                 Move toCheck = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowIterator,columnIterator),false);
-                                //if it can reach the position theoretically it can block the check and therefore it is not checkmated
                                 Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
                                 if(correctDirection(toCheck)){
-                                    if(checkPathBlocked(toCheck.currentPosition,toCheck.targetPosition,toCheck.piece,simulationBoard)){
+                                    if(checkPathBlocked(toCheck.getCurrentPosition(), toCheck.getTargetPosition(), toCheck.getPiece(),simulationBoard)){
                                         Board.getBoardInstance().updateBoard(toCheck,simulationBoard);
                                         if(inCheck(king.getPieceColor(),simulationBoard) == false){
-                                            System.out.println(toCheck + "This move prevents the checkmate");
                                             return false;
                                         }
                                     }
-
                                 }
                             }
-                            rowIterator+= rowIncrement;
-                            columnIterator += columnIncrement;
                         }
+                        else if( p != king){
+                            Move toCheck = new Move(p,Position.getPositionFromValue(i,j),Position.getPositionFromValue(rowIterator,columnIterator),false);
+                            //if it can reach the position theoretically it can block the check and therefore it is not checkmated
+                            Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard());
+                            if(correctDirection(toCheck)){
+                                if(checkPathBlocked(toCheck.getCurrentPosition(), toCheck.getTargetPosition(), toCheck.getPiece(),simulationBoard)){
+                                    Board.getBoardInstance().updateBoard(toCheck,simulationBoard);
+                                    if(inCheck(king.getPieceColor(),simulationBoard) == false){
+                                        //System.out.println(toCheck + "This move prevents the checkmate");
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                        rowIterator+= rowIncrement;
+                        columnIterator += columnIncrement;
+                    }
                 }
             }
         }
-
-
-
         return true;
     }
 
     /**
-     * Checks if the moveColor is checkmated
-     * @return true if the board param is in a stalemate position
+     * Tests if the playerColor of the given Board is currently in a Stalemate positionn
+     * @param playerColor the color to be checked for stalemate
+     * @param boardParam the board to be checked for stalemate
+     * @return true if the board is currently in a stalemate position
      */
     public boolean isStaleMated(PlayerColor playerColor, Piece[][] boardParam){
         /*
-           iterate over all pieces
-                and for each piece iterate over all the possible directions and test if the move would be legal
+            iterate over all pieces
+                for each piece iterate over all the possible directions and test if the move would be legal
          */
         for(int i = 0; i<boardParam.length;i++){
             for(int j = 0; j<boardParam[i].length;j++){
                 if(boardParam[i][j] != null && boardParam[i][j].getPieceColor() == playerColor){
                     Piece p = boardParam[i][j];
-                    if(hasPossibleMoves(p,Position.getPositionFromValue(i,j),boardParam) == false){
+                    if(hasPossibleMoves(p,Position.getPositionFromValue(i,j),boardParam) == true){
                         return false;
                     }
                 }
@@ -628,7 +605,18 @@ public class MoveValidation {
         return true;
     }
 
+    /**
+     * Tests if the piece has a legal chess move
+     * @param piece the piece to be testes
+     * @param currentPosition the current position of the piece
+     * @param boardParam the board to be tested
+     * @return true if the piece has a legal move
+     */
     private boolean hasPossibleMoves(Piece piece, Position currentPosition,Piece[][] boardParam){
+        /*
+            get the correct directionarray for the according piece
+            iterate over all possible pairs of arraylist and add them to the position and determine if they are legal
+         */
         ArrayList<Pair> direction = null;
         if(piece == whitePawn){
             direction = whitePawnDirection;
@@ -651,10 +639,7 @@ public class MoveValidation {
         else if(piece == whiteQueen || piece == blackQueen){
             direction = queenDirection;
         }
-
-        //if piece has any legal move return true
-        //iterate over all possible pairs and add them to it and determine if they are legal
-
+        //iterate over all possible pairs and add them to the position and determine if they are legal
         for(Pair p : direction){
             int rowAfterMove = currentPosition.getRow() + p.row;
             int columnAfterMove = currentPosition.getColumn() + p.column;
@@ -662,31 +647,28 @@ public class MoveValidation {
             if(rowAfterMove >= boardParam.length ||rowAfterMove<0 || columnAfterMove >= boardParam.length ||columnAfterMove<0){
                 continue;
             }
-
             Move simulationMove = new Move(piece,currentPosition,Position.getPositionFromValue(rowAfterMove,columnAfterMove),false);
+            //prevents moves to be checked that capture own pieces or are just illegal in general. This caused the king to get captured and threw a nullpointer when searching for the kingposition
+            if(boardParam[simulationMove.getTargetPosition().getRow()][simulationMove.getTargetPosition().getColumn()] != null && boardParam[simulationMove.getTargetPosition().getRow()][simulationMove.getTargetPosition().getColumn()].getPieceColor() == simulationMove.getPiece().getPieceColor()){
+                continue;
+            }
             Piece[][] simulationBoard = Board.getBoardInstance().cloneBoard(boardParam);
-
-            /*
-            if correct direction
+            /* if correct direction
                 if not path blocked
-                    if not in check afterwards
-                        return true
-             */
+                    if not in check afterwards */
             if(correctDirection(simulationMove)){
-                if(checkPathBlocked(currentPosition,simulationMove.targetPosition,simulationMove.piece,simulationBoard) == true){
-                    Board.getBoardInstance().updateBoard(simulationMove,simulationBoard);
-                    if(inCheck(simulationMove.piece.getPieceColor(), simulationBoard) == false){
-                        System.out.println("Not in check and therefore legal move!");
+                if(checkPathBlocked(currentPosition, simulationMove.getTargetPosition(), simulationMove.getPiece(),simulationBoard) == true){
+                    Board.updateBoard(simulationMove,simulationBoard);
+                    if(inCheck(simulationMove.getPiece().getPieceColor(), simulationBoard) == false){
                         return true;
                     }
                 }
             }
         }
-
         return false;
     }
 
-    //TODO change parameters to Move and Board only
+    //FIXME switching parameters of this function to Move and Board would probably be better
     /**
      * Checks if the path between the current location and the target location is blocked by a piece and the move therefore illegal.
      * Calculates the difference between current and targetposition and checks each position by using the Integer.compare(a,b) function to increment with 1 or -1 until the position is reached.
@@ -700,13 +682,12 @@ public class MoveValidation {
         int targetRow = targetPosition.getRow();
         int currentColumn = currentPosition.getColumn();
         int targetColumn = targetPosition.getColumn();
-        Board boardInstance = Board.getBoardInstance();
         int rowIncrement = Integer.compare(targetRow, currentRow);
         int columnIncrement = Integer.compare(targetColumn, currentColumn);
-        //start increment 1 before so it doesnt detect the currentPosition as foundation.Piece that is blocking the path:
+        //start increment 1 before so it doesnt detect the currentPosition as Piece that is blocking the path:
         currentRow += rowIncrement;
         currentColumn += columnIncrement;
-        if(piece.equals(Piece.blackBishop) || piece.equals(Piece.whiteBishop) || piece.equals(Piece.whiteRook) || piece.equals(Piece.blackRook) || piece.equals(Piece.blackQueen) || piece.equals(Piece.whiteQueen) ) {
+        if(piece == Piece.blackBishop || piece == Piece.whiteBishop || piece==Piece.whiteRook || piece==Piece.blackRook || piece==Piece.blackQueen || piece==Piece.whiteQueen ) {
             while(currentRow!= targetRow || currentColumn != targetColumn) {
                 if(boardParam[currentRow][currentColumn]!=null) {
                     return false;
@@ -720,7 +701,7 @@ public class MoveValidation {
 
 
     /**
-     * Checks for an incoming move if the foundation.Position can be legally reached
+     * Checks for an incoming move if the Position can be legally reached
      * @param move The move that is to be checked
      * @return returns true if the piece can theoretically move to the targeted position
      */
@@ -752,16 +733,14 @@ public class MoveValidation {
         else{
             return false;
         }
-
     }
 
     /**
-     * This function Takes the currentPosition, adds all possible direction changes to it and checks if the targetPosition equals a foundation.Position that gets calculated when adding the move coordinates to the currentPosition
-     *
+     * This function Takes the currentPosition, adds all possible direction changes to it and checks if the targetPosition equals a Position that gets calculated when adding the move coordinates to the currentPosition
      * @param list List of Pairs that represent all the possible moves the piece can theoretically execute
-     * @param currentPosition The current foundation.Position of the foundation.Piece
-     * @param targetPosition The in the move targeted foundation.Position of the move
-     * @return Returns boolean value stating if the foundation.Piece can theoretically move to the given foundation.Position; True if it can move there; false if it cannot
+     * @param currentPosition The current Position of the Piece
+     * @param targetPosition The in the move targeted Position of the move
+     * @return Returns boolean value stating if the Piece can theoretically move to the given Position; True if it can move there; false if it cannot
      */
     private boolean positionMatches(ArrayList<Pair> list, Position currentPosition, Position targetPosition) {
         int currentRow = currentPosition.getRow();
@@ -784,14 +763,22 @@ public class MoveValidation {
      * @throws IllegalMoveException
      */
     private boolean pawnMoveValidity(Move move, Piece pawn) throws IllegalMoveException {
+        /*
+            pawn blockage by enemy pawn
+            tests for the following cases:
+            first pawn move 2 squares
+            en passant
+            no diagonal pawn moves without captures
+            diagonal pawn captures
+         */
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
         int currentRow = move.getCurrentPosition().getRow();
         int currentColumn = move.getCurrentPosition().getColumn();
         int targetRow = move.getTargetPosition().getRow();
         int targetColumn = move.getTargetPosition().getColumn();
-
         int startingRow = -1;
+        boolean enpassant = false;
         Piece enemyPawn = null;
         if(pawn.getPieceColor() == PlayerColor.BLACK){
             startingRow = 1;
@@ -801,12 +788,9 @@ public class MoveValidation {
             startingRow = 6;
             enemyPawn = Piece.blackPawn;
         }
-
-        boolean enpassant = false;
         if(currentColumn == targetColumn && board[targetRow][targetColumn] == enemyPawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way");
         //first move 2 squares
         if(Math.abs(currentRow - targetRow) == 2 && currentRow != startingRow) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
-
         //target square is empty
         if(board[targetRow][targetColumn] == null) {
             //check en passant
@@ -814,7 +798,7 @@ public class MoveValidation {
             if(playedMoves.size()>0){
                 Move previouslyPlayed = playedMoves.get(playedMoves.size()-1);
                 //moved piece has to be enemy pawn
-                if(previouslyPlayed.piece == enemyPawn) {
+                if(previouslyPlayed.getPiece() == enemyPawn) {
                     Position previouslyTargetPosition = previouslyPlayed.getTargetPosition();
                     int previouslyTargetRow = previouslyTargetPosition.getRow();
                     int previouslyTargetColumn = previouslyTargetPosition.getColumn();
@@ -835,7 +819,6 @@ public class MoveValidation {
                         enpassant = true;
                     }
                 }
-
                 //moving to empty diagonal field without en passant possibility
                 if(!enpassant && currentColumn != targetColumn) {
                     throw new IllegalMoveException("moving to empty diagonal square as pawn without en passant is illegal");
@@ -843,56 +826,46 @@ public class MoveValidation {
             }
             //targetSquare is not empty and occpuied by same colored pawn
             else if(Math.abs(currentRow-targetRow) == 1 && Math.abs(currentColumn - targetColumn) == 1 && board[targetRow][targetColumn].getPieceColor() == pawn.getPieceColor()){
-                throw new IllegalMoveException("The targeted square is filled with a foundation.Piece from the same color");
+                throw new IllegalMoveException("The targeted square is filled with a Piece from the same color");
             }
         }
         return true;
     }
 
     /**
-     * This method checks the validity of a king move, including casling
+     * checks the validity of a king move, including castling
      * @param move the king move to be checked
      * @param king either whiteKing or blackKing enum values
      * @return true if the king move is valid
      * @throws IllegalMoveException gets thrown if the move is illegal
      */
     private boolean kingMoveValidity(Move move, Piece king) throws IllegalMoveException {
-
-
-        //king cannot LEAVE or CROSS OVER or FINISH on a square that is checked
-        // LEAVE => this function
-        // cross over => simulateKingMove
-        // FINISH => isValid at the End
+        //test if castling is legal => else simulateKingMove(king,rook,move,crossingSquare,rookPosition);
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
         int currentRow = move.getCurrentPosition().getRow();
         int currentColumn = move.getCurrentPosition().getColumn();
         int targetRow = move.getTargetPosition().getRow();
         int targetColumn = move.getTargetPosition().getColumn();
-
         boolean blackKingHasMoved = false;
         boolean whiteKingHasMoved = false;
         boolean whiteArookHasMoved = false;
         boolean whiteHrookHasMoved = false;
         boolean blackArookHasMoved = false;
         boolean blackHrookHasMoved = false;
-
         boolean whiteShortCastle = false;
         boolean whiteLongCastle = false;
         boolean blackShortCastle = false;
         boolean blackLongCastle = false;
-
         Position crossingSquare = null;
         Position rookPosition = null;
         Piece rook = null;
-
         boolean piecesHaveMoved = false;
-
         ArrayList<Move> playedMoves = boardInstance.getPlayedMoves();
         //castling move
         if(currentRow-targetRow == 0 && Math.abs(currentColumn-targetColumn) == 2){
             //currently in check: LEAVE
-            if(inCheck(move.color,board)){
+            if(inCheck(move.getColor(),board)){
                 throw new IllegalMoveException("King cannot castle when given a check");
             }
             //check if king or rook were moved
@@ -904,31 +877,30 @@ public class MoveValidation {
                 else if(m.getPiece().equals(Piece.blackRook) && m.getCurrentPosition() == Position.A8)blackArookHasMoved = true;
                 else if(m.getPiece().equals(Piece.blackRook) && m.getCurrentPosition() == Position.H8)blackHrookHasMoved = true;
             }
-            if(move.targetPosition == Position.G1){
+            if(move.getTargetPosition() == Position.G1){
                 whiteShortCastle = true;
                 crossingSquare = Position.F1;
                 rookPosition = Position.H1;
                 rook = Piece.whiteRook;
             }
-            else if(move.targetPosition == Position.C1){
+            else if(move.getTargetPosition() == Position.C1){
                 whiteLongCastle = true;
                 crossingSquare = Position.D1;
                 rookPosition = Position.A1;
                 rook = Piece.whiteRook;
             }
-            else if(move.targetPosition == Position.G8){
+            else if(move.getTargetPosition() == Position.G8){
                 blackShortCastle = true;
                 crossingSquare = Position.F8;
                 rookPosition = Position.H8;
                 rook = Piece.blackRook;
             }
-            else if(move.targetPosition == Position.C8){
+            else if(move.getTargetPosition() == Position.C8){
                 blackLongCastle = true;
                 crossingSquare = Position.D8;
                 rookPosition = Position.A8;
                 rook = Piece.blackRook;
             }
-
             if(whiteShortCastle && (whiteKingHasMoved || whiteHrookHasMoved)) piecesHaveMoved = true;
             if(whiteLongCastle && (whiteKingHasMoved || whiteArookHasMoved)) piecesHaveMoved = true;
             if(blackShortCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
@@ -942,7 +914,7 @@ public class MoveValidation {
         }
         return true;
     }
-
+    //TODO this and kingMoveValidity could be merged?
     /**
      * Simulates a king move and determines if it is legal or not
      * @param king either blackking or whiteking
@@ -957,8 +929,7 @@ public class MoveValidation {
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
         Piece[][] boardSimulation = boardInstance.cloneBoard(board);
-
-        Move moveToCrossingSquare = new Move(king,move.currentPosition,crossingSquare,false);
+        Move moveToCrossingSquare = new Move(king, move.getCurrentPosition(),crossingSquare,false);
         boardInstance.updateBoard(moveToCrossingSquare, boardSimulation);
         //cross over square that is checked by enemy piece:
         if(inCheck(king.getPieceColor(),boardSimulation)) {
@@ -969,13 +940,10 @@ public class MoveValidation {
         if(inCheck(king.getPieceColor(),boardSimulationDefault)) {
             throw new IllegalMoveException("King is in check after this move");
         }
-        // is this correct?
         boardInstance.removePiece(rookPosition, Board.getBoardInstance().getBoard());
         boardInstance.placePiece(crossingSquare, Board.getBoardInstance().getBoard(),rook);
         return true;
     }
-
-
 
     static class Pair{
         public int row;

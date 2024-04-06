@@ -6,15 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CheckMateTest {
     /*
-    Fools Mate :: done
-    backrank mate :: done
-    ladder checkmate :: done
-    double checks :: done
-    pawn checkmates :: done
-    pinned piece knight checkmate :: done
-    normal protected queen checkmate :: done
-    anastastia mate :: done
-    middle of the board mate :: done
+    Fools Mate
+    backrank mate
+    ladder checkmate
+    double checks
+    pawn checkmates
+    pinned piece knight checkmate
+    normal protected queen checkmate
+    anastastia mate
+    middle of the board mate
      */
 
     //always the color getting checkmated
@@ -31,8 +31,6 @@ public class CheckMateTest {
         new Move(Piece.whitePawn, Position.E3, Position.E4, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.F7, Position.F6, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whiteQueen, Position.D1, Position.H5, PlayerColor.WHITE));
-
-        //new Move(Piece.whiteQueen, Position.D1, Position.H5, PlayerColor.WHITE);
     }
 
     @Test
@@ -41,7 +39,6 @@ public class CheckMateTest {
         new Move(Piece.blackPawn, Position.E7, Position.E6, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.F2, Position.F3, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackQueen, Position.D8, Position.H4, PlayerColor.BLACK));
-        //new Move(Piece.blackQueen, Position.D8, Position.H4, PlayerColor.BLACK);
     }
 
     @Test
@@ -61,7 +58,6 @@ public class CheckMateTest {
         new Move(Piece.whitePawn, Position.A5, Position.A6, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.H7, Position.G6, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whiteRook, Position.H1, Position.H8, PlayerColor.WHITE));
-        //new Move(Piece.whiteRook, Position.H1, Position.H8, PlayerColor.WHITE);
     }
 
     @Test
@@ -125,7 +121,6 @@ public class CheckMateTest {
         new Move(Piece.blackRook, Position.H2, Position.G2, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.B5, Position.B6, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackRook, Position.H8, Position.H1, PlayerColor.BLACK));
-
     }
 
     @Test
@@ -208,7 +203,6 @@ public class CheckMateTest {
         new Move(Piece.blackRook, Position.A8, Position.D8, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.H6, Position.G7, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackBishop, Position.D7, Position.G4, PlayerColor.BLACK));
-
     }
 
     @Test
@@ -222,7 +216,6 @@ public class CheckMateTest {
         new Move(Piece.whitePawn, Position.E5, Position.E6, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.A4, Position.A3, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whitePawn, Position.E6, Position.F7, PlayerColor.WHITE));
-
     }
 
     @Test
@@ -237,7 +230,6 @@ public class CheckMateTest {
         new Move(Piece.blackPawn, Position.E4, Position.E3, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.A6, Position.B7, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackPawn, Position.E3, Position.F2, PlayerColor.BLACK));
-
     }
 
 
@@ -250,7 +242,6 @@ public class CheckMateTest {
         new Move(Piece.whiteBishop, Position.F1, Position.C4, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.A5, Position.A4, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whiteBishop, Position.C4, Position.F7, PlayerColor.WHITE));
-
     }
 
     @Test
@@ -263,7 +254,6 @@ public class CheckMateTest {
         new Move(Piece.blackBishop, Position.F8, Position.C5, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.A5, Position.A6, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackBishop, Position.C5, Position.F2, PlayerColor.BLACK));
-
     }
 
     @Test
@@ -277,7 +267,6 @@ public class CheckMateTest {
         new Move(Piece.whitePawn, Position.E5, Position.E6, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.A4, Position.A3, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whiteQueen, Position.F3, Position.F7, PlayerColor.WHITE));
-
     }
 
     @Test
@@ -292,10 +281,8 @@ public class CheckMateTest {
         new Move(Piece.blackPawn, Position.E4, Position.E3, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.A6, Position.B7, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackQueen, Position.F6, Position.F2, PlayerColor.BLACK));
-
     }
 
-    //mit abzugsschach
     @Test
     void testBlackAnastasiaMated(){
         new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
@@ -312,21 +299,17 @@ public class CheckMateTest {
         new Move(Piece.blackPawn, Position.A7, Position.A6, PlayerColor.BLACK);
         new Move(Piece.whiteKnight, Position.H4, Position.F5, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.A6, Position.A5, PlayerColor.BLACK);
-        //this is not checkmate! only normal check
         new Move(Piece.whiteKnight, Position.F5, Position.E7, PlayerColor.WHITE);
         new Move(Piece.blackKing, Position.G8, Position.H8, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.H2, Position.H3, PlayerColor.WHITE);
-        //same problem as the other test, this should be a legal move! fixme
         new Move(Piece.blackPawn, Position.H5, Position.G4, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.B2, Position.B3, PlayerColor.WHITE);
         new Move(Piece.blackKnight, Position.F6, Position.E4, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.C2, Position.C3, PlayerColor.WHITE);
         new Move(Piece.blackKing, Position.H8, Position.H7, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whitePawn, Position.H3, Position.G4, PlayerColor.WHITE));
-
     }
 
-    //mit abzugsschach aber FIXME buggy irgendwas beim vorletzen zug
     @Test
     void testWhiteAnastasiaMated(){
         new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
@@ -349,11 +332,8 @@ public class CheckMateTest {
         new Move(Piece.blackPawn, Position.H5, Position.G4, PlayerColor.BLACK);
         new Move(Piece.whiteBishop,Position.D3,Position.H7,PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() ->new Move(Piece.blackRook,Position.H8,Position.H7,PlayerColor.BLACK));
-
-
     }
 
-    //fixme siehe comment im test
     @Test
     void testBlackMiddleOfTheBoardMated(){
         new Move(Piece.whitePawn, Position.E2, Position.E3, PlayerColor.WHITE);
@@ -367,12 +347,10 @@ public class CheckMateTest {
         new Move(Piece.whitePawn, Position.B2, Position.B4, PlayerColor.WHITE);
         new Move(Piece.blackKing, Position.C6, Position.B6, PlayerColor.BLACK);
         new Move(Piece.whitePawn, Position.C2, Position.C4, PlayerColor.WHITE);
-        //sollte legal sein, möglicherweise wird der bishop auf f1 nicht als geblocked gesehen und das game denkt dass der king auf a6 vom bishop gesehen werden kann?
         new Move(Piece.blackKing, Position.B6, Position.A6, PlayerColor.BLACK);
         new Move(Piece.whiteQueen, Position.G3, Position.E5, PlayerColor.WHITE);
         new Move(Piece.blackPawn, Position.H7, Position.H6, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(Piece.whiteQueen, Position.E5, Position.B5, PlayerColor.WHITE));
-
     }
 
     @Test
@@ -389,6 +367,5 @@ public class CheckMateTest {
         new Move(Piece.blackQueen, Position.F6, Position.F4, PlayerColor.BLACK);
         new Move(Piece.whiteKing, Position.G3, Position.H3, PlayerColor.WHITE);
         assertThrows(RuntimeException.class,() -> new Move(Piece.blackQueen, Position.F4, Position.H4, PlayerColor.BLACK));
-
     }
 }

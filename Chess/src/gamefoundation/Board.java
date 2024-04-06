@@ -65,9 +65,8 @@ public class Board {
 	 * @param move The move object that is to be executed
 	 * @param boardParam The board that is to be updated. Either the currently active gameboard or a copy of the board used to simulate the position after a move is made
 	 */
-	public void updateBoard(Move move, Piece[][] boardParam) {
+	public static void updateBoard(Move move, Piece[][] boardParam) {
 		//alte position null setzen neue foundation.Position das Zeichen setzen
-
 			int oldRow = move.getCurrentPosition().getRow();
 			int oldColumn = move.getCurrentPosition().getColumn();
 			boardParam[oldRow][oldColumn] = null;
@@ -101,9 +100,8 @@ public class Board {
 		board[pos.getRow()][pos.getColumn()] = piece;
 	}
 
-	/**
-	 * used to reset the board when testing code
-	 */
+
+	//used to reset the board when testing code
 	public void resetGame(){
 		board = new Piece[][] {
 				{blackRook,blackKnight,blackBishop,blackQueen,blackKing,blackBishop,blackKnight,blackRook},
