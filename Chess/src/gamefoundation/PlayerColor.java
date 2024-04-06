@@ -6,5 +6,5 @@ package gamefoundation;
  *
  */
 public enum PlayerColor {
-	WHITE,BLACK;
+	WHITE,BLACK
 }

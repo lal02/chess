@@ -5,6 +5,7 @@ package gamefoundation;
  * @author lalbr
  *
  */
+@SuppressWarnings("ALL")
 public enum Piece {
 	
 	

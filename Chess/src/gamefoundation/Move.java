@@ -10,9 +10,9 @@ import analysis.MoveValidation;
  **/
 public class Move {
 
-	private Piece piece;
-	private Position currentPosition;
-	private Position targetPosition;
+	private final Piece piece;
+	private final Position currentPosition;
+	private final Position targetPosition;
 	private PlayerColor color;
 
 	/**
@@ -33,7 +33,7 @@ public class Move {
 		MoveValidation m = new MoveValidation();
         try {
 			if(m.isValid(this)){
-				Board.getBoardInstance().updateBoard(this, Board.getBoardInstance().getBoard());
+				Board.updateBoard(this, Board.getBoardInstance().getBoard());
 				Board.getBoardInstance().playedMoves.add(this);
 				PlayerColor enemyColor = null;
 				if(this.getColor() == PlayerColor.WHITE) enemyColor = PlayerColor.BLACK;
@@ -43,10 +43,10 @@ public class Move {
 				if(this.getColor() == PlayerColor.WHITE)nextMoveColor = PlayerColor.BLACK;
 				else if(this.getColor() == PlayerColor.BLACK)nextMoveColor = PlayerColor.WHITE;
 
-				if( checkmated == true){
+				if(checkmated){
 					System.out.println("CHECKMATE! " + enemyColor + " is checkmated! game over");
 					throw new RuntimeException();
-				} else if(checkmated == false && m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
+				} else if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
 					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
 					throw new RuntimeException("stalemate");
 				}
@@ -56,7 +56,7 @@ public class Move {
         }
     }
 	/**
-	 * Constructor that is used to reuse functions that have Move as a parameter. Good to simulate moves that dont have to be checked for validity and added to the playedMoves list.
+	 * Constructor that is used to reuse functions that have Move as a parameter. Good to simulate moves that do not have to be checked for validity and added to the playedMoves list.
 	 * @param piece the moved piece
 	 * @param currentPosition the starting position
 	 * @param targetPosition the target position
@@ -86,8 +86,6 @@ public class Move {
 
 	@Override
 	public String toString(){
-		StringBuilder sb = new StringBuilder();
-		sb.append("Move: " + this.getPiece() + " from " + this.getCurrentPosition() + " to " + this.getTargetPosition());
-		return sb.toString();
+		return "Move: " + this.getPiece() + " from " + this.getCurrentPosition() + " to " + this.getTargetPosition();
 	}
 }

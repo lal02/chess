@@ -18,10 +18,10 @@ public enum Position {
 	private final int row;
     private final int column;
     
-	private Position(int row, int column){
+	Position(int row, int column){
 		this.row = row;
 		this.column = column;
-	}
+    }
 	
 	public int getRow() {
 	    return row;

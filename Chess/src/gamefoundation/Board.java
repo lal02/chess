@@ -66,7 +66,7 @@ public class Board {
 	 * @param boardParam The board that is to be updated. Either the currently active gameboard or a copy of the board used to simulate the position after a move is made
 	 */
 	public static void updateBoard(Move move, Piece[][] boardParam) {
-		//alte position null setzen neue foundation.Position das Zeichen setzen
+		//set the old position to null and the new position has the new piece value on it
 			int oldRow = move.getCurrentPosition().getRow();
 			int oldColumn = move.getCurrentPosition().getColumn();
 			boardParam[oldRow][oldColumn] = null;
@@ -76,13 +76,12 @@ public class Board {
 	}
 
 	/**
-	 * This is neccessary because Array.clone() does not work with 2D arrays as I have painfully learned
-	 * @param source
-	 * @return
+	 * This is necessary because Array.clone() does not work with 2D arrays as I have painfully learned
+	 * @param source the source board that is to be clones
+	 * @return a deep value copy of the board
 	 */
 	public Piece[][] cloneBoard(Piece[][] source){
 		Piece[][] returnedBoard = new Piece[source.length][source[0].length];
-
 		for(int i = 0;i< source.length;i++){
 			for(int j = 0;j<source[i].length;j++){
 				returnedBoard[i][j] = source[i][j];
