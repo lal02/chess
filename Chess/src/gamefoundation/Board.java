@@ -112,7 +112,7 @@ public class Board {
 	}
 
 	/**
-	 *
+	 * checks if a position has already been reached three times and therefore
 	 * @return
 	 */
 	public boolean threeTimeRepetition(){
@@ -120,9 +120,12 @@ public class Board {
 		for(Piece[][] arr : reachedPositions){
 			if(boardEquals(arr,this.getBoard())){
 				counter++;
+				if(counter==3){
+					return true;
+				}
 			}
 		}
-		return counter >=3;
+		return false;
 	}
 
 	/**

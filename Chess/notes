@@ -1,11 +1,9 @@
-TODO implement:
-3 time repetition => write arrayequals function
+TODO:
 
 getpossible moves function?
 switch Piece to class instead of enum?
 
 TODO tests :
-tests for all pieces
 test king cannot touch -> kingmovetest (should be covered by checkdetection but writing a test wont hurt)
 improve boardTest
 add tests for stalemate and insufficient material

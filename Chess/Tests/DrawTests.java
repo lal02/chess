@@ -1,23 +1,21 @@
 import gamefoundation.Board;
 import gamefoundation.Move;
-import gamefoundation.Piece.*;
 import gamefoundation.PlayerColor;
 import gamefoundation.Position;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static gamefoundation.Piece.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StaleMateTest {
+public class DrawTests {
 
     @BeforeEach
     void resetBoard(){
         Board.getBoardInstance().resetGame();
     }
 
-     //TODO this test is illegal :D it does not have sufficient material on the board
+    //TODO this test is illegal :D it does not have sufficient material on the board
     void testBlackStaleMated(){
         new Move(whitePawn, Position.D2, Position.D4, PlayerColor.WHITE);
         new Move(blackPawn, Position.E7, Position.E6, PlayerColor.BLACK);
@@ -79,6 +77,7 @@ public class StaleMateTest {
         new Move(blackPawn, Position.C7, Position.C5, PlayerColor.BLACK);
         new Move(whiteKing, Position.F2, Position.E3, PlayerColor.WHITE);
         new Move(blackPawn, Position.C5, Position.C4, PlayerColor.BLACK);
+        //insufficient material
         new Move(whiteKnight, Position.D2, Position.C4, PlayerColor.WHITE);
         new Move(blackKing, Position.C8, Position.C7, PlayerColor.BLACK);
         new Move(whiteKnight, Position.C4, Position.A5, PlayerColor.WHITE);
@@ -93,4 +92,28 @@ public class StaleMateTest {
         new Move(blackKing, Position.B7, Position.A8, PlayerColor.BLACK);
         assertThrows(RuntimeException.class,() -> new Move(whiteKing, Position.D6, Position.C7, PlayerColor.WHITE));
     }
+
+    //@Test
+    void testWhiteStaleMated(){
+
+    }
+
+    @Test
+    void testThreeTimeRepetition(){
+        new Move(whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE);
+        new Move(blackKnight, Position.G8, Position.F6, PlayerColor.BLACK);
+        new Move(whiteKnight, Position.F3, Position.G1, PlayerColor.WHITE);
+        new Move(blackKnight, Position.F6, Position.G8, PlayerColor.BLACK);
+        new Move(whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE);
+        new Move(blackKnight, Position.G8, Position.F6, PlayerColor.BLACK);
+        new Move(whiteKnight, Position.F3, Position.G1, PlayerColor.WHITE);
+        new Move(blackKnight, Position.F6, Position.G8, PlayerColor.BLACK);
+        assertThrows(RuntimeException.class,() -> new Move(whiteKnight, Position.G1, Position.F3, PlayerColor.WHITE));
+    }
+
+    @Test
+    void testInsufficientMaterialBlack(){
+
+    }
+
 }
