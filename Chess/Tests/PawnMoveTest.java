@@ -96,4 +96,17 @@ public class PawnMoveTest {
         //black left side en passant
         new Move(Piece.blackPawn,Position.C4,Position.B3,PlayerColor.BLACK);
     }
+
+    //how to test pawn promotion with simulated user input?
+    void testPawnPromotion(){
+        new Move(Piece.whitePawn, Position.H2, Position.H4, PlayerColor.WHITE);
+        new Move(Piece.blackPawn, Position.A7, Position.A5, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.H4, Position.H5, PlayerColor.WHITE);
+        new Move(Piece.blackPawn, Position.A5, Position.A4, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.H5, Position.H6, PlayerColor.WHITE);
+        new Move(Piece.blackPawn, Position.A4, Position.A3, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.H6, Position.G7, PlayerColor.WHITE);
+        new Move(Piece.blackPawn, Position.A3, Position.B2, PlayerColor.BLACK);
+        new Move(Piece.whitePawn, Position.G7, Position.H8, PlayerColor.WHITE);
+    }
 }

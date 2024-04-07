@@ -945,6 +945,24 @@ public class MoveValidation {
         return true;
     }
 
+    public boolean pawnPromotes(Move move){
+        if(move.getPiece() != whitePawn && move.getPiece() != blackPawn){
+            return false;
+        }
+
+        if(move.getColor() == PlayerColor.WHITE){
+            if(move.getTargetPosition().getRow() == 0){
+                return true;
+            }
+        }
+        else if(move.getColor() == PlayerColor.BLACK){
+            if(move.getTargetPosition().getRow() == 7){
+                return true;
+            }
+        }
+        return false;
+    }
+
     static class Pair{
         public int row;
         public int column;

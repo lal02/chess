@@ -3,6 +3,8 @@ package gamefoundation;
 import analysis.IllegalMoveException;
 import analysis.MoveValidation;
 
+import java.util.Scanner;
+
 /**
  * The foundation.Move class represents a Move played in the game.
  * It encapsulates information about the piece being moved, the current and targeted foundation.Position and which Color is currently moving.
@@ -35,6 +37,22 @@ public class Move {
 			if(m.isValid(this)){
 				Board.updateBoard(this, Board.getBoardInstance().getBoard());
 				Board.getBoardInstance().playedMoves.add(this);
+
+				if(m.pawnPromotes(this)){
+					Piece p = getPromotionPiece();
+					System.out.println("pawn promotion");
+
+
+					if(this.getColor() != p.getPieceColor()){
+						throw new RuntimeException("promoted to wrong color");
+					}
+					else if(p == Piece.whiteKing ||p == Piece.blackKnight ||p == Piece.whitePawn || p == Piece.blackPawn){
+						throw new RuntimeException("promoted to illegal piece");
+					}
+					else{
+						Board.updateBoard(new Move(p,this.targetPosition,this.targetPosition,false),Board.getBoardInstance().getBoard());
+					}
+				}
 				PlayerColor enemyColor = null;
 				if(this.getColor() == PlayerColor.WHITE) enemyColor = PlayerColor.BLACK;
 				if(this.getColor() == PlayerColor.BLACK) enemyColor = PlayerColor.WHITE;
@@ -66,6 +84,13 @@ public class Move {
 		this.piece = piece;
 		this.currentPosition = currentPosition;
 		this.targetPosition = targetPosition;
+	}
+
+	private Piece getPromotionPiece(){
+		Piece p = null;
+		Scanner sc = new Scanner(System.in);
+		p = Piece.valueOf(sc.nextLine());
+		return p;
 	}
 
 	public Piece getPiece() {
