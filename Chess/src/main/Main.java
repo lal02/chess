@@ -19,7 +19,12 @@ public class Main extends Thread{
 		Thread thread = new Main();
 		thread.start();	
 	}
-	
+
+	public void startThread(){
+		Thread thread = new Main();
+		thread.start();
+	}
+
 	/**
 	 * The Thread function that contains the gameLoop.
 	 * Prints the foundation.Board and updates it by using user-input from the console.
