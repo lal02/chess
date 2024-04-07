@@ -1,7 +1,5 @@
 TODO implement:
-pawn promotion
 3 time repetition
-no suffiecient material to mate on the board detection
 
 getpossible moves function?
 switch Piece to class instead of enum?

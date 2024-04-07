@@ -1,5 +1,6 @@
 package analysis;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import gamefoundation.*;
@@ -945,11 +946,17 @@ public class MoveValidation {
         return true;
     }
 
+    /**
+     * checks if the given move includes a pawn prmotion move
+     * @param move the move to be tested
+     * @return true if a pawn is promoted in this move
+     */
     public boolean pawnPromotes(Move move){
+        // only pawn moves relevant
         if(move.getPiece() != whitePawn && move.getPiece() != blackPawn){
             return false;
         }
-
+        //pawn reaches baseline => promotion
         if(move.getColor() == PlayerColor.WHITE){
             if(move.getTargetPosition().getRow() == 0){
                 return true;
@@ -962,6 +969,52 @@ public class MoveValidation {
         }
         return false;
     }
+
+    /**
+     * checks if there is still sufficient material on the board to deliver a checkmate on any side
+     * @param boardParam the board to be checked
+     * @return true if there is still enough material on the board
+     */
+    public boolean sufficientMaterialOnBoard(Piece[][] boardParam){
+        /*
+        insufficient material: king alone || king + knight or bishop
+        => sufficient material: king + pawn/rook/queen ||king + 2 pieces
+        iterate over board add all the pieces to the according arraylists
+         */
+        ArrayList<Piece> blackPieces = new ArrayList<>();
+        ArrayList<Piece> whitePieces = new ArrayList<>();
+        //fill array with all pieces
+        for(int i = 0; i< boardParam.length;i++){
+            for(int j = 0; j<boardParam[i].length;j++){
+                if(boardParam[i][j] == null){
+                    continue;
+                } else if (boardParam[i][j].getPieceColor() == PlayerColor.WHITE) {
+                    whitePieces.add(boardParam[i][j]);
+                } else if (boardParam[i][j].getPieceColor() == PlayerColor.BLACK) {
+                    blackPieces.add(boardParam[i][j]);
+                }
+            }
+        }
+        //atleast one player has enough material on the board
+        if(blackPieces.size() >2 || whitePieces.size()>2){
+            return true;
+        }
+        else{
+            //piece that can give a checkmate by itself (queen rook pawn->promotion)
+            for(Piece p : blackPieces){
+                if(p == blackPawn ||p == blackRook || p == blackQueen){
+                    return true;
+                }
+            }
+            for(Piece p : whitePieces){
+                if(p == whitePawn || p == whiteRook || p == whiteQueen){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     static class Pair{
         public int row;

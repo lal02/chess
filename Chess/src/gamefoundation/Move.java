@@ -37,12 +37,9 @@ public class Move {
 			if(m.isValid(this)){
 				Board.updateBoard(this, Board.getBoardInstance().getBoard());
 				Board.getBoardInstance().playedMoves.add(this);
-
 				if(m.pawnPromotes(this)){
 					Piece p = getPromotionPiece();
-					System.out.println("pawn promotion");
-
-
+					System.out.println("input piece to which the pawn is to be promoted");
 					if(this.getColor() != p.getPieceColor()){
 						throw new RuntimeException("promoted to wrong color");
 					}
@@ -53,6 +50,11 @@ public class Move {
 						Board.updateBoard(new Move(p,this.targetPosition,this.targetPosition,false),Board.getBoardInstance().getBoard());
 					}
 				}
+				if(m.sufficientMaterialOnBoard(Board.getBoardInstance().getBoard()) == false){
+					System.out.println("draw due to insufficient material");
+					throw new RuntimeException("insufficient material on the board");
+				}
+
 				PlayerColor enemyColor = null;
 				if(this.getColor() == PlayerColor.WHITE) enemyColor = PlayerColor.BLACK;
 				if(this.getColor() == PlayerColor.BLACK) enemyColor = PlayerColor.WHITE;
@@ -87,10 +89,10 @@ public class Move {
 	}
 
 	private Piece getPromotionPiece(){
-		Piece p = null;
 		Scanner sc = new Scanner(System.in);
-		p = Piece.valueOf(sc.nextLine());
-		return p;
+		String input = sc.nextLine();
+		sc.close();
+		return Piece.valueOf(input);
 	}
 
 	public Piece getPiece() {

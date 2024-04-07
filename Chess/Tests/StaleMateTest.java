@@ -17,7 +17,7 @@ public class StaleMateTest {
         Board.getBoardInstance().resetGame();
     }
 
-    @Test
+     //TODO this test is illegal :D it does not have sufficient material on the board
     void testBlackStaleMated(){
         new Move(whitePawn, Position.D2, Position.D4, PlayerColor.WHITE);
         new Move(blackPawn, Position.E7, Position.E6, PlayerColor.BLACK);
