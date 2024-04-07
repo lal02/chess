@@ -37,6 +37,8 @@ public class Move {
 			if(m.isValid(this)){
 				Board.updateBoard(this, Board.getBoardInstance().getBoard());
 				Board.getBoardInstance().playedMoves.add(this);
+				Board.getBoardInstance().reachedPositions.add(Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
+
 				if(m.pawnPromotes(this)){
 					Piece p = getPromotionPiece();
 					System.out.println("input piece to which the pawn is to be promoted");
@@ -50,7 +52,7 @@ public class Move {
 						Board.updateBoard(new Move(p,this.targetPosition,this.targetPosition,false),Board.getBoardInstance().getBoard());
 					}
 				}
-				if(m.sufficientMaterialOnBoard(Board.getBoardInstance().getBoard()) == false){
+				if(!m.sufficientMaterialOnBoard(Board.getBoardInstance().getBoard())){
 					System.out.println("draw due to insufficient material");
 					throw new RuntimeException("insufficient material on the board");
 				}
@@ -69,6 +71,10 @@ public class Move {
 				} else if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
 					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
 					throw new RuntimeException("stalemate");
+				}
+				if(Board.getBoardInstance().threeTimeRepetition()){
+					System.out.println("Draw! Position has been reached three times");
+					throw new RuntimeException("Three Time Repetition");
 				}
 			}
         } catch (IllegalMoveException e) {

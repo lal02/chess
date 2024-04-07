@@ -1,5 +1,6 @@
 package gamefoundation;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +31,7 @@ public class Board {
 	
 	private Piece[][] board;
 	public ArrayList<Move> playedMoves = new ArrayList<>();
-	
+	public ArrayList<Piece[][]> reachedPositions = new ArrayList<>();
 	private static Board instance = null;
 	
 	
@@ -44,7 +45,7 @@ public class Board {
 								{null,null,null,null,null,null,null,null},
 								{whitePawn,whitePawn,whitePawn,whitePawn,whitePawn,whitePawn,whitePawn,whitePawn},
 								{whiteRook,whiteKnight,whiteBishop,whiteQueen,whiteKing,whiteBishop,whiteKnight,whiteRook}	
-									};
+		};
 	}
 	
 	/**
@@ -90,15 +91,56 @@ public class Board {
 
 		return returnedBoard;
 	}
-	
+
+	/**
+	 * removes a piece from the board and sets the position to null
+	 * @param pos
+	 * @param boardParam
+	 */
 	public void removePiece(Position pos, Piece[][] boardParam) {
 		boardParam[pos.getRow()][pos.getColumn()] = null;
 	}
 
+	/**
+	 * place a piece on a board to a specific position
+	 * @param pos
+	 * @param board
+	 * @param piece
+	 */
 	public void placePiece(Position pos, Piece[][] board, Piece piece){
 		board[pos.getRow()][pos.getColumn()] = piece;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
+	public boolean threeTimeRepetition(){
+		int counter = 0;
+		for(Piece[][] arr : reachedPositions){
+			if(boardEquals(arr,this.getBoard())){
+				counter++;
+			}
+		}
+		return counter >=3;
+	}
+
+	/**
+	 * Checks if two Piece[][] are equal (have the same position)
+	 * @param board1
+	 * @param board2
+	 * @return true if the position is equal
+	 */
+	private boolean boardEquals(Piece[][] board1, Piece[][] board2){
+		for(int i = 0; i<board1.length;i++){
+			for(int j = 0; j<board1[i].length;j++){
+				if(board1[i][j] != board2[i][j]){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	//used to reset the board when testing code
 	public void resetGame(){
@@ -113,6 +155,7 @@ public class Board {
 				{whiteRook,whiteKnight,whiteBishop,whiteQueen,whiteKing,whiteBishop,whiteKnight,whiteRook}
 		};
 		playedMoves.clear();
+		reachedPositions.clear();
 	}
 	
 	public String toString() {
