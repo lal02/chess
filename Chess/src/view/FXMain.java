@@ -21,8 +21,6 @@ public class FXMain extends Application {
 
     }
 
-
-
     public static FXMain getInstance(){
         if(instance == null){
             instance = new FXMain();

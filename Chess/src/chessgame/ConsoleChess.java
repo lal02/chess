@@ -6,21 +6,21 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 /**
- * This class can be used as main class for commandline chess
+ * This class can be used as main class for Console chess
  * It manages the gameloop and in it the user input
  *
  */
-public class commandlinechess extends Thread{
+public class ConsoleChess extends Thread{
 	private Board b;
 
 
 	public static void main(String[] args) {
-		Thread thread = new commandlinechess();
+		Thread thread = new ConsoleChess();
 		thread.start();	
 	}
 
 	public void startThread(){
-		Thread thread = new commandlinechess();
+		Thread thread = new ConsoleChess();
 		thread.start();
 	}
 
