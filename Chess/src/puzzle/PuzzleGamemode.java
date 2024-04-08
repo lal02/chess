@@ -2,16 +2,46 @@ package puzzle;
 
 import gamefoundation.Board;
 import gamefoundation.Move;
+import view.Controller;
 
-public class PuzzleGamemode {
+import java.util.concurrent.Semaphore;
+
+public class PuzzleGamemode extends Thread{
 
     private Puzzle puzzle;
+    DatabaseConnection db;
+    private Semaphore semaphore;
 
     public PuzzleGamemode() {
-        DatabaseConnection db = new DatabaseConnection();
-        String[] puzzle = db.requestPuzzle(0);
-        Puzzle p = new Puzzle(puzzle);
-        setPuzzle(p);
+        db = new DatabaseConnection();
+        semaphore = new Semaphore(0);
+        this.start();
+    }
+
+
+    public void run(){
+        int i = 0;
+        while(true){
+
+            String[] puzzle = db.requestPuzzle(i);
+            Puzzle p = new Puzzle(puzzle);
+            setPuzzle(p);
+            Controller c = new Controller();
+            c.displayPieces();
+            try {
+
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            i++;
+        }
+    }
+
+
+
+    public void puzzleReady() {
+        semaphore.release(); // Signal that the puzzle is ready
     }
 
     public Move getSolution(){

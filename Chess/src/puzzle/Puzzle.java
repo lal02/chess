@@ -53,6 +53,7 @@ public class Puzzle implements Serializable {
             case "wh": return Piece.whiteKnight;
             case "wk": return Piece.whiteKing;
             case "wp": return Piece.whitePawn;
+            case "wq": return Piece.whiteQueen;
             default: return null;
         }
     }

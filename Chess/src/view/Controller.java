@@ -804,7 +804,7 @@ public class Controller {
         event.consume();
     }
 
-    public void OnDragDropped(DragEvent event){
+    public void OnDragDropped(DragEvent event) throws InterruptedException {
         Dragboard dragboard = event.getDragboard();
         boolean success = false;
 
@@ -819,27 +819,23 @@ public class Controller {
             Position targetPosition = getPositionFromImageView(target);
             Piece p = Board.getBoardInstance().getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
 
-
             if(FXMain.puzzleGamemode != null){
                 Move triedMove = new Move(p,currentPosition,targetPosition,false);
                 if(triedMove.equals(FXMain.getInstance().puzzleGamemode.getSolution())){
+                    FXMain.puzzleGamemode.puzzleReady();
                     System.out.println("correct move!");
-
+                    displayPieces();
                 }
-
             }
             else{
                 new Move(p,currentPosition,targetPosition,p.getPieceColor());
-
             }
 
             success = true;
         }
-
         event.setDropCompleted(success);
         event.consume();
         displayPieces();
-        System.out.println(Board.getBoardInstance());
     }
 
     public Position getPositionFromImageView(ImageView imageView){

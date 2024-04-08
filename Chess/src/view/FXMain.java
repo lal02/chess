@@ -40,11 +40,8 @@ public class FXMain extends Application {
         String input = sc.nextLine();
         sc.close();
         if(input.equals("puzzle")){
-            //puzzle = true;
             setPuzzle();
-            System.out.println(puzzle);
             puzzleGamemode = new PuzzleGamemode();
-
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FXMain.fxml"));
