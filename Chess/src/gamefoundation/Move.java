@@ -121,4 +121,17 @@ public class Move {
 	public String toString(){
 		return "Move: " + this.getPiece() + " from " + this.getCurrentPosition() + " to " + this.getTargetPosition();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Move){
+			Move m = (Move)obj;
+			if(this.getPiece() == m.getPiece() && this.getCurrentPosition() == m.getCurrentPosition() && this.getTargetPosition() == m.getTargetPosition()){
+				return true;
+			}
+		}
+
+			return false;
+
+	}
 }

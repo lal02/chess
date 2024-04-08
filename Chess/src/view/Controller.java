@@ -808,7 +808,6 @@ public class Controller {
         Dragboard dragboard = event.getDragboard();
         boolean success = false;
 
-        //TODO Implement move checking here
         if(dragboard.hasImage()){
             ImageView target = (ImageView) event.getGestureTarget();
             target.setImage(dragboard.getImage());
@@ -820,7 +819,19 @@ public class Controller {
             Position targetPosition = getPositionFromImageView(target);
             Piece p = Board.getBoardInstance().getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
 
-            new Move(p,currentPosition,targetPosition,p.getPieceColor());
+
+            if(FXMain.puzzleGamemode != null){
+                Move triedMove = new Move(p,currentPosition,targetPosition,false);
+                if(triedMove.equals(FXMain.getInstance().puzzleGamemode.getSolution())){
+                    System.out.println("correct move!");
+                    //TODO next puzzle
+
+                }
+
+            }
+            else{
+                new Move(p,currentPosition,targetPosition,p.getPieceColor());
+            }
 
             success = true;
         }
