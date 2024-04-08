@@ -1,6 +1,8 @@
-package main;
+package chessgame;
 
 import gamefoundation.*;
+import javafx.fxml.FXMLLoader;
+import view.Controller;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -11,17 +13,17 @@ import java.util.Scanner;
  * @author lalbr
  *
  */
-public class Main extends Thread{  
+public class chessgame extends Thread{
 	private Board b;
 
 
 	public static void main(String[] args) {
-		Thread thread = new Main();
+		Thread thread = new chessgame();
 		thread.start();	
 	}
 
 	public void startThread(){
-		Thread thread = new Main();
+		Thread thread = new chessgame();
 		thread.start();
 	}
 
@@ -37,14 +39,14 @@ public class Main extends Thread{
 				try {
 					outStream = new PrintStream(System.out, true, "UTF-8");
 					outStream.print(b);
-					String input = sc.nextLine();				
+					String input = sc.nextLine();
 					Move m = parseInput(input);
 					//b.updateBoard(m, b.getBoard());
-					
+
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
-				} 
-				
+				}
+
 			}
 		}
 		
@@ -56,7 +58,6 @@ public class Main extends Thread{
 	 */
 	
 	//TODO: adjust input reception to leave out color and instead take it from piece
-	 //=> FEN Input from chesscom?
 	/**
 	 * Parses the String user-input move into a foundation.Move object.
 	 * 
@@ -64,7 +65,7 @@ public class Main extends Thread{
 	 * @return The parsed foundation.Move Object
 	 */
 	private Move parseInput(String input) {
-		String[] parts = input.split("\\s+", 4);	
+		String[] parts = input.split("\\s+", 4);
 		return new Move(Piece.valueOf(parts[0]), Position.valueOf(parts[1]),Position.valueOf(parts[2]), PlayerColor.valueOf(parts[3]));
 	}
 	

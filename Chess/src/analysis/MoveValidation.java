@@ -173,8 +173,7 @@ public class MoveValidation {
         }
 
         //Check if Piece is on the named square
-        if(!(p== board[currentRow][currentColumn])) {
-            //the piece from the move isnt equal to the piece saved in the board array
+        if(p!= board[currentRow][currentColumn]) {
             throw new IllegalMoveException("Piece is not on the named starting piece.\nPiece current Position: "
                     + move.getCurrentPosition() + "\nPiece on the supposed Position: " + board[currentRow][currentColumn]);
         }
