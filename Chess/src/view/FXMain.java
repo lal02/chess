@@ -1,22 +1,11 @@
 package view;
 
-import gamefoundation.Board;
-import gamefoundation.Piece;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import chessgame.chessgame;
-import puzzle.DatabaseConnection;
 import puzzle.PuzzleGamemode;
-
-import javax.xml.crypto.Data;
-import java.io.InputStream;
 
 
 import java.io.IOException;
@@ -49,6 +38,7 @@ public class FXMain extends Application {
     public void start(Stage primaryStage) throws IOException {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
+        sc.close();
         if(input.equals("puzzle")){
             //puzzle = true;
             setPuzzle();
@@ -56,12 +46,7 @@ public class FXMain extends Application {
             puzzleGamemode = new PuzzleGamemode();
 
         }
-        else{
-            chessgame main = new chessgame();
-            main.startThread();
-        }
 
-        sc.close();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FXMain.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 800, 800);

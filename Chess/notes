@@ -1,5 +1,5 @@
 TODO:
-
+System that allows to build a position with drag and drop and save the board
 
 TODO tests :
 test king cannot touch -> kingmovetest (should be covered by checkdetection but writing a test wont hurt)
@@ -10,11 +10,11 @@ add tests for stalemate and insufficient material
 FIXME
 the gui solution is terrible...
 
-
-
 TODO long-term:
 gui :: done
-Puzzle gamemode with database
+Puzzle gamemode with database :: done
 System that allows to build a position with drag and drop and save the board
+multiplayer via sockets
+gamemode with limited time
 chessbot
 

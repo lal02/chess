@@ -824,13 +824,13 @@ public class Controller {
                 Move triedMove = new Move(p,currentPosition,targetPosition,false);
                 if(triedMove.equals(FXMain.getInstance().puzzleGamemode.getSolution())){
                     System.out.println("correct move!");
-                    //TODO next puzzle
 
                 }
 
             }
             else{
                 new Move(p,currentPosition,targetPosition,p.getPieceColor());
+
             }
 
             success = true;

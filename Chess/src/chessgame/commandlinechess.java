@@ -1,29 +1,26 @@
 package chessgame;
 
 import gamefoundation.*;
-import javafx.fxml.FXMLLoader;
-import view.Controller;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 /**
- * The main.Main class is the entry point of the program.
- * It manages the gameloop and in it the user input. It extends Thread and runs in its own Thread. Thread is later to be used for time management
- * @author lalbr
+ * This class can be used as main class for commandline chess
+ * It manages the gameloop and in it the user input
  *
  */
-public class chessgame extends Thread{
+public class commandlinechess extends Thread{
 	private Board b;
 
 
 	public static void main(String[] args) {
-		Thread thread = new chessgame();
+		Thread thread = new commandlinechess();
 		thread.start();	
 	}
 
 	public void startThread(){
-		Thread thread = new chessgame();
+		Thread thread = new commandlinechess();
 		thread.start();
 	}
 
@@ -41,7 +38,7 @@ public class chessgame extends Thread{
 					outStream.print(b);
 					String input = sc.nextLine();
 					Move m = parseInput(input);
-					//b.updateBoard(m, b.getBoard());
+					b.updateBoard(m, b.getBoard());
 
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
