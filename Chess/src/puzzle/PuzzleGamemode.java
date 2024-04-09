@@ -2,7 +2,7 @@ package puzzle;
 
 import gamefoundation.Board;
 import gamefoundation.Move;
-import view.Controller;
+import view.ControllerChessboard;
 
 import java.util.concurrent.Semaphore;
 
@@ -24,9 +24,12 @@ public class PuzzleGamemode extends Thread{
         while(true){
 
             String[] puzzle = db.requestPuzzle(i);
+            if(puzzle == null){
+                break;
+            }
             Puzzle p = new Puzzle(puzzle);
             setPuzzle(p);
-            Controller c = new Controller();
+            ControllerChessboard c = new ControllerChessboard();
             c.displayPieces();
             try {
 

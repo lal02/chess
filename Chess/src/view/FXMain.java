@@ -13,10 +13,8 @@ import java.util.Scanner;
 
 public class FXMain extends Application {
 
-    public boolean puzzle = false;
-    public static PuzzleGamemode puzzleGamemode = null;
     private static FXMain instance = null;
-
+    private static Stage primaryStage;
     public FXMain(){
 
     }
@@ -29,38 +27,30 @@ public class FXMain extends Application {
     }
 
     public static void main(String[] args) {
+
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        sc.close();
-        if(input.equals("puzzle")){
-            setPuzzle();
-            puzzleGamemode = new PuzzleGamemode();
-        }
+        FXMain.primaryStage = primaryStage;
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/mainmenu.fxml"));
+        Parent menuRoot = menuLoader.load();
+        Scene menuScene = new Scene(menuRoot, 500  , 300);
+        primaryStage.setScene(menuScene);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FXMain.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 800, 800);
-        primaryStage.setScene(scene);
+
         primaryStage.setResizable(false);
-
         primaryStage.setTitle("Chess");
-
-        Controller c = loader.getController();
-        c.displayPieces();
-        c.addDragListeners();
-
         primaryStage.show();
     }
 
 
 
-    private void setPuzzle(){
-        this.puzzle = true;
+
+
+    public static void setScene(Scene scene){
+        primaryStage.setScene(scene);
     }
 
 }
