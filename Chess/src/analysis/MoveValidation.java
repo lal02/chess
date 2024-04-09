@@ -788,6 +788,7 @@ public class MoveValidation {
             startingRow = 6;
             enemyPawn = Piece.blackPawn;
         }
+        //enemy pawn blocks path
         if(currentColumn == targetColumn && board[targetRow][targetColumn] == enemyPawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way");
         //first move 2 squares
         if(Math.abs(currentRow - targetRow) == 2 && currentRow != startingRow) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");

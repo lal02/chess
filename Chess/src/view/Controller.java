@@ -143,7 +143,7 @@ public class Controller {
 
 
 
-
+    //why does this accessing the imageviews through the array not work?
     public ImageView[][] imageBoard;
 
 
@@ -775,16 +775,6 @@ public class Controller {
         }
     }
 
-//    public void setDragListeners(){
-//        A8.setOnDragDetected(event -> onDragDetected(A8,event));
-//        for(int i = 0; i<imageBoard.length; i++){
-//            for(int j = 0; j<imageBoard[i].length; j++){
-//                int finalI = i;
-//                int finalJ = j;
-//                imageBoard[i][j].setOnDragDetected(event -> onDragDetected(imageBoard[finalI][finalJ],event));
-//            }
-//        }
-//    }
 
 
     public void onDragDetected(ImageView imageView, MouseEvent event){
@@ -826,6 +816,9 @@ public class Controller {
                     System.out.println("correct move!");
                     displayPieces();
                 }
+                else{
+                    System.out.println("incorrect move");
+                }
             }
             else{
                 new Move(p,currentPosition,targetPosition,p.getPieceColor());
@@ -839,74 +832,7 @@ public class Controller {
     }
 
     public Position getPositionFromImageView(ImageView imageView){
-
-        return switch (imageView.getId()) {
-            case "A8" -> Position.A8;
-            case "B8" -> Position.B8;
-            case "C8" -> Position.C8;
-            case "D8" -> Position.D8;
-            case "E8" -> Position.E8;
-            case "F8" -> Position.F8;
-            case "G8" -> Position.G8;
-            case "H8" -> Position.H8;
-            case "A7" -> Position.A7;
-            case "B7" -> Position.B7;
-            case "C7" -> Position.C7;
-            case "D7" -> Position.D7;
-            case "E7" -> Position.E7;
-            case "F7" -> Position.F7;
-            case "G7" -> Position.G7;
-            case "H7" -> Position.H7;
-            case "A6" -> Position.A6;
-            case "B6" -> Position.B6;
-            case "C6" -> Position.C6;
-            case "D6" -> Position.D6;
-            case "E6" -> Position.E6;
-            case "F6" -> Position.F6;
-            case "G6" -> Position.G6;
-            case "A5" -> Position.A5;
-            case "B5" -> Position.B5;
-            case "C5" -> Position.C5;
-            case "D5" -> Position.D5;
-            case "E5" -> Position.E5;
-            case "F5" -> Position.F5;
-            case "G5" -> Position.G5;
-            case "H5" -> Position.H5;
-            case "A4" -> Position.A4;
-            case "B4" -> Position.B4;
-            case "C4" -> Position.C4;
-            case "D4" -> Position.D4;
-            case "E4" -> Position.E4;
-            case "F4" -> Position.F4;
-            case "G4" -> Position.G4;
-            case "H4" -> Position.H4;
-            case "A3" -> Position.A3;
-            case "B3" -> Position.B3;
-            case "C3" -> Position.C3;
-            case "D3" -> Position.D3;
-            case "E3" -> Position.E3;
-            case "F3" -> Position.F3;
-            case "G3" -> Position.G3;
-            case "H3" -> Position.H3;
-            case "A2" -> Position.A2;
-            case "B2" -> Position.B2;
-            case "C2" -> Position.C2;
-            case "D2" -> Position.D2;
-            case "E2" -> Position.E2;
-            case "F2" -> Position.F2;
-            case "G2" -> Position.G2;
-            case "H2" -> Position.H2;
-            case "A1" -> Position.A1;
-            case "B1" -> Position.B1;
-            case "C1" -> Position.C1;
-            case "D1" -> Position.D1;
-            case "E1" -> Position.E1;
-            case "F1" -> Position.F1;
-            case "G1" -> Position.G1;
-            case "H1" -> Position.H1;
-            default -> null;
-        };
-
+        return Position.valueOf(imageView.getId());
     }
 
 

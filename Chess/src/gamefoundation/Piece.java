@@ -25,12 +25,7 @@ public enum Piece {
 	private final String unicode;
 	private final PlayerColor color;
 	private final String path;
-	
-//	Piece(String unicode,PlayerColor color){
-//		this.unicode = unicode;
-//		this.color = color;
-//		path = null;
-//	}
+
 	Piece(String unicode,PlayerColor color,String path){
 		this.unicode = unicode;
 		this.color = color;
@@ -43,7 +38,6 @@ public enum Piece {
 	public PlayerColor getPieceColor() {
 		return color;
 	}
-
 	public String getPath() {
 		return path;
 	}
