@@ -4,12 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import puzzle.PuzzleGamemode;
 
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class FXMain extends Application {
 
@@ -30,16 +29,16 @@ public class FXMain extends Application {
 
         launch(args);
     }
-
+    //view.ControllerPuzzleCreator
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMain.primaryStage = primaryStage;
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/mainmenu.fxml"));
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/fxmlfiles/mainmenu.fxml"));
         Parent menuRoot = menuLoader.load();
         Scene menuScene = new Scene(menuRoot, 500  , 300);
         primaryStage.setScene(menuScene);
 
-
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
         primaryStage.setResizable(false);
         primaryStage.setTitle("Chess");
         primaryStage.show();
@@ -49,8 +48,9 @@ public class FXMain extends Application {
 
 
 
-    public static void setScene(Scene scene){
+    public static void setScene(Scene scene,String title){
         primaryStage.setScene(scene);
+        primaryStage.setTitle(title);
     }
 
 }

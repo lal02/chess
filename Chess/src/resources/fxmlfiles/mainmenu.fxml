@@ -26,12 +26,12 @@
                   <Font name="Franklin Gothic Demi Cond" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="puzzleButton" mnemonicParsing="false" onAction="#newPuzzle" text="Puzzle" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <Button fx:id="puzzleButton" mnemonicParsing="false" onAction="#puzzleGame" text="Puzzle" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font name="Franklin Gothic Medium Cond" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="createPuzzleButton" mnemonicParsing="false" onAction="#test" text="Create Puzzle" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Button fx:id="createPuzzleButton" mnemonicParsing="false" onAction="#puzzleCreator" text="Create Puzzle" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font name="Franklin Gothic Demi Cond" size="20.0" />
                </font>
@@ -41,7 +41,7 @@
                   <Font name="Franklin Gothic Demi Cond" size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="todo toggle sound" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+            <Button mnemonicParsing="false" onAction="#toggleSound" text="todo toggle sound" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                <font>
                   <Font name="Franklin Gothic Demi Cond" size="20.0" />
                </font>

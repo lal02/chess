@@ -802,6 +802,7 @@ public class ControllerChessboard {
                 if(triedMove.equals(ControllerMainMenu.puzzleGamemode.getSolution())){
                     ControllerMainMenu.puzzleGamemode.puzzleReady();
                     System.out.println("correct move!");
+                    Board.getBoardInstance().updateBoard(triedMove,Board.getBoardInstance().getBoard());
                     displayPieces();
                 }
                 else{
