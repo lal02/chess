@@ -35,9 +35,7 @@ public class DatabaseConnection {
 
 
     public String[] requestPuzzle(int id){
-
             String query = "select board,solution from puzzle where id = ?;";
-
             try {
                 PreparedStatement st = connection.prepareStatement(query);
                 st.setInt(1, id);
@@ -54,5 +52,36 @@ public class DatabaseConnection {
             return null;
 
     }
+
+    public int getLatestPuzzle(){
+        String query = "select max(id) from puzzle";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet set = st.executeQuery();
+            if(set.next()) {
+                return set.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+       return -1;
+    }
+
+    public boolean insertPuzzle(String board, String solution) {
+        if(board.length() != 128 ||solution.length() != 6){
+            return false;
+        }
+        int id = getLatestPuzzle() +1;
+        String query = "insert into puzzle values('"+board+"','"+solution+"',"+id+");";
+
+        try {
+            Statement st = connection.createStatement();
+            st.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
 
 }

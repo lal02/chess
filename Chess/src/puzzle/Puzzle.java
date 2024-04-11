@@ -1,66 +1,31 @@
 package puzzle;
 
-import gamefoundation.Move;
-import gamefoundation.Piece;
-import gamefoundation.Position;
+import gamefoundation.*;
 
-import java.io.Serializable;
-
-public class Puzzle implements Serializable {
+public class Puzzle {
 
     private Piece[][] board = null;
     private Move solution = null;
 
+    /**
+     * Takes a String array of length 2 and calls the convertQueryResultToPuzzle function
+     * @param puzzle
+     */
     public Puzzle(String[] puzzle){
         convertQueryResultToPuzzle(puzzle);
     }
 
 
-    //decode: 128char board -> each piece 2 chars, null = nu
-    //decode: 6char move -> 2char piece 2 char currentposition 2char targetposition
+    /**
+     * Converts boardString and solutionString to Piece[][]and Move object
+     * @param input A string array of length 2 with the boardString at index 0 and the solutionMoveString at index 1
+     */
     public void convertQueryResultToPuzzle(String[] input){
         String boardString = input[0];
         String solutionString = input[1];
-
-        String[] boardPairs = boardString.split("(?<=\\G.{2})");
-
-        Piece[][] board = new Piece[8][8];
-        int l = 0;
-        for(int i = 0;i<board.length;i++){
-            for(int j = 0;j<board[i].length;j++){
-                board[i][j] = getPieceFromString(boardPairs[l]);
-                l++;
-            }
-        }
-        this.board = board;
-
-        String[] solutionPairs = solutionString.split("(?<=\\G.{2})");
-        int m = 0;
-        this.solution = new Move(getPieceFromString(solutionPairs[0]),getPositionFromString(solutionPairs[1]),getPositionFromString(solutionPairs[2]),false);
-
-    }
-
-    private Piece getPieceFromString(String s){
-        switch(s){
-            case "bp": return Piece.blackPawn;
-            case "br": return Piece.blackRook;
-            case "bb": return Piece.blackBishop;
-            case "bh": return Piece.blackKnight;
-            case "bq": return Piece.blackQueen;
-            case "bk": return Piece.blackKing;
-            case "wr": return Piece.whiteRook;
-            case "wb": return Piece.whiteBishop;
-            case "wh": return Piece.whiteKnight;
-            case "wk": return Piece.whiteKing;
-            case "wp": return Piece.whitePawn;
-            case "wq": return Piece.whiteQueen;
-            default: return null;
-        }
-    }
-
-    private Position getPositionFromString(String s){
-
-        return  Position.valueOf(s);
+        StringParser parser = new StringParser();
+        this.board = parser.getBoardFromString(boardString);
+        this.solution = parser.getMoveFromString(solutionString);
     }
 
     public Piece[][] getBoard(){
@@ -70,4 +35,14 @@ public class Puzzle implements Serializable {
         return solution;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Puzzle){
+            Puzzle p = (Puzzle) obj;
+            if(Board.getBoardInstance().boardEquals(this.board,p.board)&& this.solution.equals(p.solution)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -12,28 +12,17 @@ import java.io.IOException;
 
 public class FXMain extends Application {
 
-    private static FXMain instance = null;
     private static Stage primaryStage;
-    public FXMain(){
 
-    }
-
-    public static FXMain getInstance(){
-        if(instance == null){
-            instance = new FXMain();
-        }
-        return instance;
-    }
 
     public static void main(String[] args) {
-
         launch(args);
     }
-    //view.ControllerPuzzleCreator
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMain.primaryStage = primaryStage;
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/fxmlfiles/mainmenu.fxml"));
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/fxml/mainmenu.fxml"));
         Parent menuRoot = menuLoader.load();
         Scene menuScene = new Scene(menuRoot, 500  , 300);
         primaryStage.setScene(menuScene);
@@ -43,8 +32,6 @@ public class FXMain extends Application {
         primaryStage.setTitle("Chess");
         primaryStage.show();
     }
-
-
 
 
 

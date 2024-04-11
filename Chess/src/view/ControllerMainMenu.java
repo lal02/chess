@@ -19,16 +19,14 @@ public class ControllerMainMenu {
     @FXML
     public Button createPuzzleButton = new Button();
 
-    public boolean puzzle = false;
     public static PuzzleGamemode puzzleGamemode = null;
 
-
-    public void test() throws IOException {
-
-    }
-
+    /**
+     * Switches the scene to the chess game and starts it
+     * @throws IOException
+     */
     public void newGame() throws IOException {
-        FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxmlfiles/chessboard.fxml"));
+        FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/chessboard.fxml"));
         Parent boardRoot = boardLoader.load();
         Scene boardScene = new Scene(boardRoot);
         String title = "Chess Game";
@@ -38,29 +36,40 @@ public class ControllerMainMenu {
         c.addDragListeners();
     }
 
+    /**
+     * Switches the scene to the puzzle gamemode and starts it
+     * @throws IOException
+     */
     public void puzzleGame() throws IOException {
-        FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxmlfiles/chessboard.fxml"));
+        FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/chessboard.fxml"));
         Parent boardRoot = boardLoader.load();
         Scene boardScene = new Scene(boardRoot);
-        setPuzzle();
-        puzzleGamemode = new PuzzleGamemode();
-        String title = "Puzzle Mode";
-        FXMain.setScene(boardScene,title);
         ControllerChessboard c = boardLoader.getController();
+        puzzleGamemode = new PuzzleGamemode();
+
+        FXMain.setScene(boardScene,"Puzzle Mode");
         c.displayPieces();
+
         c.addDragListeners();
     }
 
-
+    /**
+     * Switches the scene to the puzzle creator
+     * @throws IOException
+     */
     public void puzzleCreator() throws IOException {
-        FXMLLoader puzzleCreatorLoader = new FXMLLoader(getClass().getResource("/resources/fxmlfiles/puzzlecreator.fxml"));
+        FXMLLoader puzzleCreatorLoader = new FXMLLoader(getClass().getResource("/resources/fxml/puzzlecreator.fxml"));
         Parent puzzleCreatorRoot = puzzleCreatorLoader.load();
         Scene puzzleCreatorScene = new Scene(puzzleCreatorRoot);
+        ControllerPuzzleCreator controller = puzzleCreatorLoader.getController();
+        controller.addDragListeners();
         String title = "Puzzle Creator";
         FXMain.setScene(puzzleCreatorScene,title);
-
     }
 
+    /**
+     * Toggle sounds when moving a piece
+     */
     public void toggleSound(){
         System.out.println("todo implement sound");
     }
@@ -70,8 +79,6 @@ public class ControllerMainMenu {
 
 
 
-    private void setPuzzle(){
-        this.puzzle = true;
-    }
+
 
 }

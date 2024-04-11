@@ -4,6 +4,7 @@ import analysis.IllegalMoveException;
 import analysis.MoveValidation;
 
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The foundation.Move class represents a Move played in the game.
@@ -78,7 +79,7 @@ public class Move {
 				}
 			}
         } catch (IllegalMoveException e) {
-            throw new RuntimeException(e);
+			System.out.println(e.getMessage());
         }
     }
 	/**
@@ -94,11 +95,23 @@ public class Move {
 		this.targetPosition = targetPosition;
 	}
 
-	private Piece getPromotionPiece(){
-		Scanner sc = new Scanner(System.in);
-		String input = sc.nextLine();
-		sc.close();
-		return Piece.valueOf(input);
+
+	private Piece getPromotionPiece() {
+		CompletableFuture<Piece> future = new CompletableFuture<>();
+
+		new Thread(() -> {
+			Scanner sc = new Scanner(System.in);
+			String input = sc.nextLine();
+			sc.close();
+			Piece piece = Piece.valueOf(input);
+			future.complete(piece);
+		}).start();
+
+		try {
+			return future.get(); // Wait for user input
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public Piece getPiece() {
@@ -130,8 +143,6 @@ public class Move {
 				return true;
 			}
 		}
-
-			return false;
-
+		return false;
 	}
 }

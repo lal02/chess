@@ -1,6 +1,7 @@
 package gamefoundation;
 
-import java.sql.Array;
+import puzzle.StringParser;
+
 import java.util.ArrayList;
 
 /**
@@ -134,7 +135,7 @@ public class Board {
 	 * @param board2
 	 * @return true if the position is equal
 	 */
-	private boolean boardEquals(Piece[][] board1, Piece[][] board2){
+	public boolean boardEquals(Piece[][] board1, Piece[][] board2){
 		for(int i = 0; i<board1.length;i++){
 			for(int j = 0; j<board1[i].length;j++){
 				if(board1[i][j] != board2[i][j]){
@@ -160,7 +161,20 @@ public class Board {
 		playedMoves.clear();
 		reachedPositions.clear();
 	}
-	
+
+	public String boardToDBString(Piece[][] board){
+		StringBuilder sb = new StringBuilder();
+		StringParser parser = new StringParser();
+		for(int i = 0;i<board.length;i++){
+			for(int j = 0;j<board[i].length;j++){
+				String s = parser.getStringFromPiece(board[i][j]);
+				sb.append(s);
+			}
+		}
+
+		return sb.toString();
+	}
+
 	public String toString() {
 	    StringBuilder str = new StringBuilder();
 	    for(int i = 0; i < board.length; i++) {
@@ -180,8 +194,17 @@ public class Board {
 		return board;
 	}
 
+	public Piece[][] getEmptyBoard(){
+		return new Piece[8][8];
+	}
+
 	public void setBoard(Piece[][] board) {
 		this.board = board;
+	}
+
+	public void setBoardFromString(String boardString){
+		StringParser parser = new StringParser();
+		this.board = parser.getBoardFromString(boardString);
 	}
 
 	public ArrayList<Move> getPlayedMoves() {

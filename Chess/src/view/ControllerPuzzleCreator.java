@@ -1,15 +1,19 @@
 package view;
 
 import gamefoundation.Board;
-import gamefoundation.Move;
 import gamefoundation.Piece;
 import gamefoundation.Position;
+import puzzle.StringParser;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import puzzle.DatabaseConnection;
 
-public class ControllerPuzzleCreator {
-
+public class ControllerPuzzleCreator{
     @FXML
     ImageView A8 = new ImageView();
     @FXML
@@ -140,48 +144,168 @@ public class ControllerPuzzleCreator {
     ImageView H1 = new ImageView();
 
 
+    @FXML
+    ImageView selectBlackKing = new ImageView();
+    @FXML
+    ImageView selectBlackRook = new ImageView();
+    @FXML
+    ImageView selectBlackKnight = new ImageView();
+    @FXML
+    ImageView selectBlackBishop = new ImageView();
+    @FXML
+    ImageView selectBlackPawn = new ImageView();
+    @FXML
+    ImageView selectBlackQueen = new ImageView();
+    @FXML
+    ImageView selectWhiteKing = new ImageView();
+    @FXML
+    ImageView selectWhiteRook = new ImageView();
+    @FXML
+    ImageView selectWhiteKnight = new ImageView();
+    @FXML
+    ImageView selectWhiteBishop = new ImageView();
+    @FXML
+    ImageView selectWhitePawn = new ImageView();
+    @FXML
+    ImageView selectWhiteQueen = new ImageView();
 
-    public void OnDragDropped(DragEvent event) throws InterruptedException {
-//        Dragboard dragboard = event.getDragboard();
-//        boolean success = false;
-//
-//        if(dragboard.hasImage()){
-//            ImageView target = (ImageView) event.getGestureTarget();
-//            target.setImage(dragboard.getImage());
-//
-//            ImageView source = (ImageView) event.getGestureSource();
-//
-//
-//            //Position currentPosition = getPositionFromImageView(source);
-//            //Position targetPosition = getPositionFromImageView(target);
-//            //Piece p = Board.getBoardInstance().getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
-//
-//            if(ControllerMainMenu.puzzleGamemode != null){
-//               // Move triedMove = new Move(p,currentPosition,targetPosition,false);
-////                if(nullequals(ControllerMainMenu.puzzleGamemode.getSolution())){
-////                    ControllerMainMenu.puzzleGamemode.puzzleReady();
-////                    System.out.println("correct move!");
-////                    //Board.getBoardInstance().updateBoard(triedMove,Board.getBoardInstance().getBoard());
-////                    //displayPieces();
-////                }
-////                else{
-////                    System.out.println("incorrect move");
-////                }
-//            }
-//            else{
-//               // new Move(p,currentPosition,targetPosition,p.getPieceColor());
-//            }
-//
-//            success = true;
-//        }
-//        event.setDropCompleted(success);
-//        event.consume();
-//        //displayPieces();
-        System.out.println("hier kann nichts hingedragged werden");
+    @FXML
+    TextField boardTextField = new TextField();
+    @FXML
+    Button copyLoadBoardButton = new Button();
+
+    @FXML
+    TextField solutionTextField = new TextField();
+    @FXML
+    Button recordMoveButton = new Button();
+
+    @FXML
+    Button saveToDBButton = new Button();
+    @FXML
+    Label statusLabel = new Label();
+
+    @FXML
+    ImageView deleteImageView = new ImageView();
+
+    @FXML
+    Button resetButton = new Button();
+
+    private ImageView[][] imageViewArray;
+    private Piece[][] board = new Piece[8][8];
+    private boolean recordMove = false;
+
+    public void initializeArray() {
+        imageViewArray = new ImageView[][]{
+                {A8, B8, C8, D8, E8, F8, G8, H8},
+                {A7, B7, C7, D7, E7, F7, G7, H7},
+                {A6, B6, C6, D6, E6, F6, G6, H6},
+                {A5, B5, C5, D5, E5, F5, G5, H5},
+                {A4, B4, C4, D4, E4, F4, G4, H4},
+                {A3, B3, C3, D3, E3, F3, G3, H3},
+                {A2, B2, C2, D2, E2, F2, G2, H2},
+                {A1, B1, C1, D1, E1, F1, G1, H1}
+        };
     }
 
+    @FXML
+    public void initialize(){
+        initializeArray();
+    }
+
+    /**
+     * Handles the event when a drag is being dropped
+     * If recordMove is true it creates a moveString from the source target and piece
+     * If source is SideBoard it sets the image of the target and updates the board and boardString
+     * If target is deleteImageView source gets set to null and board and boardString gets updated
+     * @param event the drag event being handled
+     */
+    public void OnDragDropped(DragEvent event){
+        Dragboard dragboard = event.getDragboard();
+        ImageView target = (ImageView) event.getGestureTarget();
+        ImageView source =(ImageView) event.getGestureSource();
+        StringParser parser = new StringParser();
+        if(recordMove){
+            Position sourcePosition = Position.valueOf(source.getId());
+            Position targetPosition = Position.valueOf(target.getId());
+            Piece p = board[sourcePosition.getRow()][sourcePosition.getColumn()];
+            String piece = parser.getStringFromPiece(p);
+            String recordedMove = "";
+            recordedMove += piece;
+            recordedMove += sourcePosition;
+            recordedMove += "" + targetPosition;
+            solutionTextField.setText(recordedMove);
+            recordMove = false;
+
+        }
+        else if(isSideboard(source)){
+            target.setImage(dragboard.getImage());
+            event.setDropCompleted(true);
+            event.consume();
+            setPiece(source,target,null);
+            updateBoardTextField();
+        }
+        else if(target == deleteImageView){
+            source.setImage(null);
+            event.setDropCompleted(true);
+            event.consume();
+            Position p = Position.valueOf(source.getId());
+            int row = p.getRow();
+            int column = p.getColumn();
+            board[row][column] = null;
+            updateBoardTextField();
+        }
+        else{
+            int row = Position.valueOf(source.getId()).getRow();
+            int column = Position.valueOf(source.getId()).getColumn();
+            Piece p = board[row][column];
+            setPiece(source,target,p);
+            target.setImage(dragboard.getImage());
+            event.setDropCompleted(true);
+            event.consume();
+            updateBoardTextField();
+        }
+
+
+    }
+
+
+    /**
+     * Checks if an ImageView is part of the SideBoard
+     * @param imageView the imageView to be checked
+     * @return true if the imageView is part of the sideBoard
+     */
+    private boolean isSideboard(ImageView imageView){
+        return switch (imageView.getId()) {
+            case "selectBlackKing" -> true;
+            case "selectBlackBishop" -> true;
+            case "selectBlackKnight" -> true;
+            case "selectBlackQueen" -> true;
+            case "selectBlackRook" -> true;
+            case "selectWhiteKing" -> true;
+            case "selectWhiteRook" -> true;
+            case "selectWhiteBishop" -> true;
+            case "selectWhiteKnight" -> true;
+            case "selectWhitePawn" -> true;
+            case "selectWhiteQueen" -> true;
+            case "selectBlackPawn" -> true;
+            default -> false;
+        };
+    }
+
+    //TODO does it really get moved or copied?
+    /**
+     * Handles the event of a drag detected. If the source is part of the sideBoard it gets copied else it gets moved
+     * @param imageView
+     * @param event
+     */
     public void onDragDetected(ImageView imageView, MouseEvent event){
-        Dragboard dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
+        Dragboard dragboard;
+        if(isSideboard(imageView)){
+            dragboard = imageView.startDragAndDrop(TransferMode.COPY);
+        }
+        else{
+            dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
+        }
         ClipboardContent content = new ClipboardContent();
         content.putImage(imageView.getImage());
         dragboard.setContent(content);
@@ -189,89 +313,138 @@ public class ControllerPuzzleCreator {
     }
 
 
-
+    /**
+     * Handles the event of a dragging over
+     * @param event
+     */
     public void OnDragOver(DragEvent event){
         if(event.getGestureSource() != event.getGestureTarget() && event.getDragboard().hasImage()){
-            event.acceptTransferModes(TransferMode.MOVE);
+            event.acceptTransferModes(TransferMode.ANY);
         }
         event.consume();
     }
 
-
+    /**
+     * adds the onDragDetected Listener for all the imageViews
+     */
     public void addDragListeners(){
-        A8.setOnDragDetected(event -> onDragDetected(A8, event));
-        B8.setOnDragDetected(event -> onDragDetected(B8, event));
-        C8.setOnDragDetected(event -> onDragDetected(C8, event));
-        D8.setOnDragDetected(event -> onDragDetected(D8, event));
-        E8.setOnDragDetected(event -> onDragDetected(E8, event));
-        F8.setOnDragDetected(event -> onDragDetected(F8, event));
-        G8.setOnDragDetected(event -> onDragDetected(G8, event));
-        H8.setOnDragDetected(event -> onDragDetected(H8, event));
+        for(int i = 0;i<imageViewArray.length;i++){
+            for(int j = 0;j<imageViewArray[i].length;j++){
+                ImageView im = imageViewArray[i][j];
+                im.setOnDragDetected(event -> onDragDetected(im,event));
+            }
+        }
+        ImageView[] arr = new ImageView[]{selectBlackKing,selectBlackQueen, selectBlackKnight, selectBlackBishop,
+                selectBlackPawn, selectBlackRook,selectWhiteKing, selectWhiteBishop, selectWhiteKnight, selectWhitePawn,
+                selectWhiteQueen, selectWhiteRook};
 
-        A7.setOnDragDetected(event -> onDragDetected(A7, event));
-        B7.setOnDragDetected(event -> onDragDetected(B7, event));
-        C7.setOnDragDetected(event -> onDragDetected(C7, event));
-        D7.setOnDragDetected(event -> onDragDetected(D7, event));
-        E7.setOnDragDetected(event -> onDragDetected(E7, event));
-        F7.setOnDragDetected(event -> onDragDetected(F7, event));
-        G7.setOnDragDetected(event -> onDragDetected(G7, event));
-        H7.setOnDragDetected(event -> onDragDetected(H7, event));
+        for(int i = 0; i<arr.length; i++){
+            ImageView im = arr[i];
+            im.setOnDragDetected(event -> onDragDetected(im,event));
+        }
+    }
 
-        A6.setOnDragDetected(event -> onDragDetected(A6, event));
-        B6.setOnDragDetected(event -> onDragDetected(B6, event));
-        C6.setOnDragDetected(event -> onDragDetected(C6, event));
-        D6.setOnDragDetected(event -> onDragDetected(D6, event));
-        E6.setOnDragDetected(event -> onDragDetected(E6, event));
-        F6.setOnDragDetected(event -> onDragDetected(F6, event));
-        G6.setOnDragDetected(event -> onDragDetected(G6, event));
-        H6.setOnDragDetected(event -> onDragDetected(H6, event));
-
-        A5.setOnDragDetected(event -> onDragDetected(A5, event));
-        B5.setOnDragDetected(event -> onDragDetected(B5, event));
-        C5.setOnDragDetected(event -> onDragDetected(C5, event));
-        D5.setOnDragDetected(event -> onDragDetected(D5, event));
-        E5.setOnDragDetected(event -> onDragDetected(E5, event));
-        F5.setOnDragDetected(event -> onDragDetected(F5, event));
-        G5.setOnDragDetected(event -> onDragDetected(G5, event));
-        H5.setOnDragDetected(event -> onDragDetected(H5, event));
-
-        A4.setOnDragDetected(event -> onDragDetected(A4, event));
-        B4.setOnDragDetected(event -> onDragDetected(B4, event));
-        C4.setOnDragDetected(event -> onDragDetected(C4, event));
-        D4.setOnDragDetected(event -> onDragDetected(D4, event));
-        E4.setOnDragDetected(event -> onDragDetected(E4, event));
-        F4.setOnDragDetected(event -> onDragDetected(F4, event));
-        G4.setOnDragDetected(event -> onDragDetected(G4, event));
-        H4.setOnDragDetected(event -> onDragDetected(H4, event));
-
-        A3.setOnDragDetected(event -> onDragDetected(A3, event));
-        B3.setOnDragDetected(event -> onDragDetected(B3, event));
-        C3.setOnDragDetected(event -> onDragDetected(C3, event));
-        D3.setOnDragDetected(event -> onDragDetected(D3, event));
-        E3.setOnDragDetected(event -> onDragDetected(E3, event));
-        F3.setOnDragDetected(event -> onDragDetected(F3, event));
-        G3.setOnDragDetected(event -> onDragDetected(G3, event));
-        H3.setOnDragDetected(event -> onDragDetected(H3, event));
-
-        A2.setOnDragDetected(event -> onDragDetected(A2, event));
-        B2.setOnDragDetected(event -> onDragDetected(B2, event));
-        C2.setOnDragDetected(event -> onDragDetected(C2, event));
-        D2.setOnDragDetected(event -> onDragDetected(D2, event));
-        E2.setOnDragDetected(event -> onDragDetected(E2, event));
-        F2.setOnDragDetected(event -> onDragDetected(F2, event));
-        G2.setOnDragDetected(event -> onDragDetected(G2, event));
-        H2.setOnDragDetected(event -> onDragDetected(H2, event));
-
-        A1.setOnDragDetected(event -> onDragDetected(A1, event));
-        B1.setOnDragDetected(event -> onDragDetected(B1, event));
-        C1.setOnDragDetected(event -> onDragDetected(C1, event));
-        D1.setOnDragDetected(event -> onDragDetected(D1, event));
-        E1.setOnDragDetected(event -> onDragDetected(E1, event));
-        F1.setOnDragDetected(event -> onDragDetected(F1, event));
-        G1.setOnDragDetected(event -> onDragDetected(G1, event));
-        H1.setOnDragDetected(event -> onDragDetected(H1, event));
+    /**
+     * Updates the boardTextField with the current state of the board represented as String
+     */
+    private void updateBoardTextField(){
+    StringBuilder sb = new StringBuilder();
+    StringParser parser = new StringParser();
+        for(int i = 0;i<board.length;i++){
+            for(int j = 0;j<board[i].length;j++){
+                Piece p = board[i][j];
+                sb.append(parser.getStringFromPiece(p));
+            }
+        }
+        boardTextField.setText(sb.toString());
     }
 
 
+    /**
+     * Loads a board state from a boardString
+     */
+    public void onActionLoadBoardButton(){
+        String boardString = boardTextField.getText();
+        StringParser parser = new StringParser();
+        Piece[][] arr = parser.getBoardFromString(boardString);
+        board = Board.getBoardInstance().cloneBoard(arr);
+        for(int i = 0;i<board.length;i++){
+            for(int j = 0;j<board[i].length;j++){
+                if(board[i][j] == null){
+                    imageViewArray[i][j].setImage(null);
+                }
+                else{
+                    imageViewArray[i][j].setImage(new Image(getClass().getResourceAsStream(board[i][j].getPath())));
+                }
+            }
+        }
+    }
 
+    public void onActionRecordMoveButton(){
+        recordMove = true;
+    }
+
+    /**
+     * Saves the recorded puzzle to the database using the boardTextField and solutionTextField Text
+     */
+    public void onActionSaveToDBButton(){
+        DatabaseConnection db = new DatabaseConnection();
+        if(db.insertPuzzle(boardTextField.getText(),solutionTextField.getText())){
+            statusLabel.setText("Saved!");
+        }
+        else{
+            statusLabel.setText("Invalid Input!");
+        }
+        statusLabel.setVisible(true);
+    }
+
+    /**
+     * Resets the puzzleCreator
+     */
+    public void onActionResetButton(){
+        for(int i = 0; i<imageViewArray.length;i++){
+            for(int j = 0; j<imageViewArray[i].length;j++){
+                imageViewArray[i][j].setImage(null);
+            }
+        }
+        board = new Piece[8][8];
+        boardTextField.setText("");
+        solutionTextField.setText("");
+        statusLabel.setVisible(false);
+    }
+
+    /**
+     * Sets a piece on the boardArray after a drag and drop event is done
+     * @param source the source of the event
+     * @param target the target of the event
+     * @param p the piece to be inserted on the board
+     */
+    private void setPiece(ImageView source,ImageView target,Piece p){
+        String id = source.getId();
+        int row = -1;
+        int column = -1;
+        String targetId = target.getId();
+        row = Position.valueOf(targetId).getRow();
+        column = Position.valueOf(targetId).getColumn();
+
+        if(p!=null){
+            board[row][column] = p;
+            return;
+        }
+        switch(id){
+            case "selectWhiteKing": board[row][column] = Piece.whiteKing; break;
+            case "selectWhiteRook":board[row][column] = Piece.whiteRook; break;
+            case "selectWhitePawn":board[row][column] = Piece.whitePawn; break;
+            case "selectWhiteKnight":board[row][column] = Piece.whiteKnight; break;
+            case "selectWhiteQueen":board[row][column] = Piece.whiteQueen; break;
+            case "selectWhiteBishop":board[row][column] = Piece.whiteBishop; break;
+            case "selectBlackKing":board[row][column] = Piece.blackKing; break;
+            case "selectBlackRook":board[row][column] = Piece.blackRook; break;
+            case "selectBlackPawn":board[row][column] = Piece.blackPawn; break;
+            case "selectBlackKnight":board[row][column] = Piece.blackKnight; break;
+            case "selectBlackQueen":board[row][column] = Piece.blackQueen; break;
+            case "selectBlackBishop":board[row][column] = Piece.blackBishop; break;
+            default: board[row][column] = null;
+        }
+    }
 }
