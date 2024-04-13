@@ -28,7 +28,7 @@ public class DatabaseConnection {
                 System.out.println("not connected");
             }
         }
-        catch(Exception e) {
+        catch(ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }

@@ -1,4 +1,4 @@
-package analysis.sound;
+package sound;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

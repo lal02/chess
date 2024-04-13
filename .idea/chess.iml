@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Chess/Tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Chess/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Chess/src/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

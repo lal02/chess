@@ -13,7 +13,7 @@ public class PuzzleGamemode extends Thread{
 
     private Puzzle puzzle;
     DatabaseConnection db;
-    private Semaphore semaphore;
+    private final Semaphore semaphore;
 
     /**
      * Establishes a database connection and starts the thread and therefore the puzzle gameLoop

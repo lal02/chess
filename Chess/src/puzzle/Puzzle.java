@@ -9,7 +9,7 @@ public class Puzzle {
 
     /**
      * Takes a String array of length 2 and calls the convertQueryResultToPuzzle function
-     * @param puzzle
+     * @param puzzle String array that contains the boardString and the solutionString
      */
     public Puzzle(String[] puzzle){
         convertQueryResultToPuzzle(puzzle);
@@ -39,9 +39,7 @@ public class Puzzle {
     public boolean equals(Object obj) {
         if(obj instanceof Puzzle){
             Puzzle p = (Puzzle) obj;
-            if(Board.getBoardInstance().boardEquals(this.board,p.board)&& this.solution.equals(p.solution)){
-                return true;
-            }
+            return Board.getBoardInstance().boardEquals(this.board, p.board) && this.solution.equals(p.solution);
         }
         return false;
     }

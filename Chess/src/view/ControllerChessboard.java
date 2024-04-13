@@ -260,23 +260,21 @@ public class ControllerChessboard {
             }
             else{
                 new Move(p,currentPosition,targetPosition,p.getPieceColor());
-                if(b.gameOver){
+                if(b.isGameOver()){
                     ImageView gameResultImageView = (ImageView) dialogPane.getContent();
-                    if(b.whiteCheckmated){
-                        gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/gameover/white_checkmated.png"))));
+                    if(b.isWhiteCheckmated()){
+                        gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/game_result/white_checkmated.png"))));
                     }
-                    else if(b.blackCheckmated){
-                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/resources/gameover/black_checkmated.png")))));
+                    else if(b.isBlackCheckmated()){
+                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/black_checkmated.png")))));
                     }
-                    else if(b.draw){
-                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/resources/gameover/draw.png")))));
+                    else if(b.isDraw()){
+                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/draw.png")))));
                     }
                     dialogPane.setVisible(true);
                     dialogPane.setExpanded(true);
                     Button closeButton = (Button) dialogPane.lookupButton(ButtonType.CLOSE);
-                    closeButton.setOnAction(actionEvent -> {
-                        dialogPane.setVisible(false);
-                    });
+                    closeButton.setOnAction(actionEvent -> dialogPane.setVisible(false));
                 }
             }
             success = true;

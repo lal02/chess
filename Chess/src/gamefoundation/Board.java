@@ -34,10 +34,10 @@ public class Board {
 	public ArrayList<Move> playedMoves = new ArrayList<>();
 	public ArrayList<Piece[][]> reachedPositions = new ArrayList<>();
 	private static Board instance = null;
-	public boolean gameOver = false;
-	public boolean draw = false;
-	public boolean whiteCheckmated = false;
-	public boolean blackCheckmated = false;
+	private boolean gameOver = false;
+	private boolean draw = false;
+	private boolean whiteCheckmated = false;
+	private boolean blackCheckmated = false;
 	public boolean sound = true;
 	
 	private Board() {
@@ -99,8 +99,8 @@ public class Board {
 
 	/**
 	 * removes a piece from the board and sets the position to null
-	 * @param pos
-	 * @param boardParam
+	 * @param pos the position that is to be set to null
+	 * @param boardParam the board that is to be used
 	 */
 	public void removePiece(Position pos, Piece[][] boardParam) {
 		boardParam[pos.getRow()][pos.getColumn()] = null;
@@ -108,9 +108,9 @@ public class Board {
 
 	/**
 	 * place a piece on a board to a specific position
-	 * @param pos
-	 * @param board
-	 * @param piece
+	 * @param pos the position that is to be filled
+	 * @param board the board that is to be used
+	 * @param piece the piece that is to be placed
 	 */
 	public void placePiece(Position pos, Piece[][] board, Piece piece){
 		board[pos.getRow()][pos.getColumn()] = piece;
@@ -135,9 +135,9 @@ public class Board {
 
 	/**
 	 * Checks if two Piece[][] are equal (have the same position)
-	 * @param board1
-	 * @param board2
-	 * @return true if the position is equal
+	 * @param board1 board1
+	 * @param board2 board2
+	 * @return true if the current position of the two boards is equal
 	 */
 	public boolean boardEquals(Piece[][] board1, Piece[][] board2){
 		for(int i = 0; i<board1.length;i++){
@@ -151,6 +151,10 @@ public class Board {
 	}
 
 	//used to reset the board when testing code
+
+	/**
+	 * resets the state of the Board object to a new game
+	 */
 	public void resetGame(){
 		board = new Piece[][] {
 				{blackRook,blackKnight,blackBishop,blackQueen,blackKing,blackBishop,blackKnight,blackRook},
@@ -164,6 +168,11 @@ public class Board {
 		};
 		playedMoves.clear();
 		reachedPositions.clear();
+		gameOver = false;
+		draw = false;
+		whiteCheckmated = false;
+		blackCheckmated = false;
+
 	}
 
 	public String boardToDBString(Piece[][] board){
@@ -213,5 +222,37 @@ public class Board {
 
 	public ArrayList<Move> getPlayedMoves() {
 		return playedMoves;
+	}
+
+	public void setBlackCheckmated(boolean blackCheckmated) {
+		this.blackCheckmated = blackCheckmated;
+	}
+
+	public void setWhiteCheckmated(boolean whiteCheckmated) {
+		this.whiteCheckmated = whiteCheckmated;
+	}
+
+	public void setDraw(boolean draw) {
+		this.draw = draw;
+	}
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+
+	public boolean isBlackCheckmated() {
+		return blackCheckmated;
+	}
+
+	public boolean isWhiteCheckmated() {
+		return whiteCheckmated;
+	}
+
+	public boolean isDraw() {
+		return draw;
+	}
+
+	public boolean isGameOver() {
+		return gameOver;
 	}
 }
