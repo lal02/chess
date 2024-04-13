@@ -79,6 +79,7 @@ public class Move {
 				}
 			}
         } catch (IllegalMoveException e) {
+
 			System.out.println(e.getMessage());
         }
     }

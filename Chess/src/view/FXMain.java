@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 
 public class FXMain extends Application {
@@ -27,10 +29,11 @@ public class FXMain extends Application {
         Scene menuScene = new Scene(menuRoot, 500  , 300);
         primaryStage.setScene(menuScene);
 
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/app_icon.jpg")));
         primaryStage.setResizable(false);
         primaryStage.setTitle("Chess");
         primaryStage.show();
+
     }
 
 
