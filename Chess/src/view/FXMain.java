@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.util.Objects;
 
 public class FXMain extends Application {
 
@@ -26,17 +27,16 @@ public class FXMain extends Application {
         FXMain.primaryStage = primaryStage;
         FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/fxml/mainmenu.fxml"));
         Parent menuRoot = menuLoader.load();
-        Scene menuScene = new Scene(menuRoot, 500  , 300);
+        Scene menuScene = new Scene(menuRoot);
+
         primaryStage.setScene(menuScene);
 
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/app_icon.jpg")));
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/app_icon.jpg"))));
         primaryStage.setResizable(false);
         primaryStage.setTitle("Chess");
         primaryStage.show();
 
     }
-
-
 
     public static void setScene(Scene scene,String title){
         primaryStage.setScene(scene);

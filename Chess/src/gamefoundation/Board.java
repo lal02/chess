@@ -34,7 +34,11 @@ public class Board {
 	public ArrayList<Move> playedMoves = new ArrayList<>();
 	public ArrayList<Piece[][]> reachedPositions = new ArrayList<>();
 	private static Board instance = null;
-	
+	public boolean gameOver = false;
+	public boolean draw = false;
+	public boolean whiteCheckmated = false;
+	public boolean blackCheckmated = false;
+	public boolean sound = true;
 	
 	private Board() {
 		board = new Piece[][] {							

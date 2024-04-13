@@ -5,9 +5,14 @@ import gamefoundation.Move;
 import gamefoundation.Piece;
 import gamefoundation.Position;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+
+import java.util.Objects;
 
 public class ControllerChessboard {
     @FXML
@@ -139,6 +144,10 @@ public class ControllerChessboard {
     @FXML
     ImageView H1 = new ImageView();
 
+    @FXML
+    DialogPane dialogPane = new DialogPane();
+
+
 
     @FXML
     public void initialize(){
@@ -171,7 +180,7 @@ public class ControllerChessboard {
                     imageViewArray[i][j].setImage(null);
                 }
                 else{
-                    Image image = new Image(getClass().getResourceAsStream(board[i][j].getPath()));
+                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(board[i][j].getPath())));
                     imageViewArray[i][j].setImage(image);
                 }
 
@@ -201,6 +210,7 @@ public class ControllerChessboard {
         ClipboardContent content = new ClipboardContent();
         content.putImage(imageView.getImage());
         dragboard.setContent(content);
+        dragboard.setDragView(null);
         event.consume();
     }
 
@@ -213,35 +223,35 @@ public class ControllerChessboard {
         if(event.getGestureSource() != event.getGestureTarget() && event.getDragboard().hasImage()){
             event.acceptTransferModes(TransferMode.MOVE);
         }
+        event.getDragboard().setDragView(null);
         event.consume();
     }
 
     /**
-     * Handles the event when an image is dropped onto the chessboard
+     * Handles the event when an image is dropped onto the chessboard. If the game is over after the move it displays the game result
      * @param event the dragEvent being called
-     * @throws InterruptedException
      */
     public void OnDragDropped(DragEvent event)  {
         Dragboard dragboard = event.getDragboard();
+        event.getDragboard().setDragView(null);
         boolean success = false;
-
+        Board b = Board.getBoardInstance();
         if(dragboard.hasImage()){
             ImageView target = (ImageView) event.getGestureTarget();
             target.setImage(dragboard.getImage());
 
             ImageView source = (ImageView) event.getGestureSource();
 
-
             Position currentPosition = Position.valueOf(source.getId());
             Position targetPosition = Position.valueOf(target.getId());
-            Piece p = Board.getBoardInstance().getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
+            Piece p = b.getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
 
             if(ControllerMainMenu.puzzleGamemode != null){
                 Move triedMove = new Move(p,currentPosition,targetPosition,false);
                 if(triedMove.equals(ControllerMainMenu.puzzleGamemode.getSolution())){
                     ControllerMainMenu.puzzleGamemode.puzzleReady();
                     System.out.println("correct move!");
-                    Board.getBoardInstance().updateBoard(triedMove,Board.getBoardInstance().getBoard());
+                    Board.updateBoard(triedMove,b.getBoard());
                     displayPieces();
                 }
                 else{
@@ -250,8 +260,25 @@ public class ControllerChessboard {
             }
             else{
                 new Move(p,currentPosition,targetPosition,p.getPieceColor());
+                if(b.gameOver){
+                    ImageView gameResultImageView = (ImageView) dialogPane.getContent();
+                    if(b.whiteCheckmated){
+                        gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/gameover/white_checkmated.png"))));
+                    }
+                    else if(b.blackCheckmated){
+                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/resources/gameover/black_checkmated.png")))));
+                    }
+                    else if(b.draw){
+                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/resources/gameover/draw.png")))));
+                    }
+                    dialogPane.setVisible(true);
+                    dialogPane.setExpanded(true);
+                    Button closeButton = (Button) dialogPane.lookupButton(ButtonType.CLOSE);
+                    closeButton.setOnAction(actionEvent -> {
+                        dialogPane.setVisible(false);
+                    });
+                }
             }
-
             success = true;
         }
         event.setDropCompleted(success);

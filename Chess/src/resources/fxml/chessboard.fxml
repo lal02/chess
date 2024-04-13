@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -104,10 +105,13 @@
             <ImageView fx:id="H3" fitHeight="100.0" fitWidth="100.0" onDragDropped="#OnDragDropped" onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="5" />
          </children>
       </GridPane>
-      <DialogPane layoutX="250.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" visible="false">
+      <DialogPane fx:id="dialogPane" layoutX="250.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" visible="false">
          <content>
             <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
          </content>
+         <buttonTypes>
+            <ButtonType fx:constant="CLOSE" />
+         </buttonTypes>
       </DialogPane>
    </children>
 </AnchorPane>

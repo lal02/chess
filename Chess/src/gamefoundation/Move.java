@@ -1,8 +1,11 @@
 package gamefoundation;
 
-import analysis.IllegalMoveException;
 import analysis.MoveValidation;
+import analysis.sound.SoundManager;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,53 +37,89 @@ public class Move {
 		this.targetPosition = targetPosition;
 		this.color = color;
 		MoveValidation m = new MoveValidation();
-        try {
-			if(m.isValid(this)){
-				Board.updateBoard(this, Board.getBoardInstance().getBoard());
-				Board.getBoardInstance().playedMoves.add(this);
-				Board.getBoardInstance().reachedPositions.add(Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
+        if(m.isValid(this) && !Board.getBoardInstance().gameOver){
+            Board.updateBoard(this, Board.getBoardInstance().getBoard());
+            Board.getBoardInstance().playedMoves.add(this);
+            Board.getBoardInstance().reachedPositions.add(Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
 
-				if(m.pawnPromotes(this)){
-					Piece p = getPromotionPiece();
-					System.out.println("input piece to which the pawn is to be promoted");
-					if(this.getColor() != p.getPieceColor()){
-						throw new RuntimeException("promoted to wrong color");
+            if(m.pawnPromotes(this)){
+                Piece p = getPromotionPiece();
+                System.out.println("input piece to which the pawn is to be promoted");
+                if(this.getColor() != p.getPieceColor()){
+					Board.getBoardInstance().gameOver = true;
+					System.out.println("game over, promoted to wrong color");
+                }
+                else if(p == Piece.whiteKing ||p == Piece.blackKing ||p == Piece.whitePawn || p == Piece.blackPawn){
+					Board.getBoardInstance().gameOver = true;
+					System.out.println("game over, promoted to illegal piece");
+                }
+                else{
+                    Board.updateBoard(new Move(p,this.targetPosition,this.targetPosition,false),Board.getBoardInstance().getBoard());
+                }
+            }
+            if(!m.sufficientMaterialOnBoard(Board.getBoardInstance().getBoard())){
+                System.out.println("draw due to insufficient material");
+				Board.getBoardInstance().gameOver = true;
+				Board.getBoardInstance().draw = true;
+            }
+
+
+
+            PlayerColor enemyColor = null;
+            if(this.getColor() == PlayerColor.WHITE) enemyColor = PlayerColor.BLACK;
+            if(this.getColor() == PlayerColor.BLACK) enemyColor = PlayerColor.WHITE;
+            boolean checkmated = m.isCheckMated(enemyColor,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
+            PlayerColor nextMoveColor = null;
+            if(this.getColor() == PlayerColor.WHITE)nextMoveColor = PlayerColor.BLACK;
+            else if(this.getColor() == PlayerColor.BLACK)nextMoveColor = PlayerColor.WHITE;
+
+            if(checkmated){
+				Board.getBoardInstance().gameOver = true;
+				if(enemyColor == PlayerColor.WHITE){
+					Board.getBoardInstance().whiteCheckmated = true;
+				}
+				else{
+					Board.getBoardInstance().blackCheckmated = true;
+				}
+            } else if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
+                System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
+				Board.getBoardInstance().gameOver = true;
+				Board.getBoardInstance().draw = true;
+            }
+            if(Board.getBoardInstance().threeTimeRepetition()){
+                System.out.println("Draw! Position has been reached three times");
+				Board.getBoardInstance().gameOver = true;
+				Board.getBoardInstance().draw = true;
+            }
+			boolean enemyChecked = false;
+			if(m.inCheck(enemyColor,Board.getBoardInstance().getBoard())){
+				enemyChecked = true;
+			}
+
+			SoundManager sound = new SoundManager();
+            try {
+				if(Board.getBoardInstance().sound){
+					if(checkmated){
+						sound.playCheckmateSound();
 					}
-					else if(p == Piece.whiteKing ||p == Piece.blackKnight ||p == Piece.whitePawn || p == Piece.blackPawn){
-						throw new RuntimeException("promoted to illegal piece");
+					else if(Board.getBoardInstance().draw){
+						sound.playDrawSound();
+					}
+					else if(enemyChecked){
+						sound.playCheckSound();
 					}
 					else{
-						Board.updateBoard(new Move(p,this.targetPosition,this.targetPosition,false),Board.getBoardInstance().getBoard());
+						sound.playMoveAudio();
 					}
-				}
-				if(!m.sufficientMaterialOnBoard(Board.getBoardInstance().getBoard())){
-					System.out.println("draw due to insufficient material");
-					throw new RuntimeException("insufficient material on the board");
-				}
 
-				PlayerColor enemyColor = null;
-				if(this.getColor() == PlayerColor.WHITE) enemyColor = PlayerColor.BLACK;
-				if(this.getColor() == PlayerColor.BLACK) enemyColor = PlayerColor.WHITE;
-				boolean checkmated = m.isCheckMated(enemyColor,Board.getBoardInstance().cloneBoard(Board.getBoardInstance().getBoard()));
-				PlayerColor nextMoveColor = null;
-				if(this.getColor() == PlayerColor.WHITE)nextMoveColor = PlayerColor.BLACK;
-				else if(this.getColor() == PlayerColor.BLACK)nextMoveColor = PlayerColor.WHITE;
-
-				if(checkmated){
-					System.out.println("CHECKMATE! " + enemyColor + " is checkmated! game over");
-					throw new RuntimeException();
-				} else if(m.isStaleMated(nextMoveColor,Board.getBoardInstance().getBoard())){
-					System.out.println("Stalemate! " + nextMoveColor + " king is stalemated! Draw!");
-					throw new RuntimeException("stalemate");
 				}
-				if(Board.getBoardInstance().threeTimeRepetition()){
-					System.out.println("Draw! Position has been reached three times");
-					throw new RuntimeException("Three Time Repetition");
-				}
-			}
-        } catch (IllegalMoveException e) {
-
-			System.out.println(e.getMessage());
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+				e.printStackTrace();
+            } catch (LineUnavailableException e) {
+				e.printStackTrace();
+            }
         }
     }
 	/**
@@ -107,7 +146,6 @@ public class Move {
 			Piece piece = Piece.valueOf(input);
 			future.complete(piece);
 		}).start();
-
 		try {
 			return future.get(); // Wait for user input
 		} catch (Exception e) {

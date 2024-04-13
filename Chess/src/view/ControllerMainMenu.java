@@ -1,29 +1,39 @@
 package view;
 
+import gamefoundation.Board;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import puzzle.PuzzleGamemode;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ControllerMainMenu {
 
     @FXML
-    //public Button newGameButton = new Button();
     public Button newGameButton;
     @FXML
     public Button puzzleButton = new Button();
     @FXML
     public Button createPuzzleButton = new Button();
+    @FXML
+    public Button toggleSoundButton = new Button();
+
+
+    @FXML
+    void initialize(){
+        toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
+    }
 
     public static PuzzleGamemode puzzleGamemode = null;
 
     /**
      * Switches the scene to the chess game and starts it
-     * @throws IOException
      */
     public void newGame() throws IOException {
         FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/chessboard.fxml"));
@@ -38,7 +48,6 @@ public class ControllerMainMenu {
 
     /**
      * Switches the scene to the puzzle gamemode and starts it
-     * @throws IOException
      */
     public void puzzleGame() throws IOException {
         FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/chessboard.fxml"));
@@ -55,7 +64,6 @@ public class ControllerMainMenu {
 
     /**
      * Switches the scene to the puzzle creator
-     * @throws IOException
      */
     public void puzzleCreator() throws IOException {
         FXMLLoader puzzleCreatorLoader = new FXMLLoader(getClass().getResource("/resources/fxml/puzzlecreator.fxml"));
@@ -71,7 +79,13 @@ public class ControllerMainMenu {
      * Toggle sounds when moving a piece
      */
     public void toggleSound(){
-        System.out.println("todo implement sound");
+        Board.getBoardInstance().sound = !Board.getBoardInstance().sound;
+        if(!Board.getBoardInstance().sound){
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_off.png")))));
+        }
+        else{
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
+        }
     }
 
 

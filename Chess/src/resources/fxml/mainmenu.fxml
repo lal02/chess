@@ -1,15 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ControllerMainMenu">
    <children>
-      <GridPane layoutX="200.0" layoutY="155.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../menu/background.jpg" />
+         </image>
+      </ImageView>
+      <HBox layoutX="234.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="400.0" prefWidth="164.0">
+               <children>
+                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGame" style="-fx-background-color: transparent;" text="Play Chess">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="20.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="0.18483412322274884" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="puzzleButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#puzzleGame" style="-fx-background-color: transparent;" text="Puzzle">
+                     <font>
+                        <Font name="Franklin Gothic Medium Cond" size="20.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="0.18483412322274884" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="createPuzzleButton" mnemonicParsing="false" onAction="#puzzleCreator" style="-fx-background-color: transparent;" text="Puzzle Creator">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="20.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="0.18483412322274884" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                  </Button>
+               </children>
+            </VBox>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" />
+            <GridPane prefHeight="406.0" prefWidth="278.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="205.0" minWidth="10.0" prefWidth="140.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="0.0" prefWidth="50.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="180.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="50.0" minHeight="43.0" prefHeight="45.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="toggleSoundButton" alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleSound" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: transparent;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <GridPane layoutX="200.0" layoutY="155.0" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -20,33 +133,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGame" text="New Game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font name="Franklin Gothic Demi Cond" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="puzzleButton" mnemonicParsing="false" onAction="#puzzleGame" text="Puzzle" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <font>
-                  <Font name="Franklin Gothic Medium Cond" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="createPuzzleButton" mnemonicParsing="false" onAction="#puzzleCreator" text="Create Puzzle" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Franklin Gothic Demi Cond" size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" text="todo" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Franklin Gothic Demi Cond" size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#toggleSound" text="todo toggle sound" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
-               <font>
-                  <Font name="Franklin Gothic Demi Cond" size="20.0" />
-               </font>
-            </Button>
-         </children>
       </GridPane>
    </children>
 </AnchorPane>

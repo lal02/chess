@@ -1,6 +1,5 @@
 package analysis;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import gamefoundation.*;
@@ -148,7 +147,7 @@ public class MoveValidation {
      * @param move The move that is to be checked for validity
      * @throws IllegalMoveException is thrown if any of the severals checks fail with a description on why the move is illegal
      */
-    public boolean isValid(Move move) throws IllegalMoveException {
+    public boolean isValid(Move move) {
         Piece p = move.getPiece();
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
@@ -159,34 +158,46 @@ public class MoveValidation {
 
         //Check if the correct color is making a move
         ArrayList<Move> moveList = boardInstance.getPlayedMoves();
-        if(moveList.size()>0) {
+        if(!moveList.isEmpty()) {
             PlayerColor lastMoveColor = moveList.get(moveList.size() - 1).getColor();
             if(lastMoveColor == move.getColor()) {
-                throw new IllegalMoveException("Expected move from different color.\nLast move played by " +
+                System.out.println("Expected move from different color.\nLast move played by " +
                         moveList.get(moveList.size() - 1).getColor() + "\nCurrent Move played by: "+move.getColor());
+                return false;
+//                throw new IllegalMoveException("Expected move from different color.\nLast move played by " +
+//                        moveList.get(moveList.size() - 1).getColor() + "\nCurrent Move played by: "+move.getColor());
             }
         }
         else {
             if(move.getColor() == PlayerColor.BLACK) {
-                throw new IllegalMoveException("White starts the game");
+                System.out.println("White starts the game");
+                return false;
+                //throw new IllegalMoveException("White starts the game");
             }
         }
 
         //Check if Piece is on the named square
         if(p!= board[currentRow][currentColumn]) {
-            throw new IllegalMoveException("Piece is not on the named starting piece.\nPiece current Position: "
+            System.out.println("Piece is not on the named starting piece.\nPiece current Position: "
                     + move.getCurrentPosition() + "\nPiece on the supposed Position: " + board[currentRow][currentColumn]);
+            return false;
+//            throw new IllegalMoveException("Piece is not on the named starting piece.\nPiece current Position: "
+//                    + move.getCurrentPosition() + "\nPiece on the supposed Position: " + board[currentRow][currentColumn]);
         }
 
         //Check if Piece can move that way
         if(correctDirection(move) == false) {
-            throw new IllegalMoveException("This Piece cannot move that way by the rules of chess");
+            System.out.println("This Piece cannot move that way by the rules of chess");
+            return false;
+//            throw new IllegalMoveException("This Piece cannot move that way by the rules of chess");
         }
 
         //check if Tile is empty or if enemy has piece on it
         if(board[targetRow][targetColumn] != null) {
             if(board[targetRow][targetColumn].getPieceColor()==move.getColor()) {
-                throw new IllegalMoveException("Square is blocked by Piece of the same color");
+                System.out.println("Square is blocked by Piece of the same color");
+                return false;
+//                throw new IllegalMoveException("Square is blocked by Piece of the same color");
             }
         }
         //check for capture , pawn blockage, en passant, first move 2 squares
@@ -198,13 +209,17 @@ public class MoveValidation {
         }
         else if(p== Piece.whiteKing  || p== Piece.blackKing) {
             if(kingMoveValidity(move,p) == false){
-                throw new IllegalMoveException("Castling illegal");
+                System.out.println("Castling illegal in this case");
+                return false;
+//                throw new IllegalMoveException("Castling illegal");
             }
         }
         //bishop queen rook
         else {
             if(checkPathBlocked(move.getCurrentPosition(), move.getTargetPosition(), move.getPiece(),board) == false) {
-                throw new IllegalMoveException("Path is blocked");
+                System.out.println("Path is blocked");
+                return false;
+//                throw new IllegalMoveException("Path is blocked");
             }
         }
 
@@ -212,7 +227,9 @@ public class MoveValidation {
         Piece[][] boardSimulation = boardInstance.cloneBoard(board);
         boardInstance.updateBoard(move, boardSimulation);
         if(inCheck(move.getColor(),boardSimulation) == true) {
-            throw new IllegalMoveException("King is in check after this move: " + move);
+            System.out.println("King is in check after this move: " + move);
+            return false;
+//            throw new IllegalMoveException("King is in check after this move: " + move);
         }
         return true;
     }
@@ -399,8 +416,8 @@ public class MoveValidation {
 
     /**
      * Checks if the king is currently in a checkmate position on the given board
-     * @param king
-     * @param boardParam
+     * @param moveColor the color that is to be tested if it is currently in a checkmated position
+     * @param boardParam the board containing the current chess position that is to be checked
      * @return true if the king is currently checkmated on the given board
      */
     public boolean isCheckMated(PlayerColor moveColor, Piece[][] boardParam){
@@ -486,7 +503,6 @@ public class MoveValidation {
         int checkSourceColumn = checkSource.getColumn();
         int rowIncrement = Integer.compare(checkSourceRow,kingRow);
         int columnIncrement = Integer.compare(checkSourceColumn,kingColumn);
-
         //TODO this can be done better so it is also checked inside the while loop later on.
         //checks for captures
             for(int k = 0; k< boardParam.length;k++) {
@@ -762,7 +778,7 @@ public class MoveValidation {
      * @return true if the move is valid; if it is not valid analysis.IllegalMoveException gets thrown
      * @throws IllegalMoveException
      */
-    private boolean pawnMoveValidity(Move move, Piece pawn) throws IllegalMoveException {
+    private boolean pawnMoveValidity(Move move, Piece pawn) {
         /*
             pawn blockage by enemy pawn
             tests for the following cases:
@@ -789,9 +805,18 @@ public class MoveValidation {
             enemyPawn = Piece.blackPawn;
         }
         //enemy pawn blocks path
-        if(currentColumn == targetColumn && board[targetRow][targetColumn] == enemyPawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way");
+//       if(currentColumn == targetColumn && board[targetRow][targetColumn] == enemyPawn) throw new IllegalMoveException("Path blocked by enemy pawn. Pawn cannot capture that way");
+        if(currentColumn == targetColumn && board[targetRow][targetColumn] == enemyPawn){
+            System.out.println("Path blocked by enemy pawn. Pawn cannot capture that way");
+            return false;
+        }
+
         //first move 2 squares
-        if(Math.abs(currentRow - targetRow) == 2 && currentRow != startingRow) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
+//        if(Math.abs(currentRow - targetRow) == 2 && currentRow != startingRow) throw new IllegalMoveException("Pawn can only move 2 squares on the first move");
+        if(Math.abs(currentRow - targetRow) == 2 && currentRow != startingRow){
+            System.out.println("Pawn can only move 2 squares on the first move");
+            return false;
+        }
         //target square is empty
         if(board[targetRow][targetColumn] == null) {
             //check en passant
@@ -811,7 +836,9 @@ public class MoveValidation {
                      */
                     if(Math.abs(currentRow-targetRow) == 1 && Math.abs(currentColumn - targetColumn)==1 && !(Math.abs(previouslyTargetRow - previouslyCurrentRow ) == 2
                             && previouslyTargetRow == currentRow  && previouslyTargetColumn == targetColumn)) {
-                        throw new IllegalMoveException("en-passant is not possible here / ");
+                        System.out.println("en-passant is not possible here");
+                        return false;
+//                        throw new IllegalMoveException("en-passant is not possible here / ");
                     }
                     //rule correct en passant
                     else if(Math.abs(currentRow-targetRow) == 1 && Math.abs(currentColumn - targetColumn)==1 && Math.abs(previouslyTargetRow - previouslyCurrentRow ) == 2
@@ -822,12 +849,16 @@ public class MoveValidation {
                 }
                 //moving to empty diagonal field without en passant possibility
                 if(!enpassant && currentColumn != targetColumn) {
-                    throw new IllegalMoveException("moving to empty diagonal square as pawn without en passant is illegal");
+                    System.out.println("moving to empty diagonal square as pawn without en passant is illegal");
+                    return false;
+//                    throw new IllegalMoveException("moving to empty diagonal square as pawn without en passant is illegal");
                 }
             }
             //targetSquare is not empty and occpuied by same colored pawn
             else if(Math.abs(currentRow-targetRow) == 1 && Math.abs(currentColumn - targetColumn) == 1 && board[targetRow][targetColumn].getPieceColor() == pawn.getPieceColor()){
-                throw new IllegalMoveException("The targeted square is filled with a Piece from the same color");
+                System.out.println("The targeted square is filled with a Piece from the same color");
+                return false;
+//                throw new IllegalMoveException("The targeted square is filled with a Piece from the same color");
             }
         }
         return true;
@@ -840,7 +871,7 @@ public class MoveValidation {
      * @return true if the king move is valid
      * @throws IllegalMoveException gets thrown if the move is illegal
      */
-    private boolean kingMoveValidity(Move move, Piece king) throws IllegalMoveException {
+    private boolean kingMoveValidity(Move move, Piece king)  {
         //test if castling is legal => else simulateKingMove(king,rook,move,crossingSquare,rookPosition);
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
@@ -867,7 +898,9 @@ public class MoveValidation {
         if(currentRow-targetRow == 0 && Math.abs(currentColumn-targetColumn) == 2){
             //currently in check: LEAVE
             if(inCheck(move.getColor(),board)){
-                throw new IllegalMoveException("King cannot castle when given a check");
+                System.out.println("King cannot castle when given a check");
+                return false;
+//                throw new IllegalMoveException("King cannot castle when given a check");
             }
             //check if king or rook were moved
             for(Move m : playedMoves){
@@ -907,7 +940,9 @@ public class MoveValidation {
             if(blackShortCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
             if(blackLongCastle && (blackKingHasMoved || blackArookHasMoved)) piecesHaveMoved = true;
             if(piecesHaveMoved){
-                throw new IllegalMoveException("Pieces have moved and therefore cannot castle");
+                System.out.println("Pieces have moved and therefore cannot castle");
+                return false;
+//                throw new IllegalMoveException("Pieces have moved and therefore cannot castle");
             }
             else{
                 return simulateKingMove(king,rook,move,crossingSquare,rookPosition);
@@ -926,7 +961,7 @@ public class MoveValidation {
      * @return true if move is possible
      * @throws IllegalMoveException
      */
-    private boolean simulateKingMove(Piece king, Piece rook , Move move, Position crossingSquare, Position rookPosition) throws IllegalMoveException {
+    private boolean simulateKingMove(Piece king, Piece rook , Move move, Position crossingSquare, Position rookPosition) {
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
         Piece[][] boardSimulation = boardInstance.cloneBoard(board);
@@ -934,12 +969,16 @@ public class MoveValidation {
         boardInstance.updateBoard(moveToCrossingSquare, boardSimulation);
         //cross over square that is checked by enemy piece:
         if(inCheck(king.getPieceColor(),boardSimulation)) {
-            throw new IllegalMoveException("King cannot cross a square that is dangered. F1 dangered");
+            System.out.println("King cannot cross a square that is dangered."+ crossingSquare +" dangered");
+            return false;
+//            throw new IllegalMoveException("King cannot cross a square that is dangered. F1 dangered");
         }
         Piece[][] boardSimulationDefault = boardInstance.cloneBoard(board);
         boardInstance.updateBoard(move, boardSimulationDefault);
         if(inCheck(king.getPieceColor(),boardSimulationDefault)) {
-            throw new IllegalMoveException("King is in check after this move");
+            System.out.println("King is in check after this move");
+            return false;
+//            throw new IllegalMoveException("King is in check after this move");
         }
         boardInstance.removePiece(rookPosition, Board.getBoardInstance().getBoard());
         boardInstance.placePiece(crossingSquare, Board.getBoardInstance().getBoard(),rook);
