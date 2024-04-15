@@ -11,11 +11,13 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import puzzle.PuzzleGamemode;
+import multiplayer.ChessClient;
 
+import java.io.IOException;
 import java.util.Objects;
 
-public class ControllerChessboard {
+public class ControllerMultiplayer {
+
     @FXML
     ImageView A8 = new ImageView();
     @FXML
@@ -148,10 +150,11 @@ public class ControllerChessboard {
     @FXML
     DialogPane dialogPane = new DialogPane();
 
-
+    ChessClient client;
 
     @FXML
     public void initialize(){
+        client = new ChessClient();
         initializeArray();
         displayPieces();
     }
@@ -159,7 +162,7 @@ public class ControllerChessboard {
     private ImageView[][] imageViewArray;
 
     public void initializeArray() {
-         imageViewArray = new ImageView[][]{
+        imageViewArray = new ImageView[][]{
                 {A8, B8, C8, D8, E8, F8, G8, H8},
                 {A7, B7, C7, D7, E7, F7, G7, H7},
                 {A6, B6, C6, D6, E6, F6, G6, H6},
@@ -248,22 +251,16 @@ public class ControllerChessboard {
             Position targetPosition = Position.valueOf(target.getId());
             Piece p = b.getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
 
-            if(ControllerMainMenu.puzzleGamemode != null){
-                Move triedMove = new Move(p,currentPosition,targetPosition,false);
-                if(triedMove.equals(ControllerMainMenu.puzzleGamemode.getSolution())){
-                    ControllerMainMenu.puzzleGamemode.puzzleReady();
-                    System.out.println("correct move!");
-                    Board.updateBoard(triedMove,b.getBoard());
-                    displayPieces();
 
-                }
-                else{
-                    System.out.println("incorrect move");
-                }
+            Move playedMove = new Move(p,currentPosition,targetPosition,p.getPieceColor());
+            try {
+                client.sendMove(playedMove);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            else{
-                new Move(p,currentPosition,targetPosition,p.getPieceColor());
-                if(b.isGameOver()){
+
+
+            if(b.isGameOver()){
                     ImageView gameResultImageView = (ImageView) dialogPane.getContent();
                     if(b.isWhiteCheckmated()){
                         gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/game_result/white_checkmated.png"))));
@@ -279,7 +276,7 @@ public class ControllerChessboard {
                     Button closeButton = (Button) dialogPane.lookupButton(ButtonType.CLOSE);
                     closeButton.setOnAction(actionEvent -> dialogPane.setVisible(false));
                 }
-            }
+
             success = true;
         }
         event.setDropCompleted(success);

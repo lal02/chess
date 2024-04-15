@@ -1,6 +1,7 @@
 package view;
 
 import gamefoundation.Board;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import multiplayer.ChessClient;
+import multiplayer.ChessServer;
+import multiplayer.Multiplayer;
 import puzzle.PuzzleGamemode;
 
 import java.io.IOException;
@@ -23,7 +27,8 @@ public class ControllerMainMenu {
     public Button createPuzzleButton = new Button();
     @FXML
     public Button toggleSoundButton = new Button();
-
+    @FXML
+    public Button multiplayerButton = new Button();
 
     @FXML
     void initialize(){
@@ -44,6 +49,25 @@ public class ControllerMainMenu {
         ControllerChessboard c = boardLoader.getController();
         c.displayPieces();
         c.addDragListeners();
+    }
+
+    /**
+     * Switches the scene to the multiplayer
+     */
+    public void multiplayer() throws IOException {
+        FXMLLoader mpLoader = new FXMLLoader(getClass().getResource("/resources/fxml/multiplayer.fxml"));
+        Parent mpRoot = mpLoader.load();
+        Scene scene = new Scene(mpRoot);
+        ControllerMultiplayer controller = mpLoader.getController();
+        controller.addDragListeners();
+        String title = "Chess Online";
+        FXMain.setScene(scene,title);
+
+        ChessServer s = ChessServer.getInstance();
+        Multiplayer m = new Multiplayer();
+        Platform.runLater(() -> {
+            ChessClient c = new ChessClient();
+        });
     }
 
     /**
@@ -74,6 +98,8 @@ public class ControllerMainMenu {
         String title = "Puzzle Creator";
         FXMain.setScene(puzzleCreatorScene,title);
     }
+
+
 
     /**
      * Toggle sounds when moving a piece

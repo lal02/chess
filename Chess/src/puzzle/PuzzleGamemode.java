@@ -35,22 +35,25 @@ public class PuzzleGamemode extends Thread{
             throw new RuntimeException(e);
         }
         ControllerChessboard c = boardLoader.getController(); // Obtain the controller instance
+
         int i = 0;
         while(true){
+
+
             String[] puzzle = db.requestPuzzle(i);
             if(puzzle == null){
                 break;
             }
             Puzzle p = new Puzzle(puzzle);
             setPuzzle(p);
-
             c.displayPieces();
-            try {
 
+            try {
                 semaphore.acquire();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
             i++;
         }
     }
@@ -62,7 +65,6 @@ public class PuzzleGamemode extends Thread{
     public void puzzleReady() {
         semaphore.release(); // Signal that the puzzle is ready
     }
-
 
     public Move getSolution(){
         return puzzle.getSolution();
@@ -76,4 +78,5 @@ public class PuzzleGamemode extends Thread{
         this.puzzle = puzzle;
         Board.getBoardInstance().setBoard(puzzle.getBoard());
     }
+
 }

@@ -10,6 +10,7 @@ import gamefoundation.Position;
  */
 public class StringParser {
 
+
     /**
      * Converts a given pieceString to a Piece enum
      * @param pieceString the string to be parsed to a Piece
@@ -93,5 +94,16 @@ public class StringParser {
         String[] solutionPairs = moveString.split("(?<=\\G.{2})");
         return new Move(getPieceFromString(solutionPairs[0]), Position.valueOf(solutionPairs[1]),Position.valueOf(solutionPairs[2]),false);
     }
+
+    public String getStringFromMove(Move move){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getStringFromPiece(move.getPiece()));
+        sb.append(move.getCurrentPosition());
+        sb.append(move.getTargetPosition());
+
+        return sb.toString();
+    }
+
 
 }

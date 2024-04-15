@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import multiplayer.ChessClient;
+import multiplayer.ChessServer;
+import multiplayer.Multiplayer;
 
 
 import javax.sound.sampled.LineUnavailableException;
@@ -35,7 +38,6 @@ public class FXMain extends Application {
         primaryStage.setResizable(false);
         primaryStage.setTitle("Chess");
         primaryStage.show();
-
     }
 
     public static void setScene(Scene scene,String title){
