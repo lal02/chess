@@ -64,10 +64,6 @@ public class ControllerMainMenu {
         FXMain.setScene(scene,title);
 
         ChessServer s = ChessServer.getInstance();
-        Multiplayer m = new Multiplayer();
-        Platform.runLater(() -> {
-            ChessClient c = new ChessClient();
-        });
     }
 
     /**

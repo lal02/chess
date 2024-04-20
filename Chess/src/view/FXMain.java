@@ -1,6 +1,7 @@
 package view;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,6 +39,9 @@ public class FXMain extends Application {
         primaryStage.setResizable(false);
         primaryStage.setTitle("Chess");
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(event -> Platform.exit());
+
     }
 
     public static void setScene(Scene scene,String title){

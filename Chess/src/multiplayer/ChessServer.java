@@ -23,10 +23,6 @@ public class ChessServer {
         if(!isServerRunning()){
             startServer();
         }
-        else{
-            System.out.println("Server is already running");
-        }
-
     }
 
 
@@ -52,13 +48,14 @@ public class ChessServer {
     private void acceptClients(){
             while(connections<2){
                 try{
-                    if(connections == 0){
-                        client1 = socket.accept();
+                    Socket clientsocket = socket.accept();
+                    if(client1==null){
+                        client1 = clientsocket;
                         connections++;
                         System.out.println("connection established with client from " + client1.getInetAddress()  + " as client1" );
                     }
-                    else if(connections == 1){
-                        client2 = socket.accept();
+                    else if(client2==null && client1!= client2){
+                        client2 = clientsocket;
                         connections++;
                         System.out.println("connection established with client from " + client2.getInetAddress() + " as client2");
                     }
@@ -74,15 +71,14 @@ public class ChessServer {
     }
 
     public void forwardMove(String msg,int clientTarget) throws IOException {
-
         if(clientTarget == 1){
             DataOutputStream toClient1 = new DataOutputStream(client1.getOutputStream());
             toClient1.writeUTF(msg);
-            System.out.println("server " + msg);
+            System.out.println("server " + msg + " forwarded from client 2 to client 1");
         }
         else if(clientTarget == 2){
             DataOutputStream toClient2 = new DataOutputStream(client2.getOutputStream());
-            System.out.println("server " + msg);
+            System.out.println("server " + msg + " forwarded from client 1 to client 2");
             toClient2.writeUTF(msg);
         }
 
