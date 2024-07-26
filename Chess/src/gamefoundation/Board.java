@@ -19,7 +19,6 @@ public class Board {
 	private final Piece blackRook = Piece.blackRook;
 	private final Piece blackKnight = Piece.blackKnight;
 	private final Piece blackBishop = Piece.blackBishop;
-	//private final foundation.Piece blackBishop2 = foundation.Piece.blackBishop;
 	private final Piece blackQueen = Piece.blackQueen;
 	private final Piece blackKing = Piece.blackKing;
 	private final Piece blackPawn = Piece.blackPawn;
@@ -39,6 +38,7 @@ public class Board {
 	private boolean whiteCheckmated = false;
 	private boolean blackCheckmated = false;
 	public boolean sound = true;
+
 	
 	private Board() {
 		board = new Piece[][] {							
@@ -255,4 +255,5 @@ public class Board {
 	public boolean isGameOver() {
 		return gameOver;
 	}
+
 }

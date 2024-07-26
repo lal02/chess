@@ -24,6 +24,14 @@ public class SoundManager {
         playSound("/resources/sounds/check_sound.wav",0);
     }
 
+    public void playErrorSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        playSound("/resources/sounds/error.wav",0);
+    }
+
+    public void playSuccessSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        playSound("/resources/sounds/success.wav",0);
+    }
+
     private void playSound(String path, int volumeAdjustment) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         AudioInputStream audioIn = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream(path)));
         Clip clip = AudioSystem.getClip();

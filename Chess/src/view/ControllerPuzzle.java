@@ -11,11 +11,19 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import puzzle.Puzzle;
 import puzzle.PuzzleGamemode;
+import sound.SoundManager;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 import java.util.Objects;
 
-public class ControllerChessboard {
+import static gamefoundation.Board.getBoardInstance;
+
+public class ControllerPuzzle {
+
     @FXML
     ImageView A8 = new ImageView();
     @FXML
@@ -145,22 +153,27 @@ public class ControllerChessboard {
     @FXML
     ImageView H1 = new ImageView();
 
-    @FXML
-    DialogPane dialogPane = new DialogPane();
-
-
+    private PuzzleGamemode puzzleGamemode;
+    private int puzzleCounter = 0;
+    private Puzzle puzzle;
+    private Piece[][] puzzleBoard;
+    private Move solutionMove;
+    private boolean sound = Board.getBoardInstance().sound;
 
     @FXML
     public void initialize(){
+        puzzleGamemode = new PuzzleGamemode();
         initializeArray();
-        displayPieces();
         addDragListeners();
+        nextPuzzle(0);
+
     }
+
 
     private ImageView[][] imageViewArray;
 
     public void initializeArray() {
-         imageViewArray = new ImageView[][]{
+        imageViewArray = new ImageView[][]{
                 {A8, B8, C8, D8, E8, F8, G8, H8},
                 {A7, B7, C7, D7, E7, F7, G7, H7},
                 {A6, B6, C6, D6, E6, F6, G6, H6},
@@ -176,14 +189,13 @@ public class ControllerChessboard {
      * Displays the current state of the chessboard by setting the image of the ImageView according
      */
     public void displayPieces(){
-        Piece[][] board = Board.getBoardInstance().getBoard();
-        for(int i = 0;i<board.length;i++){
-            for(int j = 0;j<board[i].length;j++){
-                if(board[i][j] == null){
+        for(int i = 0;i<puzzleBoard.length;i++){
+            for(int j = 0;j<puzzleBoard[i].length;j++){
+                if(puzzleBoard[i][j] == null){
                     imageViewArray[i][j].setImage(null);
                 }
                 else{
-                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(board[i][j].getPath())));
+                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(puzzleBoard[i][j].getPath())));
                     imageViewArray[i][j].setImage(image);
                 }
 
@@ -238,38 +250,58 @@ public class ControllerChessboard {
         Dragboard dragboard = event.getDragboard();
         event.getDragboard().setDragView(null);
         boolean success = false;
-        Board b = Board.getBoardInstance();
+
         if(dragboard.hasImage()){
             ImageView target = (ImageView) event.getGestureTarget();
-            target.setImage(dragboard.getImage());
-
             ImageView source = (ImageView) event.getGestureSource();
-
             Position currentPosition = Position.valueOf(source.getId());
             Position targetPosition = Position.valueOf(target.getId());
-            Piece p = b.getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
+            Piece p = puzzleBoard[currentPosition.getRow()][currentPosition.getColumn()];
+            Move triedMove = new Move(p,currentPosition,targetPosition,false);
 
-                new Move(p,currentPosition,targetPosition,p.getPieceColor());
-                if(b.isGameOver()){
-                    ImageView gameResultImageView = (ImageView) dialogPane.getContent();
-                    if(b.isWhiteCheckmated()){
-                        gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/game_result/white_checkmated.png"))));
-                    }
-                    else if(b.isBlackCheckmated()){
-                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/black_checkmated.png")))));
-                    }
-                    else if(b.isDraw()){
-                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/draw.png")))));
-                    }
-                    dialogPane.setVisible(true);
-                    dialogPane.setExpanded(true);
-                    Button closeButton = (Button) dialogPane.lookupButton(ButtonType.CLOSE);
-                    closeButton.setOnAction(actionEvent -> dialogPane.setVisible(false));
-                }
-            success = true;
+            SoundManager soundManager = new SoundManager();
+
+
+           if(triedMove.equals(solutionMove)){
+               puzzleCounter++;
+               System.out.println("correct move!");
+               nextPuzzle(puzzleCounter);
+               success = true;
+           }
+           if(sound){
+               if(success){
+                   try {
+                       soundManager.playSuccessSound();
+                   } catch (UnsupportedAudioFileException e) {
+                       throw new RuntimeException(e);
+                   } catch (LineUnavailableException e) {
+                       throw new RuntimeException(e);
+                   } catch (IOException e) {
+                       throw new RuntimeException(e);
+                   }
+               }
+               else{
+                   try {
+                       soundManager.playErrorSound();
+                   } catch (UnsupportedAudioFileException e) {
+                       throw new RuntimeException(e);
+                   } catch (LineUnavailableException e) {
+                       throw new RuntimeException(e);
+                   } catch (IOException e) {
+                       throw new RuntimeException(e);
+                   }
+               }
+           }
+
         }
         event.setDropCompleted(success);
         event.consume();
+    }
+
+    private void nextPuzzle(int index){
+        puzzle = puzzleGamemode.fetchPuzzle(index);
+        puzzleBoard = puzzle.getBoard();
+        solutionMove = puzzle.getSolution();
         displayPieces();
     }
 }

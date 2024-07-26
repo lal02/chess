@@ -206,7 +206,7 @@ public class MoveValidation {
             System.out.print("");
         }
         else if(p== Piece.whiteKing  || p== Piece.blackKing) {
-            if(!kingMoveValidity(move, p)){
+            if(!castlingValidity(move, p)){
                 System.out.println("Castling illegal in this case");
                 return false;
             }
@@ -840,12 +840,12 @@ public class MoveValidation {
     }
 
     /**
-     * checks the validity of a king move, including castling
+     * checks if the castling move is legal
      * @param move the king move to be checked
      * @param king either whiteKing or blackKing enum values
      * @return true if the king move is valid
      */
-    private boolean kingMoveValidity(Move move, Piece king)  {
+    private boolean castlingValidity(Move move, Piece king)  {
         //test if castling is legal => else simulateKingMove(king,rook,move,crossingSquare,rookPosition);
         Board boardInstance = Board.getBoardInstance();
         Piece[][] board = boardInstance.getBoard();
@@ -867,11 +867,12 @@ public class MoveValidation {
         Position rookPosition = null;
         Piece rook = null;
         boolean piecesHaveMoved = false;
+        PlayerColor color = move.getColor();
         ArrayList<Move> playedMoves = boardInstance.getPlayedMoves();
         //castling move
         if(currentRow-targetRow == 0 && Math.abs(currentColumn-targetColumn) == 2){
             //currently in check: LEAVE
-            if(inCheck(move.getColor(),board)){
+            if(inCheck(color,board)){
                 System.out.println("King cannot castle when given a check");
                 return false;
             }
@@ -884,6 +885,13 @@ public class MoveValidation {
                 else if(m.getPiece().equals(Piece.blackRook) && m.getCurrentPosition() == Position.A8)blackArookHasMoved = true;
                 else if(m.getPiece().equals(Piece.blackRook) && m.getCurrentPosition() == Position.H8)blackHrookHasMoved = true;
             }
+
+            if(color == PlayerColor.WHITE && whiteKingHasMoved){
+                return false;
+            } else if (color == PlayerColor.BLACK && blackKingHasMoved) {
+                return false;
+            }
+
             if(move.getTargetPosition() == Position.G1){
                 whiteShortCastle = true;
                 crossingSquare = Position.F1;
@@ -912,6 +920,7 @@ public class MoveValidation {
             if(whiteLongCastle && (whiteKingHasMoved || whiteArookHasMoved)) piecesHaveMoved = true;
             if(blackShortCastle && (blackKingHasMoved || blackHrookHasMoved)) piecesHaveMoved = true;
             if(blackLongCastle && (blackKingHasMoved || blackArookHasMoved)) piecesHaveMoved = true;
+
             if(piecesHaveMoved){
                 System.out.println("Pieces have moved and therefore cannot castle");
                 return false;

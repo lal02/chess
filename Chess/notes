@@ -1,20 +1,8 @@
-TODO:
-System that allows to build a position with drag and drop and save the board
-
-TODO tests :
-test king cannot touch -> kingmovetest (should be covered by checkdetection but writing a test wont hurt)
-improve boardTest
-add tests for stalemate and insufficient material
-
-
-FIXME
-the gui solution is terrible...
-
-TODO long-term:
-gui :: done
-Puzzle gamemode with database :: done
-System that allows to build a position with drag and drop and save the board
-multiplayer via sockets
+ideas:
 gamemode with limited time
 chessbot
+save current settings in config file and load on start
+improved multiplayer with dedicated server that handles multiple clients at once
+improved gui usability (back button etc)
+separate sound functionality from move constructor
 

@@ -9,12 +9,16 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
+import java.util.Random;
 
 public class DatabaseConnection {
     private Connection connection;
+    private int puzzleAmount = -1;
 
     public DatabaseConnection() {
         establishConnection();
+        puzzleAmount = getPuzzleAmount();
+        System.out.println(puzzleAmount);
     }
 
     private void establishConnection() {
@@ -33,8 +37,36 @@ public class DatabaseConnection {
         }
     }
 
+    private int getPuzzleAmount(){
+        String query = "select count(id) from puzzle;";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet set = st.executeQuery();
+            if(set.next()) {
+
+
+                return  set.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 
     public String[] requestPuzzle(int id){
+        if(id==puzzleAmount || id > puzzleAmount) {
+            System.out.println("id" + id + "puzzleamount " + puzzleAmount);
+            Random random = new Random();
+            int idbefore = id;
+            id = random.nextInt(puzzleAmount);
+            while(idbefore == id){
+                id = random.nextInt(puzzleAmount);
+                System.out.println("new id: " + id);
+            }
+            System.out.println(id + " huan");
+        }
+
             String query = "select board,solution from puzzle where id = ?;";
             try {
                 PreparedStatement st = connection.prepareStatement(query);

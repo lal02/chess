@@ -210,6 +210,7 @@ public class ControllerPuzzleCreator{
     @FXML
     public void initialize(){
         initializeArray();
+        addDragListeners();
     }
 
     /**
@@ -276,18 +277,9 @@ public class ControllerPuzzleCreator{
      */
     private boolean isSideboard(ImageView imageView){
         return switch (imageView.getId()) {
-            case "selectBlackKing" -> true;
-            case "selectBlackBishop" -> true;
-            case "selectBlackKnight" -> true;
-            case "selectBlackQueen" -> true;
-            case "selectBlackRook" -> true;
-            case "selectWhiteKing" -> true;
-            case "selectWhiteRook" -> true;
-            case "selectWhiteBishop" -> true;
-            case "selectWhiteKnight" -> true;
-            case "selectWhitePawn" -> true;
-            case "selectWhiteQueen" -> true;
-            case "selectBlackPawn" -> true;
+            case "selectBlackKing", "selectBlackPawn", "selectWhiteQueen", "selectWhitePawn", "selectWhiteKnight",
+                 "selectWhiteBishop", "selectWhiteRook", "selectBlackRook", "selectBlackQueen", "selectWhiteKing",
+                 "selectBlackKnight", "selectBlackBishop" -> true;
             default -> false;
         };
     }

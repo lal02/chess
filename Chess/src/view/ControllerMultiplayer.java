@@ -157,6 +157,7 @@ public class ControllerMultiplayer {
         client = new ChessClient();
         initializeArray();
         displayPieces();
+        addDragListeners();
     }
 
     private ImageView[][] imageViewArray;
