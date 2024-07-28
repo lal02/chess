@@ -7,13 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import multiplayer.ChessClient;
-import multiplayer.ChessServer;
-import multiplayer.Multiplayer;
+import settings.Settings;
 
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -40,13 +36,22 @@ public class FXMain extends Application {
         primaryStage.setTitle("Chess");
         primaryStage.show();
 
-        primaryStage.setOnCloseRequest(event -> Platform.exit());
+        primaryStage.setOnCloseRequest(event -> onApplicationExit());
 
+        Settings settings = Settings.getSettingsInstance();
     }
 
     public static void setScene(Scene scene,String title){
         primaryStage.setScene(scene);
         primaryStage.setTitle(title);
+    }
+
+    private void onApplicationExit(){
+        //save settings
+        Settings settings = Settings.getSettingsInstance();
+        settings.saveSettings();
+
+        Platform.exit();
     }
 
 }

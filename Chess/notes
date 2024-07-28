@@ -1,8 +1,5 @@
 ideas:
-gamemode with limited time
-chessbot
-save current settings in config file and load on start
-improved multiplayer with dedicated server that handles multiple clients at once
 improved gui usability (back button etc)
-separate sound functionality from move constructor
-
+gamemode with limited time
+improved multiplayer with dedicated server that handles multiple clients at once
+chessbot

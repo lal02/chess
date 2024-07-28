@@ -37,8 +37,6 @@ public class Board {
 	private boolean draw = false;
 	private boolean whiteCheckmated = false;
 	private boolean blackCheckmated = false;
-	public boolean sound = true;
-
 	
 	private Board() {
 		board = new Piece[][] {							

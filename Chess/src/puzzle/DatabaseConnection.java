@@ -1,26 +1,23 @@
 package puzzle;
 
-import gamefoundation.Move;
-import gamefoundation.Piece;
-
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
-import java.util.Calendar;
 import java.util.Random;
 
 public class DatabaseConnection {
     private Connection connection;
     private int puzzleAmount = -1;
 
+    /**
+     * Default Constructor that establishes a connection and retrieves the amount of entries in the database and stores it in a variable
+     */
     public DatabaseConnection() {
         establishConnection();
         puzzleAmount = getPuzzleAmount();
-        System.out.println(puzzleAmount);
     }
 
+    /**
+     * Connect to the database
+     */
     private void establishConnection() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -37,6 +34,10 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Get the amount of puzzle Objects that are stored in the database
+     * @return int amount
+     */
     private int getPuzzleAmount(){
         String query = "select count(id) from puzzle;";
         try {
@@ -53,18 +54,20 @@ public class DatabaseConnection {
         return -1;
     }
 
-
-    public String[] requestPuzzle(int id){
+    /**
+     * Retrieves the Puzzle with the according index from the Database.
+     * If index >= amount of puzzles it retrieves a random puzzle with a different index
+     * @param id the id of the puzzle to be retrieves
+     * @return String array that has to be converted to a puzzle object
+     */
+    public String[] retrievePuzzle(int id){
         if(id==puzzleAmount || id > puzzleAmount) {
-            System.out.println("id" + id + "puzzleamount " + puzzleAmount);
             Random random = new Random();
             int idbefore = id;
             id = random.nextInt(puzzleAmount);
             while(idbefore == id){
                 id = random.nextInt(puzzleAmount);
-                System.out.println("new id: " + id);
             }
-            System.out.println(id + " huan");
         }
 
             String query = "select board,solution from puzzle where id = ?;";
@@ -82,9 +85,12 @@ public class DatabaseConnection {
                 e.printStackTrace();
             }
             return null;
-
     }
 
+    /**
+     * get the puzzle that was last stored in the database
+     * @return the last added puzzle
+     */
     public int getLatestPuzzle(){
         String query = "select max(id) from puzzle";
         try {
@@ -99,13 +105,18 @@ public class DatabaseConnection {
        return -1;
     }
 
+    /**
+     * Insert a puzzle into the database
+     * @param board the board represented as as 128 length String
+     * @param solution the solution move represented as a 6 length String
+     * @return boolean value if the operation was successful or not
+     */
     public boolean insertPuzzle(String board, String solution) {
         if(board.length() != 128 ||solution.length() != 6){
             return false;
         }
         int id = getLatestPuzzle() +1;
         String query = "insert into puzzle values('"+board+"','"+solution+"',"+id+");";
-
         try {
             Statement st = connection.createStatement();
             st.executeUpdate(query);

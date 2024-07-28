@@ -1,6 +1,7 @@
 package gamefoundation;
 
 import analysis.MoveValidation;
+import settings.Settings;
 import sound.SoundManager;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -91,17 +92,18 @@ public class Move {
 			}
 			boolean enemyChecked = m.inCheck(enemyColor, getBoardInstance().getBoard());
 
-			SoundManager sound = new SoundManager();
+			SoundManager soundManager = new SoundManager();
+			boolean sound = Settings.getSettingsInstance().getSound();
 			try {
-				if (getBoardInstance().sound) {
+				if (sound) {
 					if (checkmated) {
-						sound.playCheckmateSound();
+						soundManager.playCheckmateSound();
 					} else if (getBoardInstance().isDraw()) {
-						sound.playDrawSound();
+						soundManager.playDrawSound();
 					} else if (enemyChecked) {
-						sound.playCheckSound();
+						soundManager.playCheckSound();
 					} else {
-						sound.playMoveAudio();
+						soundManager.playMoveAudio();
 					}
 				}
 			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {

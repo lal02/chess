@@ -5,22 +5,18 @@ import gamefoundation.Move;
 import gamefoundation.Piece;
 import gamefoundation.Position;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import puzzle.Puzzle;
 import puzzle.PuzzleGamemode;
+import settings.Settings;
 import sound.SoundManager;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Objects;
-
-import static gamefoundation.Board.getBoardInstance;
 
 public class ControllerPuzzle {
 
@@ -158,10 +154,9 @@ public class ControllerPuzzle {
     private Puzzle puzzle;
     private Piece[][] puzzleBoard;
     private Move solutionMove;
-    private boolean sound = Board.getBoardInstance().sound;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         puzzleGamemode = new PuzzleGamemode();
         initializeArray();
         addDragListeners();
@@ -188,13 +183,12 @@ public class ControllerPuzzle {
     /**
      * Displays the current state of the chessboard by setting the image of the ImageView according
      */
-    public void displayPieces(){
-        for(int i = 0;i<puzzleBoard.length;i++){
-            for(int j = 0;j<puzzleBoard[i].length;j++){
-                if(puzzleBoard[i][j] == null){
+    public void displayPieces() {
+        for (int i = 0; i < puzzleBoard.length; i++) {
+            for (int j = 0; j < puzzleBoard[i].length; j++) {
+                if (puzzleBoard[i][j] == null) {
                     imageViewArray[i][j].setImage(null);
-                }
-                else{
+                } else {
                     Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(puzzleBoard[i][j].getPath())));
                     imageViewArray[i][j].setImage(image);
                 }
@@ -206,21 +200,22 @@ public class ControllerPuzzle {
     /**
      * Iterate over the ImageViewArray and set the dragListeners
      */
-    public void addDragListeners(){
-        for(int i = 0;i<imageViewArray.length;i++){
-            for(int j = 0;j<imageViewArray[i].length;j++){
+    public void addDragListeners() {
+        for (int i = 0; i < imageViewArray.length; i++) {
+            for (int j = 0; j < imageViewArray[i].length; j++) {
                 ImageView im = imageViewArray[i][j];
-                im.setOnDragDetected(event -> onDragDetected(im,event));
+                im.setOnDragDetected(event -> onDragDetected(im, event));
             }
         }
     }
 
     /**
      * Adds the image of the ImageView to the dragBoard
+     *
      * @param imageView the source of the drag and drop input
-     * @param event the mouseevent that is being called
+     * @param event     the mouseevent that is being called
      */
-    public void onDragDetected(ImageView imageView, MouseEvent event){
+    public void onDragDetected(ImageView imageView, MouseEvent event) {
         Dragboard dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
         ClipboardContent content = new ClipboardContent();
         content.putImage(imageView.getImage());
@@ -232,10 +227,11 @@ public class ControllerPuzzle {
 
     /**
      * Checks if the tile that is being hovered over can accept the image
+     *
      * @param event the dragEvent that is being called
      */
-    public void OnDragOver(DragEvent event){
-        if(event.getGestureSource() != event.getGestureTarget() && event.getDragboard().hasImage()){
+    public void OnDragOver(DragEvent event) {
+        if (event.getGestureSource() != event.getGestureTarget() && event.getDragboard().hasImage()) {
             event.acceptTransferModes(TransferMode.MOVE);
         }
         event.getDragboard().setDragView(null);
@@ -243,62 +239,66 @@ public class ControllerPuzzle {
     }
 
     /**
-     * Handles the event when an image is dropped onto the chessboard. If the game is over after the move it displays the game result
+     * Handles the event when an image is dropped onto the chessboard.
+     * Checks if the played Move is the correct solution for the puzzle.
+     * Loads a new puzzle if it was the correct move.
+     * Plays the according sound for error or success
+     *
      * @param event the dragEvent being called
      */
-    public void OnDragDropped(DragEvent event)  {
+    public void OnDragDropped(DragEvent event) {
         Dragboard dragboard = event.getDragboard();
         event.getDragboard().setDragView(null);
         boolean success = false;
-
-        if(dragboard.hasImage()){
+        if (dragboard.hasImage()) {
             ImageView target = (ImageView) event.getGestureTarget();
             ImageView source = (ImageView) event.getGestureSource();
             Position currentPosition = Position.valueOf(source.getId());
             Position targetPosition = Position.valueOf(target.getId());
             Piece p = puzzleBoard[currentPosition.getRow()][currentPosition.getColumn()];
-            Move triedMove = new Move(p,currentPosition,targetPosition,false);
-
+            Move triedMove = new Move(p, currentPosition, targetPosition, false);
+            //check if move is correct
+            if (triedMove.equals(solutionMove)) {
+                puzzleCounter++;
+                nextPuzzle(puzzleCounter);
+                success = true;
+            }
+            //play error or success sound if sound is activated
             SoundManager soundManager = new SoundManager();
-
-
-           if(triedMove.equals(solutionMove)){
-               puzzleCounter++;
-               System.out.println("correct move!");
-               nextPuzzle(puzzleCounter);
-               success = true;
-           }
-           if(sound){
-               if(success){
-                   try {
-                       soundManager.playSuccessSound();
-                   } catch (UnsupportedAudioFileException e) {
-                       throw new RuntimeException(e);
-                   } catch (LineUnavailableException e) {
-                       throw new RuntimeException(e);
-                   } catch (IOException e) {
-                       throw new RuntimeException(e);
-                   }
-               }
-               else{
-                   try {
-                       soundManager.playErrorSound();
-                   } catch (UnsupportedAudioFileException e) {
-                       throw new RuntimeException(e);
-                   } catch (LineUnavailableException e) {
-                       throw new RuntimeException(e);
-                   } catch (IOException e) {
-                       throw new RuntimeException(e);
-                   }
-               }
-           }
-
+            boolean sound = Settings.getSettingsInstance().getSound();
+            if (sound) {
+                if (success) {
+                    try {
+                        soundManager.playSuccessSound();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        soundManager.playErrorSound();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
         event.setDropCompleted(success);
         event.consume();
     }
 
-    private void nextPuzzle(int index){
+    /**
+     * Load the next puzzle for the next round
+     * @param index
+     */
+    private void nextPuzzle(int index) {
         puzzle = puzzleGamemode.fetchPuzzle(index);
         puzzleBoard = puzzle.getBoard();
         solutionMove = puzzle.getSolution();

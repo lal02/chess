@@ -13,6 +13,7 @@ import multiplayer.ChessClient;
 import multiplayer.ChessServer;
 import multiplayer.Multiplayer;
 import puzzle.PuzzleGamemode;
+import settings.Settings;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -32,10 +33,14 @@ public class ControllerMainMenu {
 
     @FXML
     void initialize(){
-        toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
-    }
+        if(Settings.getSettingsInstance().getSound()){
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
+        }
+        else{
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_off.png")))));
+        }
 
-    public static PuzzleGamemode puzzleGamemode = null;
+    }
 
     /**
      * Switches the scene to the chess game and starts it
@@ -44,7 +49,6 @@ public class ControllerMainMenu {
         FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/chessboard.fxml"));
         Parent boardRoot = boardLoader.load();
         FXMain.setScene(new Scene(boardRoot),"Singleplayer Chess");
-
     }
 
     /**
@@ -84,20 +88,13 @@ public class ControllerMainMenu {
      * Toggle sounds when moving a piece
      */
     public void toggleSound(){
-        Board.getBoardInstance().sound = !Board.getBoardInstance().sound;
-        if(!Board.getBoardInstance().sound){
+        boolean sound = Settings.getSettingsInstance().getSound();
+        Settings.getSettingsInstance().setSound(!sound);
+        if(sound){
             toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_off.png")))));
         }
         else{
             toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
         }
     }
-
-
-
-
-
-
-
-
 }
