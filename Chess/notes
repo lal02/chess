@@ -3,3 +3,6 @@ improved gui usability (back button etc)
 gamemode with limited time
 improved multiplayer with dedicated server that handles multiple clients at once
 chessbot
+edit existing puzzles
+replay games
+logging for each object etc created and all the things that happen during the application start (new file for every time we start the application)
