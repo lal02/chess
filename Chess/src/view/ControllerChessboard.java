@@ -11,8 +11,9 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import puzzle.PuzzleGamemode;
+import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class ControllerChessboard {
@@ -145,13 +146,26 @@ public class ControllerChessboard {
     @FXML
     ImageView H1 = new ImageView();
 
+
+    @FXML
+    ImageView background;
+
     @FXML
     DialogPane dialogPane = new DialogPane();
 
+    @FXML
+    Button returnButton;
+    @FXML
+    Button resetGameButton;
+    @FXML
+    Button pauseGameButton;
+    @FXML
+    Pane buttonPane;
 
 
     @FXML
     public void initialize(){
+
         initializeArray();
         displayPieces();
         addDragListeners();
@@ -249,7 +263,7 @@ public class ControllerChessboard {
             Position targetPosition = Position.valueOf(target.getId());
             Piece p = b.getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
 
-                new Move(p,currentPosition,targetPosition,p.getPieceColor());
+            new Move(p,currentPosition,targetPosition,p.getPieceColor());
                 if(b.isGameOver()){
                     ImageView gameResultImageView = (ImageView) dialogPane.getContent();
                     if(b.isWhiteCheckmated()){
@@ -261,8 +275,11 @@ public class ControllerChessboard {
                     else if(b.isDraw()){
                         gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/draw.png")))));
                     }
+                    System.out.println("whattt");
                     dialogPane.setVisible(true);
+                    System.out.println("should be visible!");
                     dialogPane.setExpanded(true);
+
                     Button closeButton = (Button) dialogPane.lookupButton(ButtonType.CLOSE);
                     closeButton.setOnAction(actionEvent -> dialogPane.setVisible(false));
                 }
@@ -271,5 +288,25 @@ public class ControllerChessboard {
         event.setDropCompleted(success);
         event.consume();
         displayPieces();
+    }
+
+
+    @FXML
+    public void onReturnButtonPressed(){
+        try {
+            FXMain.setMainMenuScene();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    @FXML
+    public void onResetGameButtonPressed(){
+        Board.getBoardInstance().resetGame();
+        displayPieces();
+    }
+    @FXML
+    public void onPauseGameButtonPressed(){
+        System.out.println("Pause game button pressed!");
     }
 }

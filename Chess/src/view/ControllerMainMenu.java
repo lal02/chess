@@ -55,11 +55,12 @@ public class ControllerMainMenu {
      * Switches the scene to the multiplayer
      */
     public void multiplayer() throws IOException {
-        FXMLLoader mpLoader = new FXMLLoader(getClass().getResource("/resources/fxml/multiplayer.fxml"));
-        Parent mpRoot = mpLoader.load();
-        Scene scene = new Scene(mpRoot);
-        FXMain.setScene(scene,"Multiplayer Chess");
-        ChessServer s = ChessServer.getInstance();
+//        FXMLLoader mpLoader = new FXMLLoader(getClass().getResource("/resources/fxml/multiplayer.fxml"));
+//        Parent mpRoot = mpLoader.load();
+//        Scene scene = new Scene(mpRoot);
+//        ChessServer s = ChessServer.getInstance();
+//        FXMain.setScene(scene,"Multiplayer Chess");
+        System.out.println("WIP");
     }
 
     /**

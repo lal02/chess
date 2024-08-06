@@ -25,20 +25,23 @@ public class FXMain extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMain.primaryStage = primaryStage;
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/resources/fxml/mainmenu.fxml"));
-        Parent menuRoot = menuLoader.load();
-        Scene menuScene = new Scene(menuRoot);
 
-        primaryStage.setScene(menuScene);
+        FXMain.setMainMenuScene();
 
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/app_icon.jpg"))));
         primaryStage.setResizable(false);
-        primaryStage.setTitle("Chess");
         primaryStage.show();
-
         primaryStage.setOnCloseRequest(event -> onApplicationExit());
 
         Settings settings = Settings.getSettingsInstance();
+    }
+
+    public static void setMainMenuScene() throws IOException {
+        FXMLLoader menuLoader = new FXMLLoader(FXMain.class.getResource("/resources/fxml/mainmenu.fxml"));
+        Parent menuRoot = menuLoader.load();
+        Scene menuScene = new Scene(menuRoot);
+        primaryStage.setTitle("Chess");
+        primaryStage.setScene(menuScene);
     }
 
     public static void setScene(Scene scene,String title){

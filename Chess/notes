@@ -1,8 +1,26 @@
 ideas:
 improved gui usability (back button etc)
+add settings view
+different themes that get also saved in config (dark mode etc) -> import feature for other custom themes? // linear gradient for each square in the toolbar? -> fade away each square
+Fix multiplayer (use only chessboard.fxml and only one controller for it)
 gamemode with limited time
 improved multiplayer with dedicated server that handles multiple clients at once
 chessbot
 edit existing puzzles
-replay games
+replay games -> game class = list of moves with winner (and final board state for display?) -> saved in database -> converter or web scrapper for pro games into database?
 logging for each object etc created and all the things that happen during the application start (new file for every time we start the application)
+rework and improve move (and moveValidation)
+play custom game where you can edit the settings (time etc)
+remove rounded corners from background image
+
+
+
+
+
+
+
+
+
+
+
+
