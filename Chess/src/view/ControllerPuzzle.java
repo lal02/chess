@@ -1,15 +1,16 @@
 package view;
 
-import gamefoundation.Board;
 import gamefoundation.Move;
 import gamefoundation.Piece;
 import gamefoundation.Position;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import puzzle.Puzzle;
 import puzzle.PuzzleGamemode;
+import puzzle.PuzzleIndexException;
 import settings.Settings;
 import sound.SoundManager;
 
@@ -17,6 +18,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 public class ControllerPuzzle {
 
@@ -148,6 +150,13 @@ public class ControllerPuzzle {
     ImageView G1 = new ImageView();
     @FXML
     ImageView H1 = new ImageView();
+
+    @FXML
+    Button returnButton;
+    @FXML
+    Button nextPuzzleButton;
+    @FXML
+    Button previousPuzzleButton;
 
     private PuzzleGamemode puzzleGamemode;
     private int puzzleCounter = 0;
@@ -298,10 +307,48 @@ public class ControllerPuzzle {
      * Load the next puzzle for the next round
      * @param index
      */
-    private void nextPuzzle(int index) {
+    private void nextPuzzle(int index)  {
         puzzle = puzzleGamemode.fetchPuzzle(index);
         puzzleBoard = puzzle.getBoard();
         solutionMove = puzzle.getSolution();
         displayPieces();
     }
+
+
+    @FXML
+    public void onReturnButtonPressed(){
+        try {
+            FXMain.setMainMenuScene();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    @FXML
+    public void onNextPuzzleButtonPressed(){
+        System.out.println("next puzzle!");
+        nextPuzzle(++puzzleCounter);
+    }
+
+    @FXML
+    public void onPreviousPuzzleButtonPressed() throws PuzzleIndexException {
+        System.out.println("previous puzzle!");
+        int index = --puzzleCounter;
+        if(index < 0) {
+            puzzleCounter = 0;
+            throw new PuzzleIndexException();
+        }
+
+        nextPuzzle(puzzleCounter);
+    }
+
+    @FXML
+    public void onRandomPuzzleButtonPressed(){
+        System.out.println("random puzzle!");
+        Random random = new Random();
+        int index = random.nextInt(puzzleGamemode.getPuzzleCount());
+        puzzleCounter = index;
+        nextPuzzle(puzzleCounter);
+    }
+
 }

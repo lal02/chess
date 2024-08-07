@@ -1,7 +1,5 @@
 package view;
 
-import gamefoundation.Board;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,10 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import multiplayer.ChessClient;
-import multiplayer.ChessServer;
-import multiplayer.Multiplayer;
-import puzzle.PuzzleGamemode;
 import settings.Settings;
 
 import java.io.IOException;
@@ -34,10 +28,10 @@ public class ControllerMainMenu {
     @FXML
     void initialize(){
         if(Settings.getSettingsInstance().getSound()){
-            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_on.png")))));
         }
         else{
-            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_off.png")))));
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_off.png")))));
         }
 
     }
@@ -92,10 +86,10 @@ public class ControllerMainMenu {
         boolean sound = Settings.getSettingsInstance().getSound();
         Settings.getSettingsInstance().setSound(!sound);
         if(sound){
-            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_off.png")))));
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_off.png")))));
         }
         else{
-            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/menu/sound_on.png")))));
+            toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_on.png")))));
         }
     }
 }

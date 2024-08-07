@@ -28,7 +28,7 @@ public class FXMain extends Application {
 
         FXMain.setMainMenuScene();
 
-        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/app_icon.jpg"))));
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/other/app_icon.jpg"))));
         primaryStage.setResizable(false);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> onApplicationExit());

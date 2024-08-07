@@ -267,13 +267,13 @@ public class ControllerChessboard {
                 if(b.isGameOver()){
                     ImageView gameResultImageView = (ImageView) dialogPane.getContent();
                     if(b.isWhiteCheckmated()){
-                        gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/game_result/white_checkmated.png"))));
+                        gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/white_checkmated.png"))));
                     }
                     else if(b.isBlackCheckmated()){
-                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/black_checkmated.png")))));
+                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/black_checkmated.png")))));
                     }
                     else if(b.isDraw()){
-                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/game_result/draw.png")))));
+                        gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/draw.png")))));
                     }
                     System.out.println("whattt");
                     dialogPane.setVisible(true);

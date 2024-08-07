@@ -1,5 +1,5 @@
 ideas:
-improved gui usability (back button etc)
+improved gui usability (back button etc) ||||| Currently fixing puzzle creator
 add settings view
 different themes that get also saved in config (dark mode etc) -> import feature for other custom themes? // linear gradient for each square in the toolbar? -> fade away each square
 Fix multiplayer (use only chessboard.fxml and only one controller for it)
@@ -12,6 +12,8 @@ logging for each object etc created and all the things that happen during the ap
 rework and improve move (and moveValidation)
 play custom game where you can edit the settings (time etc)
 remove rounded corners from background image
+generate gif from game
+test if random puzzle takes random from the whole range of puzzles
 
 
 

@@ -8,7 +8,7 @@
     <children>
         <ImageView fitHeight="800.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
-                <Image url="@../chessboard.png" />
+                <Image url="@../images/boards/greenBoard.png" />
             </image>
         </ImageView>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0">
@@ -103,62 +103,62 @@
                 <ImageView fx:id="H3" fitHeight="100.0" fitWidth="100.0" onDragDropped="#OnDragDropped" onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="5" />
             <ImageView fx:id="selectBlackKing" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
                <image>
-                  <Image url="@../pieces/black_king.png" />
+                  <Image url="@../images/pieces/black_king.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectBlackKnight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
                <image>
-                  <Image url="@../pieces/black_knight.png" />
+                  <Image url="@../images/pieces/black_knight.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectBlackBishop" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
                <image>
-                  <Image url="@../pieces/black_bishop.png" />
+                  <Image url="@../images/pieces/black_bishop.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectBlackPawn" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../pieces/black_pawn.png" />
+                  <Image url="@../images/pieces/black_pawn.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectBlackRook" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../pieces/black_rook.png" />
+                  <Image url="@../images/pieces/black_rook.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectBlackQueen" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../pieces/black_queen.png" />
+                  <Image url="@../images/pieces/black_queen.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectWhiteKing" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="2">
                <image>
-                  <Image url="@../pieces/white_king.png" />
+                  <Image url="@../images/pieces/white_king.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectWhiteKnight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2">
                <image>
-                  <Image url="@../pieces/white_knight.png" />
+                  <Image url="@../images/pieces/white_knight.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectWhiteBishop" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
                <image>
-                  <Image url="@../pieces/white_bishop.png" />
+                  <Image url="@../images/pieces/white_bishop.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectWhitePawn" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
                <image>
-                  <Image url="@../pieces/white_pawn.png" />
+                  <Image url="@../images/pieces/white_pawn.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectWhiteRook" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
                <image>
-                  <Image url="@../pieces/white_rook.png" />
+                  <Image url="@../images/pieces/white_rook.png" />
                </image>
             </ImageView>
             <ImageView fx:id="selectWhiteQueen" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="3">
                <image>
-                  <Image url="@../pieces/white_queen.png" />
+                  <Image url="@../images/pieces/white_queen.png" />
                </image>
             </ImageView>
             <TextField fx:id="boardTextField" alignment="BASELINE_LEFT" prefHeight="50.0" prefWidth="100.0" GridPane.columnIndex="9" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
@@ -171,7 +171,7 @@
             <Label fx:id="statusLabel" alignment="CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" text="Status" visible="false" GridPane.columnIndex="10" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
             <ImageView fx:id="deleteImageView" fitHeight="100.0" fitWidth="100.0" onDragDropped="#OnDragDropped" onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@../trashcan.png" />
+                  <Image url="@../images/puzzle_creator/trashcan.png" />
                </image>
             </ImageView>
             <Button fx:id="resetButton" alignment="CENTER" mnemonicParsing="false" onAction="#onActionResetButton" text="reset" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />

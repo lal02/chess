@@ -3,9 +3,11 @@ package puzzle;
 public class PuzzleGamemode extends Thread{
 
     private static DatabaseConnection db;
+    private final int puzzleCount;
 
     public PuzzleGamemode() {
         db = new DatabaseConnection();
+        puzzleCount = db.getLatestPuzzle();
     }
 
     /**
@@ -16,5 +18,9 @@ public class PuzzleGamemode extends Thread{
     public Puzzle fetchPuzzle(int index){
         String[] puzzleString = db.retrievePuzzle(index);
         return new Puzzle(puzzleString);
+    }
+
+    public int getPuzzleCount() {
+        return puzzleCount;
     }
 }
