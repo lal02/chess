@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import puzzle.DatabaseConnection;
 
+import java.io.IOException;
+
 public class ControllerPuzzleCreator{
     @FXML
     ImageView A8 = new ImageView();
@@ -189,6 +191,9 @@ public class ControllerPuzzleCreator{
 
     @FXML
     Button resetButton = new Button();
+
+    @FXML
+    Button returnButton;
 
     private ImageView[][] imageViewArray;
     private Piece[][] board = new Piece[8][8];
@@ -437,6 +442,16 @@ public class ControllerPuzzleCreator{
             case "selectBlackQueen":board[row][column] = Piece.blackQueen; break;
             case "selectBlackBishop":board[row][column] = Piece.blackBishop; break;
             default: board[row][column] = null;
+        }
+    }
+
+
+    @FXML
+    public void onReturnButtonPressed(){
+        try {
+            FXMain.setMainMenuScene();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

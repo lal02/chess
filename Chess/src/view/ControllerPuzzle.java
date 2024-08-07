@@ -322,7 +322,6 @@ public class ControllerPuzzle {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
     @FXML
     public void onNextPuzzleButtonPressed(){
