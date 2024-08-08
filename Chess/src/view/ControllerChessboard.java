@@ -12,6 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import settings.Background;
+import settings.Settings;
+import utility.LoggingUtility;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -165,7 +168,7 @@ public class ControllerChessboard {
 
     @FXML
     public void initialize(){
-
+        displayBackground();
         initializeArray();
         displayPieces();
         addDragListeners();
@@ -203,6 +206,21 @@ public class ControllerChessboard {
 
             }
         }
+        LoggingUtility.getLogger().info("Displaying Pieces");
+    }
+
+    private void displayBackground(){
+        Settings settings = Settings.getSettingsInstance();
+        Background backgroundEnum = settings.getBackground();
+
+        String path;
+        switch(backgroundEnum){
+            case LIGHTGREEN -> path = "/resources/images/boards/light_greenBoard.png";
+            case DARKGREEN -> path = "/resources/images/boards/dark_greenBoard.png";
+            default -> path = "/resources/images/boards/light_greenBoard.png";
+        }
+        Image image = new Image(getClass().getResourceAsStream(path));
+        background.setImage(image);
     }
 
     /**
@@ -215,6 +233,7 @@ public class ControllerChessboard {
                 im.setOnDragDetected(event -> onDragDetected(im,event));
             }
         }
+        LoggingUtility.getLogger().info("Registered Drag Listeners");
     }
 
     /**
@@ -264,16 +283,20 @@ public class ControllerChessboard {
             Piece p = b.getBoard()[currentPosition.getRow()][currentPosition.getColumn()];
 
             new Move(p,currentPosition,targetPosition,p.getPieceColor());
+
                 if(b.isGameOver()){
                     ImageView gameResultImageView = (ImageView) dialogPane.getContent();
                     if(b.isWhiteCheckmated()){
                         gameResultImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/white_checkmated.png"))));
+                        LoggingUtility.getLogger().info("Game Over - White Checkmated");
                     }
                     else if(b.isBlackCheckmated()){
                         gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/black_checkmated.png")))));
+                        LoggingUtility.getLogger().info("Game Over - Black Checkmated");
                     }
                     else if(b.isDraw()){
                         gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/draw.png")))));
+                        LoggingUtility.getLogger().info("Game Over - Draw");
                     }
                     System.out.println("whattt");
                     dialogPane.setVisible(true);
@@ -288,6 +311,7 @@ public class ControllerChessboard {
         event.setDropCompleted(success);
         event.consume();
         displayPieces();
+        LoggingUtility.getLogger().info("Move Sequence Completed");
     }
 
 
@@ -295,6 +319,7 @@ public class ControllerChessboard {
     public void onReturnButtonPressed(){
         try {
             FXMain.setMainMenuScene();
+            LoggingUtility.getLogger().info("Returning to Main Menu");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -304,7 +329,9 @@ public class ControllerChessboard {
     public void onResetGameButtonPressed(){
         Board.getBoardInstance().resetGame();
         displayPieces();
+        LoggingUtility.getLogger().info("Reset Game State");
     }
+    //TODO: implement
     @FXML
     public void onPauseGameButtonPressed(){
         System.out.println("Pause game button pressed!");

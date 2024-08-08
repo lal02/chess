@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import settings.Settings;
+import utility.LoggingUtility;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -55,6 +56,7 @@ public class ControllerMainMenu {
 //        ChessServer s = ChessServer.getInstance();
 //        FXMain.setScene(scene,"Multiplayer Chess");
         System.out.println("WIP");
+
     }
 
     /**
@@ -91,5 +93,6 @@ public class ControllerMainMenu {
         else{
             toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_on.png")))));
         }
+        LoggingUtility.getLogger().info("Toggled Sound and Sound-Image");
     }
 }

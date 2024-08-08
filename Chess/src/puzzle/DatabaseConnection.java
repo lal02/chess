@@ -1,5 +1,7 @@
 package puzzle;
 
+import utility.LoggingUtility;
+
 import java.sql.*;
 import java.util.Random;
 
@@ -24,8 +26,10 @@ public class DatabaseConnection {
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/chess","postgres","root");
             if(connection != null) {
                 System.out.println("connected");
+                LoggingUtility.getLogger().info("Database Connection Established");
             }
             else {
+                LoggingUtility.getLogger().info("Database Connection failed");
                 System.out.println("not connected");
             }
         }
@@ -44,13 +48,13 @@ public class DatabaseConnection {
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet set = st.executeQuery();
             if(set.next()) {
-
-
-                return  set.getInt(1);
+                LoggingUtility.getLogger().info("Fetching puzzle amount");
+                return set.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        LoggingUtility.getLogger().info("Failed to fetch puzzle amount");
         return -1;
     }
 
@@ -69,7 +73,6 @@ public class DatabaseConnection {
                 id = random.nextInt(puzzleAmount);
             }
         }
-
             String query = "select board,solution from puzzle where id = ?;";
             try {
                 PreparedStatement st = connection.prepareStatement(query);
@@ -79,12 +82,15 @@ public class DatabaseConnection {
                     String board = set.getString("board");
                     String solution = set.getString("solution");
 
+                    LoggingUtility.getLogger().info("Fetched puzzle with index " +id);
                     return new String[] {board, solution};
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            return null;
+        LoggingUtility.getLogger().info("Failed to fetch Puzzle with index " +id);
+
+        return null;
     }
 
     /**
@@ -97,11 +103,13 @@ public class DatabaseConnection {
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet set = st.executeQuery();
             if(set.next()) {
+                LoggingUtility.getLogger().info("Fetching latest puzzle id");
                 return set.getInt(1);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        LoggingUtility.getLogger().info("Failed to fetch latest puzzle");
        return -1;
     }
 
@@ -113,6 +121,7 @@ public class DatabaseConnection {
      */
     public boolean insertPuzzle(String board, String solution) {
         if(board.length() != 128 ||solution.length() != 6){
+            LoggingUtility.getLogger().severe("Failed to insert puzzle due to wrong string formatting");
             return false;
         }
         int id = getLatestPuzzle() +1;
@@ -123,6 +132,7 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        LoggingUtility.getLogger().info("Inserted puzzle with id " +id);
         return true;
     }
 

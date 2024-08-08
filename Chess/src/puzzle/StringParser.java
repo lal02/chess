@@ -3,6 +3,7 @@ package puzzle;
 import gamefoundation.Move;
 import gamefoundation.Piece;
 import gamefoundation.Position;
+import utility.LoggingUtility;
 
 /**
  * This class provides functions used to interact with the Database.
@@ -68,7 +69,7 @@ public class StringParser {
      */
     public Piece[][] getBoardFromString(String boardString){
         if(boardString.length() != 128){
-            System.out.println("error");
+            LoggingUtility.getLogger().warning("Failed to convert String to board due to invalid length");
             return null;
         }
         Piece[][] board = new Piece[8][8];
@@ -80,6 +81,7 @@ public class StringParser {
                 counter++;
             }
         }
+        LoggingUtility.getLogger().info("Converted String to board");
         return board;
     }
 
@@ -91,18 +93,21 @@ public class StringParser {
      * @return Move Object from a given String
      */
     public Move getMoveFromString(String moveString){
+        if(moveString.length() != 6){
+            LoggingUtility.getLogger().warning("Failed to convert String to Move due to invalid length");
+            return null;
+        }
         String[] solutionPairs = moveString.split("(?<=\\G.{2})");
+        LoggingUtility.getLogger().info("Converting String to Move");
         return new Move(getPieceFromString(solutionPairs[0]), Position.valueOf(solutionPairs[1]),Position.valueOf(solutionPairs[2]),false);
     }
 
     public String getStringFromMove(Move move){
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(getStringFromPiece(move.getPiece()));
-        sb.append(move.getCurrentPosition());
-        sb.append(move.getTargetPosition());
-
-        return sb.toString();
+        String sb = getStringFromPiece(move.getPiece()) +
+                move.getCurrentPosition() +
+                move.getTargetPosition();
+        LoggingUtility.getLogger().info("Converted Move to String");
+        return sb;
     }
 
 

@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import puzzle.DatabaseConnection;
+import utility.LoggingUtility;
 
 import java.io.IOException;
 
@@ -270,8 +271,6 @@ public class ControllerPuzzleCreator{
             event.consume();
             updateBoardTextField();
         }
-
-
     }
 
 
@@ -354,6 +353,7 @@ public class ControllerPuzzleCreator{
             }
         }
         boardTextField.setText(sb.toString());
+        LoggingUtility.getLogger().info("Updated Board TextField");
     }
 
 
@@ -375,6 +375,8 @@ public class ControllerPuzzleCreator{
                 }
             }
         }
+        LoggingUtility.getLogger().info("Loaded board state from TextField String");
+
     }
 
     public void onActionRecordMoveButton(){
@@ -393,6 +395,7 @@ public class ControllerPuzzleCreator{
             statusLabel.setText("Invalid Input!");
         }
         statusLabel.setVisible(true);
+        LoggingUtility.getLogger().info("Saved Puzzle to DB");
     }
 
     /**
@@ -408,6 +411,7 @@ public class ControllerPuzzleCreator{
         boardTextField.setText("");
         solutionTextField.setText("");
         statusLabel.setVisible(false);
+        LoggingUtility.getLogger().info("Reset Puzzle Creator State");
     }
 
     /**

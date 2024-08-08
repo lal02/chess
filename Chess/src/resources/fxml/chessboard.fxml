@@ -9,9 +9,6 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ControllerChessboard">
    <children>
       <ImageView fx:id="background" fitHeight="750.0" fitWidth="750.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/boards/greenBoard.png" />
-         </image>
          <viewport>
             <Rectangle2D />
          </viewport>

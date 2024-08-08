@@ -8,7 +8,7 @@
     <children>
         <ImageView fitHeight="800.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
             <image>
-                <Image url="@../images/boards/greenBoard.png" />
+                <Image url="@../images/boards/light_greenBoard.png" />
             </image>
         </ImageView>
       <VBox layoutX="19.0" prefHeight="850.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

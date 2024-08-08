@@ -1,5 +1,7 @@
 package puzzle;
 
+import utility.LoggingUtility;
+
 public class PuzzleGamemode extends Thread{
 
     private static DatabaseConnection db;
@@ -17,6 +19,7 @@ public class PuzzleGamemode extends Thread{
      */
     public Puzzle fetchPuzzle(int index){
         String[] puzzleString = db.retrievePuzzle(index);
+        LoggingUtility.getLogger().info("Fetching puzzle with index: " + index);
         return new Puzzle(puzzleString);
     }
 

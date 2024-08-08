@@ -1,5 +1,7 @@
 package settings;
 
+import utility.LoggingUtility;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,22 +21,18 @@ public class Settings {
             File directory = settingsFile.getParentFile();
             if(!directory.exists()){
                 directory.mkdir();
+                LoggingUtility.getLogger().info("Created directory with path" + directory.getCanonicalPath());
             }
             if(!settingsFile.exists()){
                 settingsFile.createNewFile();
+                LoggingUtility.getLogger().info("Created file with path" + settingsFile.getCanonicalPath());
             }
             FileReader fr = new FileReader(settingsFile);
             settings.load(fr);
-
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            LoggingUtility.getLogger().info("Loaded Settings");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        //parse all the values to the fields
-//        boolean sound = Boolean.parseBoolean(settings.getProperty("sound"));
     }
 
     /**
@@ -54,10 +52,10 @@ public class Settings {
      * Saves the Property file. Called on Application Exit
      */
     public void saveSettings(){
-        System.out.println("Saving Settings");
         try {
             OutputStream out = new FileOutputStream(settingsFilePath.toFile());
             settings.store(out,"Settings");
+            LoggingUtility.getLogger().info("Saved Settings");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,10 +64,28 @@ public class Settings {
 
     public void setSound(boolean status){
         settings.setProperty("sound", String.valueOf(status));
-        System.out.println(settings.getProperty("sound"));
+        LoggingUtility.getLogger().info("Set sound to "+status);
     }
 
     public boolean getSound(){
+        LoggingUtility.getLogger().info("Parsing sound property to "+settings.getProperty("sound"));
         return Boolean.parseBoolean(settings.getProperty("sound"));
+    }
+
+    public void setBackground(Background background){
+        settings.setProperty("background",background.toString());
+        LoggingUtility.getLogger().info("Set background to "+background);
+    }
+
+    public Background getBackground(){
+        if(settings.getProperty("background")==null){
+            LoggingUtility.getLogger().info("No background property found, falling back to default Background.LIGHTGREEN");
+            setBackground(Background.LIGHTGREEN);
+            return Background.LIGHTGREEN;
+        }
+        else{
+            LoggingUtility.getLogger().info("Loading Background: "+settings.getProperty("background"));
+            return Background.valueOf(settings.getProperty("background"));
+        }
     }
 }

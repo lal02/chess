@@ -13,6 +13,7 @@ import puzzle.PuzzleGamemode;
 import puzzle.PuzzleIndexException;
 import settings.Settings;
 import sound.SoundManager;
+import utility.LoggingUtility;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -169,7 +170,7 @@ public class ControllerPuzzle {
         puzzleGamemode = new PuzzleGamemode();
         initializeArray();
         addDragListeners();
-        nextPuzzle(0);
+        loadPuzzle(0);
 
     }
 
@@ -201,7 +202,6 @@ public class ControllerPuzzle {
                     Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(puzzleBoard[i][j].getPath())));
                     imageViewArray[i][j].setImage(image);
                 }
-
             }
         }
     }
@@ -269,7 +269,7 @@ public class ControllerPuzzle {
             //check if move is correct
             if (triedMove.equals(solutionMove)) {
                 puzzleCounter++;
-                nextPuzzle(puzzleCounter);
+                loadPuzzle(puzzleCounter);
                 success = true;
             }
             //play error or success sound if sound is activated
@@ -307,7 +307,7 @@ public class ControllerPuzzle {
      * Load the next puzzle for the next round
      * @param index
      */
-    private void nextPuzzle(int index)  {
+    private void loadPuzzle(int index)  {
         puzzle = puzzleGamemode.fetchPuzzle(index);
         puzzleBoard = puzzle.getBoard();
         solutionMove = puzzle.getSolution();
@@ -325,29 +325,28 @@ public class ControllerPuzzle {
     }
     @FXML
     public void onNextPuzzleButtonPressed(){
-        System.out.println("next puzzle!");
-        nextPuzzle(++puzzleCounter);
+        loadPuzzle(++puzzleCounter);
+        LoggingUtility.getLogger().info("Next Puzzle process finished");
     }
 
     @FXML
     public void onPreviousPuzzleButtonPressed() throws PuzzleIndexException {
-        System.out.println("previous puzzle!");
         int index = --puzzleCounter;
         if(index < 0) {
             puzzleCounter = 0;
             throw new PuzzleIndexException();
         }
-
-        nextPuzzle(puzzleCounter);
+        loadPuzzle(puzzleCounter);
+        LoggingUtility.getLogger().info("Previous Puzzle process finished");
     }
 
     @FXML
     public void onRandomPuzzleButtonPressed(){
-        System.out.println("random puzzle!");
         Random random = new Random();
         int index = random.nextInt(puzzleGamemode.getPuzzleCount());
         puzzleCounter = index;
-        nextPuzzle(puzzleCounter);
+        loadPuzzle(puzzleCounter);
+        LoggingUtility.getLogger().info("Random Puzzle process finished");
     }
 
 }

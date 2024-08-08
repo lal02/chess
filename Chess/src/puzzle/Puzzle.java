@@ -1,6 +1,7 @@
 package puzzle;
 
 import gamefoundation.*;
+import utility.LoggingUtility;
 
 public class Puzzle {
 
@@ -26,6 +27,7 @@ public class Puzzle {
         StringParser parser = new StringParser();
         this.board = parser.getBoardFromString(boardString);
         this.solution = parser.getMoveFromString(solutionString);
+        LoggingUtility.getLogger().info("Converting String to Puzzle");
     }
 
     public Piece[][] getBoard(){
