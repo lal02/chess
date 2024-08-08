@@ -6,16 +6,16 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ControllerPuzzleCreator">
     <children>
-        <ImageView fitHeight="800.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+        <ImageView fx:id="background" fitHeight="800.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
             <image>
                 <Image url="@../images/boards/light_greenBoard.png" />
             </image>
         </ImageView>
       <VBox layoutX="19.0" prefHeight="850.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="toolPane" stylesheets="@../stylesheets/styles.css">
+            <Pane fx:id="buttonPane" prefHeight="200.0" prefWidth="200.0" styleClass="toolPane" stylesheets="@../stylesheets/styles.css">
                <children>
-                  <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="buttons" text="return to menu" />
+                  <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to menu" />
                </children></Pane>
             <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0">
                <columnConstraints>

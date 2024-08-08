@@ -1,5 +1,6 @@
 ideas:
-add settings view (themes,sound,utility yes/no)
+
+add logging for settings view, finish styling the settings view
 
 refactor drag listeners and displaying pieces to its own class (no need to have it implemented each time again)
 
@@ -7,7 +8,7 @@ refactor some button functions?
 
 add promotion GUI ingame
 
-different themes that get also saved in config (dark mode etc) -> import feature for other custom themes? // linear gradient for each square in the toolbar? -> fade away each square
+import feature for other custom themes?
 
 Fix multiplayer (use only chessboard.fxml and only one controller for it)
 

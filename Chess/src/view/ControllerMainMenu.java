@@ -25,6 +25,8 @@ public class ControllerMainMenu {
     public Button toggleSoundButton = new Button();
     @FXML
     public Button multiplayerButton = new Button();
+    @FXML
+    public Button settingsButton;
 
     @FXML
     void initialize(){
@@ -34,21 +36,20 @@ public class ControllerMainMenu {
         else{
             toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_off.png")))));
         }
-
     }
 
     /**
      * Switches the scene to the chess game and starts it
      */
+    @FXML
     public void newGame() throws IOException {
-        FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/chessboard.fxml"));
-        Parent boardRoot = boardLoader.load();
-        FXMain.setScene(new Scene(boardRoot),"Singleplayer Chess");
+        loadProcess("/resources/fxml/chessboard.fxml","Singleplayer Chess");
     }
 
     /**
      * Switches the scene to the multiplayer
      */
+    @FXML
     public void multiplayer() throws IOException {
 //        FXMLLoader mpLoader = new FXMLLoader(getClass().getResource("/resources/fxml/multiplayer.fxml"));
 //        Parent mpRoot = mpLoader.load();
@@ -62,21 +63,17 @@ public class ControllerMainMenu {
     /**
      * Switches the scene to the puzzle gamemode and starts it
      */
+    @FXML
     public void puzzleGame() throws IOException {
-        FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("/resources/fxml/puzzle.fxml"));
-        Parent boardRoot = boardLoader.load();
-        Scene boardScene = new Scene(boardRoot);
-        FXMain.setScene(boardScene,"Puzzle Gamemode");
+        loadProcess("/resources/fxml/puzzle.fxml","Puzzle Gamemode");
     }
 
     /**
      * Switches the scene to the puzzle creator
      */
+    @FXML
     public void puzzleCreator() throws IOException {
-        FXMLLoader puzzleCreatorLoader = new FXMLLoader(getClass().getResource("/resources/fxml/puzzlecreator.fxml"));
-        Parent puzzleCreatorRoot = puzzleCreatorLoader.load();
-        Scene puzzleCreatorScene = new Scene(puzzleCreatorRoot);
-        FXMain.setScene(puzzleCreatorScene,"Puzzle Creator");
+        loadProcess("/resources/fxml/puzzlecreator.fxml","Puzzle Creator");
     }
 
 
@@ -84,6 +81,7 @@ public class ControllerMainMenu {
     /**
      * Toggle sounds when moving a piece
      */
+    @FXML
     public void toggleSound(){
         boolean sound = Settings.getSettingsInstance().getSound();
         Settings.getSettingsInstance().setSound(!sound);
@@ -94,5 +92,17 @@ public class ControllerMainMenu {
             toggleSoundButton.setGraphic(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu/sound_on.png")))));
         }
         LoggingUtility.getLogger().info("Toggled Sound and Sound-Image");
+    }
+
+    @FXML
+    public void onSettingsButtonPressed() throws IOException {
+        loadProcess("/resources/fxml/settings.fxml","Settings");
+    }
+
+
+    private void loadProcess(String path, String title) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+        Parent root = loader.load();
+        FXMain.setScene(new Scene(root),path);
     }
 }

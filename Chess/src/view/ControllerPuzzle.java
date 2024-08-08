@@ -8,9 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.Pane;
 import puzzle.Puzzle;
 import puzzle.PuzzleGamemode;
 import puzzle.PuzzleIndexException;
+import settings.Background;
 import settings.Settings;
 import sound.SoundManager;
 import utility.LoggingUtility;
@@ -153,6 +155,11 @@ public class ControllerPuzzle {
     ImageView H1 = new ImageView();
 
     @FXML
+    ImageView background;
+    @FXML
+    Pane buttonPane;
+
+    @FXML
     Button returnButton;
     @FXML
     Button nextPuzzleButton;
@@ -167,6 +174,7 @@ public class ControllerPuzzle {
 
     @FXML
     public void initialize() {
+        displayBackground();
         puzzleGamemode = new PuzzleGamemode();
         initializeArray();
         addDragListeners();
@@ -205,6 +213,21 @@ public class ControllerPuzzle {
             }
         }
     }
+
+    private void displayBackground(){
+        Settings settings = Settings.getSettingsInstance();
+        Background backgroundEnum = settings.getBackground();
+
+        Image image = new Image(getClass().getResourceAsStream(backgroundEnum.getPath()));
+        background.setImage(image);
+        LoggingUtility.getLogger().info("Displaying Background Image");
+
+        String startColor = backgroundEnum.getColor();
+        String endColor = "black";
+        buttonPane.setStyle(String.format("-fx-background-color: linear-gradient(to top,%s,%s);",startColor,endColor));
+        LoggingUtility.getLogger().info("Applying Linear Gradient");
+    }
+
 
     /**
      * Iterate over the ImageViewArray and set the dragListeners

@@ -107,9 +107,9 @@
       </GridPane>
       <Pane fx:id="buttonPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="750.0" styleClass="toolPane" stylesheets="@../stylesheets/styles.css">
          <children>
-            <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="buttons" text="return to main menu" />
-            <Button fx:id="resetGameButton" layoutX="161.0" layoutY="13.0" mnemonicParsing="false" onAction="#onResetGameButtonPressed" styleClass="buttons" text="reset game" />
-            <Button fx:id="pauseGameButton" layoutX="270.0" layoutY="13.0" mnemonicParsing="false" onAction="#onPauseGameButtonPressed" styleClass="buttons" text="pause game" />
+            <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to main menu" />
+            <Button fx:id="resetGameButton" layoutX="161.0" layoutY="13.0" mnemonicParsing="false" onAction="#onResetGameButtonPressed" styleClass="toolbarButtons" text="reset game" />
+            <Button fx:id="pauseGameButton" layoutX="270.0" layoutY="13.0" mnemonicParsing="false" onAction="#onPauseGameButtonPressed" styleClass="toolbarButtons" text="pause game" />
          </children>
       </Pane>
       <DialogPane fx:id="dialogPane" layoutX="250.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" visible="false">

@@ -168,6 +168,7 @@ public class ControllerChessboard {
 
     @FXML
     public void initialize(){
+
         displayBackground();
         initializeArray();
         displayPieces();
@@ -213,14 +214,14 @@ public class ControllerChessboard {
         Settings settings = Settings.getSettingsInstance();
         Background backgroundEnum = settings.getBackground();
 
-        String path;
-        switch(backgroundEnum){
-            case LIGHTGREEN -> path = "/resources/images/boards/light_greenBoard.png";
-            case DARKGREEN -> path = "/resources/images/boards/dark_greenBoard.png";
-            default -> path = "/resources/images/boards/light_greenBoard.png";
-        }
-        Image image = new Image(getClass().getResourceAsStream(path));
+        Image image = new Image(getClass().getResourceAsStream(backgroundEnum.getPath()));
         background.setImage(image);
+        LoggingUtility.getLogger().info("Displaying Background Image");
+
+        String startColor = backgroundEnum.getColor();
+        String endColor = "black";
+        buttonPane.setStyle(String.format("-fx-background-color: linear-gradient(to top,%s,%s);",startColor,endColor));
+        LoggingUtility.getLogger().info("Applying Linear Gradient");
     }
 
     /**

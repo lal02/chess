@@ -3,6 +3,7 @@ package view;
 import gamefoundation.Board;
 import gamefoundation.Piece;
 import gamefoundation.Position;
+import javafx.scene.layout.Pane;
 import puzzle.StringParser;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import puzzle.DatabaseConnection;
+import settings.Background;
+import settings.Settings;
 import utility.LoggingUtility;
 
 import java.io.IOException;
@@ -192,7 +195,10 @@ public class ControllerPuzzleCreator{
 
     @FXML
     Button resetButton = new Button();
-
+    @FXML
+    Pane buttonPane;
+    @FXML
+    ImageView background;
     @FXML
     Button returnButton;
 
@@ -215,6 +221,7 @@ public class ControllerPuzzleCreator{
 
     @FXML
     public void initialize(){
+        displayBackground();
         initializeArray();
         addDragListeners();
     }
@@ -273,6 +280,19 @@ public class ControllerPuzzleCreator{
         }
     }
 
+    private void displayBackground(){
+        Settings settings = Settings.getSettingsInstance();
+        Background backgroundEnum = settings.getBackground();
+
+        Image image = new Image(getClass().getResourceAsStream(backgroundEnum.getPath()));
+        background.setImage(image);
+        LoggingUtility.getLogger().info("Displaying Background Image");
+
+        String startColor = backgroundEnum.getColor();
+        String endColor = "black";
+        buttonPane.setStyle(String.format("-fx-background-color: linear-gradient(to top,%s,%s);",startColor,endColor));
+        LoggingUtility.getLogger().info("Applying Linear Gradient");
+    }
 
     /**
      * Checks if an ImageView is part of the SideBoard

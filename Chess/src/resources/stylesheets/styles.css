@@ -1,21 +1,24 @@
-.toolPane{
-    /*-fx-background-color: linear-gradient(to top,#EEEED5,black);*/
-    /*-fx-background-color: linear-gradient(to top,grey,black);*/
-
-    /* radial gradient for each single pane if single pane implementation?*/
-    -fx-background-color: linear-gradient(to top,#7D945D,black);
-    /*-fx-border-color:black;*/
-    /*-fx-border-widt:2;*/
-}
-
-.buttons{
+.toolbarButtons{
     -fx-font-family: sans-serif;
     -fx-text-fill: gold;
-
     -fx-background-color: radial-gradient(center 50% 50%, radius 50%,transparent ,rgba(0, 0, 0, 0.5));
     -fx-background-radius: 70;
     -fx-border-radius: 70;
     -fx-border-color:black;
     -fx-border-width:3;
+}
+
+.menuButtons{
+    -fx-background-color: transparent;
+    -fx-font-family: Franklin Gothic Demi Cond;
+    -fx-font-size: 20;
+    -fx-content-display: center;
+    -fx-alignment: center-left;
+    -fx-text-fill: white;
+}
+
+.themeChooserButtons{
+    -fx-background-color:transparent;
+    -fx-border-widt:20;
 }
 
