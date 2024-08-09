@@ -1,42 +1,38 @@
 ideas:
 
 refactor drag listeners and displaying pieces to its own class (no need to have it implemented each time again)
-
 refactor some button functions?
-
-add promotion GUI ingame
-
-import feature for other custom themes?
-
-Fix multiplayer (use only chessboard.fxml and only one controller for it)
-
-gamemode with limited time
-
-improved multiplayer with dedicated server that handles multiple clients at once
-
-chessbot
-
-edit existing puzzles
-
-multi move puzzles
-
-replay games -> game class = list of moves with winner (and final board state for display?) -> saved in database -> converter or web scrapper for pro games into database?
-
-rework and improve move (and moveValidation)
-
-play custom game where you can edit the settings (time etc)
 
 remove rounded corners from background image
 
-generate gif from game
+add promotion GUI ingame
+
+
+Fix multiplayer (use only chessboard.fxml and only one controller for it)
+improved multiplayer with dedicated server that handles multiple clients at once
+
+rework and improve move (and moveValidation)
+
+gamemode with limited time
 
 test if random puzzle takes random from the whole range of puzzles
+edit existing puzzles
+multi move puzzles
 
-create your own themes by replacing a color in the settings and set a new square color for it?
+replay games -> game class = list of moves with winner (and final board state for display?)
+-> saved in database -> converter or web scrapper for pro games into database?
+-> save played base in database with user given title?
 
 database with chess openings that you can learn
 
+generate gif from game
 
+chessbot
+
+play custom game where you can edit the settings (time etc)
+
+import feature for other custom themes?
+create your own themes by replacing a color in the settings and set a new square color for it?
 
 
 
