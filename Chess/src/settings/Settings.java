@@ -19,11 +19,11 @@ public class Settings {
             File settingsFile = settingsFilePath.toFile();
             File directory = settingsFile.getParentFile();
             if(!directory.exists()){
-                directory.mkdir();
+               LoggingUtility.getLogger().info("Directory created: "+directory.mkdir());
                 LoggingUtility.getLogger().info("Created directory with path" + directory.getCanonicalPath());
             }
             if(!settingsFile.exists()){
-                settingsFile.createNewFile();
+               LoggingUtility.getLogger().info("file created:"+ settingsFile.createNewFile());
                 LoggingUtility.getLogger().info("Created file with path" + settingsFile.getCanonicalPath());
             }
             FileReader fr = new FileReader(settingsFile);

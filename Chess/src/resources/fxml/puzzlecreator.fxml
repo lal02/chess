@@ -15,7 +15,7 @@
          <children>
             <Pane fx:id="buttonPane" prefHeight="200.0" prefWidth="200.0" styleClass="toolPane" stylesheets="@../stylesheets/styles.css">
                <children>
-                  <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to menu" />
+                  <Button fx:id="returnButton" cancelButton="true" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to menu" />
                </children></Pane>
             <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0">
                <columnConstraints>

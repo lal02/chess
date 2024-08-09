@@ -17,8 +17,43 @@
     -fx-text-fill: white;
 }
 
-.themeChooserButtons{
+.themeButtons{
     -fx-background-color:transparent;
     -fx-border-widt:20;
+}
+
+.settingsButtons{
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-border-radius: 10;
+    -fx-border-color: black;
+    -fx-padding: 10;
+    -fx-start-margin: 10;
+
+}
+
+.backgroundPane {
+    -fx-background-color:
+            linear-gradient(
+            to right,
+                    white ,
+                    gold
+            ),
+            radial-gradient(
+                    focus-angle 0deg,
+                    focus-distance 0%,
+                    center 100% 0%,
+                    radius 50%,
+                    black,
+                    transparent
+            ),
+            radial-gradient(
+                    focus-angle 0deg,
+                    focus-distance 0%,
+                    center 100% 100%,
+                    radius 50%,
+                    black,
+                    transparent
+            );
 }
 

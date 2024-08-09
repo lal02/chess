@@ -1,7 +1,5 @@
 ideas:
 
-add logging for settings view, finish styling the settings view
-
 refactor drag listeners and displaying pieces to its own class (no need to have it implemented each time again)
 
 refactor some button functions?
@@ -36,7 +34,7 @@ test if random puzzle takes random from the whole range of puzzles
 
 create your own themes by replacing a color in the settings and set a new square color for it?
 
-
+database with chess openings that you can learn
 
 
 

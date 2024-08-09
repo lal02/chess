@@ -107,7 +107,7 @@
       </GridPane>
       <Pane fx:id="buttonPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="750.0" styleClass="toolPane" stylesheets="@../stylesheets/styles.css">
          <children>
-            <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to main menu" />
+            <Button fx:id="returnButton" cancelButton="true" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to main menu" />
             <Button fx:id="resetGameButton" layoutX="161.0" layoutY="13.0" mnemonicParsing="false" onAction="#onResetGameButtonPressed" styleClass="toolbarButtons" text="reset game" />
             <Button fx:id="pauseGameButton" layoutX="270.0" layoutY="13.0" mnemonicParsing="false" onAction="#onPauseGameButtonPressed" styleClass="toolbarButtons" text="pause game" />
          </children>

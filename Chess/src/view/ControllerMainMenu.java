@@ -103,6 +103,6 @@ public class ControllerMainMenu {
     private void loadProcess(String path, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent root = loader.load();
-        FXMain.setScene(new Scene(root),path);
+        FXMain.setScene(new Scene(root),title);
     }
 }

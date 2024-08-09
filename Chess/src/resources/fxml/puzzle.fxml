@@ -110,7 +110,7 @@
         </GridPane>
         <Pane fx:id="buttonPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="750.0" styleClass="toolPane" stylesheets="@../stylesheets/styles.css">
             <children>
-                <Button fx:id="returnButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to main menu" />
+                <Button fx:id="returnButton" cancelButton="true" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onReturnButtonPressed" styleClass="toolbarButtons" text="return to main menu" />
                 <Button fx:id="nextPuzzleButton" layoutX="274.0" layoutY="13.0" mnemonicParsing="false" onAction="#onNextPuzzleButtonPressed" styleClass="toolbarButtons" text="next puzzle" />
                 <Button fx:id="previousPuzzleButton" layoutX="155.0" layoutY="13.0" mnemonicParsing="false" onAction="#onPreviousPuzzleButtonPressed" styleClass="toolbarButtons" text="previous puzzle" />
             <Button fx:id="randomPuzzleButton" layoutX="375.0" layoutY="13.0" mnemonicParsing="false" onAction="#onRandomPuzzleButtonPressed" styleClass="toolbarButtons" text="random puzzle" />
