@@ -7,6 +7,8 @@ remove rounded corners from background image
 
 add promotion GUI ingame
 
+Tooltips?
+Different figure images?
 
 Fix multiplayer (use only chessboard.fxml and only one controller for it)
 improved multiplayer with dedicated server that handles multiple clients at once
@@ -18,6 +20,7 @@ gamemode with limited time
 test if random puzzle takes random from the whole range of puzzles
 edit existing puzzles
 multi move puzzles
+puzzle types, titles (e.g. checkmate, trapped queen etc), puzzle difficulties,...
 
 replay games -> game class = list of moves with winner (and final board state for display?)
 -> saved in database -> converter or web scrapper for pro games into database?
