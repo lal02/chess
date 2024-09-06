@@ -299,9 +299,7 @@ public class ControllerChessboard {
                         gameResultImageView.setImage(new Image((Objects.requireNonNull(getClass().getResourceAsStream("/images/game_result/draw.png")))));
                         LoggingUtility.getLogger().info("Game Over - Draw");
                     }
-                    System.out.println("whattt");
                     dialogPane.setVisible(true);
-                    System.out.println("should be visible!");
                     dialogPane.setExpanded(true);
 
                     Button closeButton = (Button) dialogPane.lookupButton(ButtonType.CLOSE);
