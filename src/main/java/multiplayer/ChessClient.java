@@ -18,7 +18,7 @@ public class ChessClient {
     public ChessClient(){
         new Thread(() -> {
             try {
-                FXMLLoader mpLoader = new FXMLLoader(getClass().getResource("/resources/fxml/multiplayer.fxml"));
+                FXMLLoader mpLoader = new FXMLLoader(getClass().getResource("/fxml/multiplayer.fxml"));
                 ControllerMultiplayer controller = mpLoader.getController();
 
                 socket = new Socket("localhost",8888);

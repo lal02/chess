@@ -62,13 +62,13 @@ public class Settings {
 
 
     public void setSound(boolean status){
-        settings.setProperty("sound", String.valueOf(status));
+        settings.setProperty("", String.valueOf(status));
         LoggingUtility.getLogger().info("Set sound to "+status);
     }
 
     public boolean getSound(){
-        LoggingUtility.getLogger().info("Parsing sound property to "+settings.getProperty("sound"));
-        return Boolean.parseBoolean(settings.getProperty("sound"));
+        LoggingUtility.getLogger().info("Parsing sound property to "+settings.getProperty(""));
+        return Boolean.parseBoolean(settings.getProperty(""));
     }
 
     public void setBackground(Background background){

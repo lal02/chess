@@ -13,7 +13,6 @@ import settings.Settings;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.logging.*;
 
 public class FXMain extends Application {
 
@@ -42,7 +41,7 @@ public class FXMain extends Application {
     }
 
     public static void setMainMenuScene() throws IOException {
-        FXMLLoader menuLoader = new FXMLLoader(FXMain.class.getResource("/resources/fxml/mainmenu.fxml"));
+        FXMLLoader menuLoader = new FXMLLoader(FXMain.class.getResource("/fxml/mainmenu.fxml"));
         Parent menuRoot = menuLoader.load();
         Scene menuScene = new Scene(menuRoot);
         primaryStage.setTitle("main menu");

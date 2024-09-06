@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$" dumb="true">
       <sourceFolder url="file://$MODULE_DIR$/Chess/Tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Chess/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Chess/src/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java/resources" type="java-resource" />
     </content>
   </component>
 </module>

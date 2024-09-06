@@ -43,7 +43,7 @@ public class ControllerMainMenu {
      */
     @FXML
     public void newGame() throws IOException {
-        loadProcess("/resources/fxml/chessboard.fxml","Singleplayer Chess");
+        loadProcess("/fxml/chessboard.fxml","Singleplayer Chess");
     }
 
     /**
@@ -65,7 +65,7 @@ public class ControllerMainMenu {
      */
     @FXML
     public void puzzleGame() throws IOException {
-        loadProcess("/resources/fxml/puzzle.fxml","Puzzle Gamemode");
+        loadProcess("/fxml/puzzle.fxml","Puzzle Gamemode");
     }
 
     /**
@@ -73,7 +73,7 @@ public class ControllerMainMenu {
      */
     @FXML
     public void puzzleCreator() throws IOException {
-        loadProcess("/resources/fxml/puzzlecreator.fxml","Puzzle Creator");
+        loadProcess("/fxml/puzzlecreator.fxml","Puzzle Creator");
     }
 
 
@@ -96,7 +96,7 @@ public class ControllerMainMenu {
 
     @FXML
     public void onSettingsButtonPressed() throws IOException {
-        loadProcess("/resources/fxml/settings.fxml","Settings");
+        loadProcess("/fxml/settings.fxml","Settings");
     }
 
 

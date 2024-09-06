@@ -1,3 +1,6 @@
-Run config:
+Run config without maven:
 --module-path "C:\Users\lalbr\javafx-sdk-22\lib" --add-modules=javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.fxml
 
+run config with maven:
+javafx:run -f pom.xml
+working directory: chess

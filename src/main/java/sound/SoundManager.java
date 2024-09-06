@@ -12,32 +12,32 @@ import java.util.Objects;
 public class SoundManager {
 
     public void playMoveAudio() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        playSound("/resources/sounds/move_sound.wav",-20);
+        playSound("/sounds/move_sound.wav",-20);
         LoggingUtility.getLogger().info("played move_sound.wav");
     }
 
     public void playCheckmateSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        playSound("/resources/sounds/checkmate_sound.wav",-20);
+        playSound("/sounds/checkmate_sound.wav",-20);
         LoggingUtility.getLogger().info("played checkmate_sound.wav");
     }
     public void playDrawSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        playSound("/resources/sounds/draw_sound.wav",-20);
+        playSound("/sounds/draw_sound.wav",-20);
         LoggingUtility.getLogger().info("played draw_sound.wav");
     }
 
     public void playCheckSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound("/resources/sounds/check_sound.wav",0);
+        playSound("/sounds/check_sound.wav",0);
         LoggingUtility.getLogger().info("played check_sound.wav");
     }
 
     public void playErrorSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound("/resources/sounds/error.wav",0);
+        playSound("/sounds/error.wav",0);
         LoggingUtility.getLogger().info("played error_sound.wav");
 
     }
 
     public void playSuccessSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound("/resources/sounds/success.wav",0);
+        playSound("/sounds/success.wav",0);
         LoggingUtility.getLogger().info("played success_sound.wav");
 
     }
