@@ -5,4 +5,6 @@ It also includes a puzzle gamemode and puzzle creator. The puzzles are stored as
 
 It currently only works in windows because it needs a specific directory structure inorder to work.
 
+Also includes customizable backgrounds and other features.
 
+![](chess.png)
